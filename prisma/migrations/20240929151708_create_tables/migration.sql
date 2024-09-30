@@ -47,6 +47,7 @@ CREATE TABLE `db_pasien` (
     `tempat_lahir` VARCHAR(100) NOT NULL,
     `tgl_lahir` DATE NOT NULL,
     `jenis_kelamin` INTEGER NOT NULL,
+    `id_warga_negara` INTEGER NOT NULL,
     `identitas_pasien` INTEGER NOT NULL,
     `no_identitas` VARCHAR(100) NOT NULL,
     `id_ms_negara_tinggal` INTEGER NOT NULL,
@@ -208,6 +209,7 @@ CREATE TABLE `db_user` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    UNIQUE INDEX `db_user_email_user_key`(`email_user`),
     PRIMARY KEY (`id_user`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -279,7 +281,7 @@ CREATE TABLE `ms_agama` (
     `id_ms_agama` INTEGER NOT NULL AUTO_INCREMENT,
     `nama_agama` VARCHAR(50) NOT NULL,
     `status` INTEGER NOT NULL DEFAULT 1,
-    `created_at` DATETIME(0) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `created_by` CHAR(36) NOT NULL DEFAULT '0',
     `modified_at` DATETIME(0) NULL,
     `modified_by` CHAR(36) NULL,
@@ -584,4 +586,92 @@ CREATE TABLE `ms_tingkat_pendidikan` (
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
     PRIMARY KEY (`id_ms_tingkat_pendidikan`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `db_antrian` (
+    `id_antrian` INTEGER NOT NULL AUTO_INCREMENT,
+    `jenis_pasien` INTEGER NOT NULL,
+    `jenis_penjamin` INTEGER NOT NULL,
+    `kode_rm` VARCHAR(20) NOT NULL,
+    `nama_pasien` VARCHAR(100) NOT NULL,
+    `tgl_lahir` DATE NOT NULL,
+    `hp` VARCHAR(20) NOT NULL,
+    `no_bpjs` VARCHAR(50) NOT NULL,
+    `kode_antrian` VARCHAR(1) NOT NULL,
+    `no_antrian` INTEGER NOT NULL,
+    `id_jadwal_dokter` INTEGER NOT NULL,
+    `tgl_panggil` DATETIME(0) NOT NULL,
+    `id_ms_loket_antrian` INTEGER NOT NULL,
+    `status_panggil` INTEGER NOT NULL,
+    `status` INTEGER NOT NULL DEFAULT 1,
+    `created_at` DATETIME(0) NOT NULL,
+    `created_by` CHAR(36) NOT NULL DEFAULT '0',
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` CHAR(36) NULL,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` CHAR(36) NULL,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` CHAR(36) NULL,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    PRIMARY KEY (`id_antrian`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `db_jadwal_dokter` (
+    `id_jadwal_dokter` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_hari` INTEGER NOT NULL,
+    `tgl_praktek` DATE NOT NULL,
+    `id_pegawai` INTEGER NOT NULL,
+    `id_unit_kerja` INTEGER NOT NULL,
+    `jam_awal_prakter` TIME(0) NOT NULL,
+    `jam_akhir_praktek` TIME(0) NOT NULL,
+    `online_bpjs_mjkn` INTEGER NOT NULL,
+    `online_umum` INTEGER NOT NULL,
+    `onsite_bpjs` INTEGER NOT NULL,
+    `onsite_umum` INTEGER NOT NULL,
+    `status` INTEGER NOT NULL DEFAULT 1,
+    `created_at` DATETIME(0) NOT NULL,
+    `created_by` CHAR(36) NOT NULL DEFAULT '0',
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` CHAR(36) NULL,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` CHAR(36) NULL,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` CHAR(36) NULL,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    PRIMARY KEY (`id_jadwal_dokter`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `db_jadwal_dokter_ganti` (
+    `id_jadwal_dokter_ganti` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_jadwal_dokter` INTEGER NOT NULL,
+    `tgl_praktek` DATE NOT NULL,
+    `id_pegawai` INTEGER NOT NULL,
+    `id_unit_kerja` INTEGER NOT NULL,
+    `jam_awal_prakter` TIME(0) NOT NULL,
+    `jam_akhir_praktek` TIME(0) NOT NULL,
+    `online_bpjs_mjkn` INTEGER NOT NULL,
+    `online_umum` INTEGER NOT NULL,
+    `onsite_bpjs` INTEGER NOT NULL,
+    `onsite_umum` INTEGER NOT NULL,
+    `keterangan_ganti` TEXT NOT NULL,
+    `status` INTEGER NOT NULL DEFAULT 1,
+    `created_at` DATETIME(0) NOT NULL,
+    `created_by` CHAR(36) NOT NULL DEFAULT '0',
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` CHAR(36) NULL,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` CHAR(36) NULL,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` CHAR(36) NULL,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    PRIMARY KEY (`id_jadwal_dokter_ganti`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

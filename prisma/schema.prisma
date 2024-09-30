@@ -55,6 +55,7 @@ model Patient {
   tempat_lahir            String    @db.VarChar(100)
   tgl_lahir               DateTime  @db.Date
   jenis_kelamin           Int
+  id_warga_negara         Int
   identitas_pasien        Int
   no_identitas            String    @db.VarChar(100)
   id_ms_negara_tinggal    Int
@@ -202,7 +203,7 @@ model User {
   id_user       Int       @id @default(autoincrement())
   id_pegawai    Int
   nama_user     String    @db.VarChar(100)
-  email_user    String    @db.VarChar(100)
+  email_user    String    @unique @db.VarChar(100)
   hp_user       String    @db.VarChar(20)
   password_user String    @db.Text
   status        Boolean
@@ -288,7 +289,7 @@ model Religion {
   id_ms_agama Int       @id @default(autoincrement())
   nama_agama  String    @db.VarChar(50)
   status      Int       @default(1)
-  created_at  DateTime  @db.DateTime(0)
+  created_at  DateTime  @default(now())
   created_by  String    @default("0") @db.Char(36)
   modified_at DateTime? @db.DateTime(0)
   modified_by String?   @db.Char(36)
@@ -593,4 +594,86 @@ model EducationLevel {
   is_restored              Boolean   @default(false)
 
   @@map("ms_tingkat_pendidikan")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model db_antrian {
+  id_antrian          Int       @id @default(autoincrement())
+  jenis_pasien        Int
+  jenis_penjamin      Int
+  kode_rm             String    @db.VarChar(20)
+  nama_pasien         String    @db.VarChar(100)
+  tgl_lahir           DateTime  @db.Date
+  hp                  String    @db.VarChar(20)
+  no_bpjs             String    @db.VarChar(50)
+  kode_antrian        String    @db.VarChar(1)
+  no_antrian          Int
+  id_jadwal_dokter    Int
+  tgl_panggil         DateTime  @db.DateTime(0)
+  id_ms_loket_antrian Int
+  status_panggil      Int
+  status              Int       @default(1)
+  created_at          DateTime  @db.DateTime(0)
+  created_by          String    @default("0") @db.Char(36)
+  modified_at         DateTime? @db.DateTime(0)
+  modified_by         String?   @db.Char(36)
+  deleted_at          DateTime? @db.DateTime(0)
+  deleted_by          String?   @db.Char(36)
+  restored_at         DateTime? @db.DateTime(0)
+  restored_by         String?   @db.Char(36)
+  is_deleted          Boolean   @default(false)
+  is_restored         Boolean   @default(false)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model db_jadwal_dokter {
+  id_jadwal_dokter  Int       @id @default(autoincrement())
+  id_hari           Int
+  tgl_praktek       DateTime  @db.Date
+  id_pegawai        Int
+  id_unit_kerja     Int
+  jam_awal_prakter  DateTime  @db.Time(0)
+  jam_akhir_praktek DateTime  @db.Time(0)
+  online_bpjs_mjkn  Int
+  online_umum       Int
+  onsite_bpjs       Int
+  onsite_umum       Int
+  status            Int       @default(1)
+  created_at        DateTime  @db.DateTime(0)
+  created_by        String    @default("0") @db.Char(36)
+  modified_at       DateTime? @db.DateTime(0)
+  modified_by       String?   @db.Char(36)
+  deleted_at        DateTime? @db.DateTime(0)
+  deleted_by        String?   @db.Char(36)
+  restored_at       DateTime? @db.DateTime(0)
+  restored_by       String?   @db.Char(36)
+  is_deleted        Boolean   @default(false)
+  is_restored       Boolean   @default(false)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model db_jadwal_dokter_ganti {
+  id_jadwal_dokter_ganti Int       @id @default(autoincrement())
+  id_jadwal_dokter       Int
+  tgl_praktek            DateTime  @db.Date
+  id_pegawai             Int
+  id_unit_kerja          Int
+  jam_awal_prakter       DateTime  @db.Time(0)
+  jam_akhir_praktek      DateTime  @db.Time(0)
+  online_bpjs_mjkn       Int
+  online_umum            Int
+  onsite_bpjs            Int
+  onsite_umum            Int
+  keterangan_ganti       String    @db.Text
+  status                 Int       @default(1)
+  created_at             DateTime  @db.DateTime(0)
+  created_by             String    @default("0") @db.Char(36)
+  modified_at            DateTime? @db.DateTime(0)
+  modified_by            String?   @db.Char(36)
+  deleted_at             DateTime? @db.DateTime(0)
+  deleted_by             String?   @db.Char(36)
+  restored_at            DateTime? @db.DateTime(0)
+  restored_by            String?   @db.Char(36)
+  is_deleted             Boolean   @default(false)
+  is_restored            Boolean   @default(false)
 }

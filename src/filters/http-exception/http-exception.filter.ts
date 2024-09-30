@@ -12,14 +12,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const status = exception.getStatus();
+    const errorMessage = exception.getResponse();
+    const message = (errorMessage as any).error || errorMessage;
+    const responseBody = {
+      status_code: status,
+      errors: message,
+    };
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    const errorResponse: object = exception.getResponse();
-    response.status(status).json({
-      errors: {
-        ...errorResponse,
-      },
-    });
+    response.status(status).json(responseBody);
   }
 }
