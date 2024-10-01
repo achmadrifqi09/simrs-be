@@ -70,7 +70,5 @@ export class AuthService {
     };
   }
 
-  async logout(token: string){
-
-  }
+  async logout() {}
 }

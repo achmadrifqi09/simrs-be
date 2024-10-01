@@ -17,7 +17,7 @@ export class AuthController {
   @Post('/logout')
   @Header('Content-Type', 'application/json')
   @HttpCode(200)
-  async logout(@Body() token: string) {
-    return await this.authService.logout(token);
+  async logout() {
+    return await this.authService.logout();
   }
 }

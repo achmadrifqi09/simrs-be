@@ -1,7 +1,13 @@
-type ReligionDTO = {
+type ReligionPayloadDTO = {
   nama_agama: string;
-  status: boolean;
+  status: number;
   created_by?: number;
 };
 
-export type { ReligionDTO };
+type ReligionDTO = {
+  id_ms_agama: number;
+  nama_agama: string;
+  status: number;
+};
+
+export type { ReligionPayloadDTO, ReligionDTO };

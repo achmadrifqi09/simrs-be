@@ -5,7 +5,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: "module"
   },
-  plugins: ["@typescript-eslint/eslint-plugin"],
+  plugins: ["@typescript-eslint/eslint-plugin", "import"],
   extends: [
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended"
@@ -23,5 +23,6 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     'eol-last': ['error', 'always'],
     'multiline-ternary': ['error', 'never'],
+    "import/no-commonjs": ["error", { "allowRequire": true }]
   }
 };

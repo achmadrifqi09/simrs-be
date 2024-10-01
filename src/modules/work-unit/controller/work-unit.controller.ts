@@ -15,6 +15,7 @@ export class WorkUnitController {
 
   @Get('/polyclinic')
   @Header('Content-Type', 'application/json')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async findPolyclinic(@Query('keyword') keyword: string, @Req() req: any) {
     return this.workUnitService.getPolyclinic(keyword);
   }
