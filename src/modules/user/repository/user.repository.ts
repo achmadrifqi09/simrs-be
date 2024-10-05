@@ -9,6 +9,36 @@ export class UserRepository {
   async findByEmail(email: string) {
     return this.prismaService.user.findFirst({
       where: { email_user: email },
+      select: {
+        id_user: true,
+        nama_user: true,
+        email_user: true,
+        password_user: true,
+        status: true,
+        izin_user: {
+          select: {
+            izin_menu: {
+              select: {
+                nama: true,
+                id_menu: true,
+                is_view: true,
+                is_create: true,
+                is_update: true,
+                is_delete: true,
+                submenu: {
+                  select: {
+                    id_submenu: true,
+                    is_view: true,
+                    is_create: true,
+                    is_update: true,
+                    is_delete: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     });
   }
 }

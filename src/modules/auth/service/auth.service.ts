@@ -1,24 +1,19 @@
-import {
-  Dependencies,
-  HttpException,
-  HttpStatus,
-  Injectable,
-  Post,
-} from '@nestjs/common';
+import { Dependencies, HttpException, HttpStatus, Injectable, Post } from '@nestjs/common';
 import { UserService } from '../../user/service/user.service';
 import { LoginDTO } from '../dto/auth.dto';
 import * as bcrypt from 'bcrypt';
-import { User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import * as moment from 'moment-timezone';
 import * as process from 'node:process';
+import { AuthRepository } from '../repository/auth.repository';
 
-@Dependencies([UserService, JwtService])
+@Dependencies([UserService, JwtService, AuthRepository])
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly authRepository: AuthRepository,
   ) {}
 
   @Post()
@@ -30,7 +25,7 @@ export class AuthService {
       );
     }
 
-    const user: User = await this.userService.findByEmail(credentials.email);
+    const user = await this.userService.findByEmail(credentials.email);
     if (!user) {
       throw new HttpException(
         'Email atau password salah',
@@ -67,8 +62,20 @@ export class AuthService {
       ...payload,
       token: await this.jwtService.signAsync(payload),
       expires: formattedExpires,
+      permissions: user.izin_user,
     };
   }
 
-  async logout() {}
+  async verifyToken(token: string) {
+    try {
+      return await this.jwtService.verifyAsync(token);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      throw new HttpException('Token tidak valid', HttpStatus.UNAUTHORIZED);
+    }
+  }
+
+  async findClient(id: string) {
+    return this.authRepository.findClient(id);
+  }
 }

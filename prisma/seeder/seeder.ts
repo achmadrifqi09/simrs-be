@@ -1,13 +1,17 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { userSeeder } from './module-seeder/user.seeder';
+import { prismaClient } from './prisma';
+import { menuSeeder } from './module-seeder/menu.seeder';
+import { permissionSeeder } from './module-seeder/permission.seeder';
+import { Menu, MenuPermission } from './types/menu';
+import { userPermissionSeeder } from './module-seeder/user-permission.seeder';
+import { clientSeeder } from './module-seeder/client.seeder';
 
 async function main() {
-  await prisma.appClient.create({
-    data: {
-      nama_client: 'SIMRS_V4',
-    },
-  });
+  const user = await userSeeder();
+  const menus: Menu[] = await menuSeeder();
+  const permissions: MenuPermission[] = await permissionSeeder(menus);
+  await clientSeeder();
+  await userPermissionSeeder(user, permissions);
 }
 
 main()
@@ -16,5 +20,5 @@ main()
     process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect();
+    await prismaClient.$disconnect();
   });

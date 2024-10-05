@@ -13,12 +13,33 @@ export class AppMiddleware implements NestMiddleware {
   constructor(private readonly prismaService: PrismaService) {}
 
   async use(req: any, _res: any, next: () => void) {
-    const clientKey: string = req.headers['client-key'];
-    const payload = Cipher.decryptClientKey(clientKey);
+    const clientId: string = req.headers['client-id'];
+    const clientSignature: string = req.headers['client-signature'];
+
+    if (!clientId || !clientSignature) {
+      throw new HttpException(
+        'Client id atau client signature tidak ditemukan',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    const client = await this.prismaService.appClient.findUnique({
+      where: {
+        client_id: clientId,
+      },
+    });
+
+    if (!client)
+      throw new HttpException('Akses tidak valid', HttpStatus.UNAUTHORIZED);
+
+    const payload = Cipher.decryptClientKey(
+      clientSignature,
+      client?.client_secret,
+    );
 
     if (!payload?.client_id || !payload?.timestamp) {
       throw new HttpException(
-        'Client key tidak ditemukan',
+        'Signature tidak ditemukan',
         HttpStatus.UNAUTHORIZED,
       );
     }
@@ -28,19 +49,6 @@ export class AppMiddleware implements NestMiddleware {
     const currentDate = moment.tz('Asia/Jakarta');
 
     if (currentDate.isAfter(clientTimestamp)) {
-      throw new HttpException(
-        'Client key tidak valid',
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
-
-    const clientExists = await this.prismaService.appClient.findUnique({
-      where: {
-        client_id: payload?.client_id,
-      },
-    });
-
-    if (!clientExists) {
       throw new HttpException(
         'Client key tidak valid',
         HttpStatus.UNAUTHORIZED,

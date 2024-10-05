@@ -10,7 +10,10 @@ async function bootstrap() {
     credentials: true,
   });
   const configService = app.get(ConfigService);
-  await app.listen(configService.get('APP_PORT'));
+  await app.listen(
+    configService.get('APP_PORT'),
+    configService.get('APP_HOSTNAME'),
+  );
 }
 
 bootstrap().catch((e) => {

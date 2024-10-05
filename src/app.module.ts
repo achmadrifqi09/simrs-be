@@ -15,6 +15,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AuthMiddleware } from './middlewares/auth/auth.middleware';
 import { ReligionModule } from './modules/master/religion/religion.module';
 import { MasterModule } from './modules/master/master.module';
+import { MenuModule } from './modules/menu/menu.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { MasterModule } from './modules/master/master.module';
     AuthModule,
     ReligionModule,
     MasterModule,
+    MenuModule,
   ],
   controllers: [AppController],
   providers: [
@@ -54,6 +56,7 @@ export class AppModule {
       .exclude(
         '/api/v1/auth/login',
         '/api/v1/work-unit/polyclinic',
+        '/api/v1/auth/verify-token',
         '/api/v1/user',
       )
       .forRoutes('*');

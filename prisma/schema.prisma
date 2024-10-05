@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -8,43 +9,140 @@ datasource db {
 }
 
 model AppClient {
-  client_id   String    @id @default(uuid())
-  nama_client String    @db.VarChar(100)
-  created_at  DateTime  @default(now())
-  created_by  String    @default("0") @db.Char(36)
-  modified_at DateTime  @default(now())
-  modified_by String?   @db.Char(36)
-  deleted_at  DateTime? @db.DateTime(0)
-  deleted_by  String?   @db.Char(36)
-  restored_at DateTime? @db.DateTime(0)
-  restored_by String?   @db.Char(36)
-  is_deleted  Boolean   @default(false)
-  is_restored Boolean   @default(false)
+  client_id     String    @id @default(uuid())
+  client_secret String    @default(uuid())
+  nama_client   String    @db.VarChar(100)
+  created_at    DateTime  @default(now())
+  created_by    Int       @default(0)
+  modified_at   DateTime? @db.DateTime(0)
+  modified_by   Int?      @default(0)
+  deleted_at    DateTime? @db.DateTime(0)
+  deleted_by    Int?      @default(0)
+  restored_at   DateTime? @db.DateTime(0)
+  restored_by   Int?      @default(0)
+  is_deleted    Boolean   @default(false)
+  is_restored   Boolean   @default(false)
 
   @@map("db_client")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Menu {
-  id_menu     Int       @id @default(autoincrement())
-  sub_id_menu Int
-  nama_menu   String    @db.VarChar(100)
-  urutan      Int
-  icon_menu   String    @db.VarChar(100)
-  page        String    @db.VarChar(100)
-  status      Boolean
-  created_at  DateTime  @db.DateTime(0)
-  created_by  String    @default("0") @db.Char(36)
-  modified_at DateTime? @db.DateTime(0)
-  modified_by String?   @default("0") @db.Char(36)
-  deleted_at  DateTime? @db.DateTime(0)
-  deleted_by  String?   @db.Char(36)
-  restored_at DateTime? @db.DateTime(0)
-  restored_by String?   @db.Char(36)
-  is_deleted  Boolean   @default(false)
-  is_restored Boolean   @default(false)
+  id          Int              @id @default(autoincrement())
+  label       String           @db.VarChar(100)
+  order       Int              @unique
+  icon        String?          @db.VarChar(100)
+  pathname    String?          @db.VarChar(100)
+  status      Boolean          @default(true)
+  is_submenu  Boolean?         @default(false)
+  submenu     Submenu[]
+  izin_menu   MenuPermission[]
+  created_at  DateTime         @default(now())
+  created_by  Int              @default(0)
+  modified_at DateTime?        @db.DateTime(0)
+  modified_by Int?             @default(0)
+  deleted_at  DateTime?        @db.DateTime(0)
+  deleted_by  Int?             @default(0)
+  restored_at DateTime?        @db.DateTime(0)
+  restored_by Int?             @default(0)
+  is_deleted  Boolean          @default(false)
+  is_restored Boolean          @default(false)
 
   @@map("db_menu")
+}
+
+model Submenu {
+  id           Int                 @id @default(autoincrement())
+  label        String
+  pathname     String
+  id_menu      Int
+  menu         Menu                @relation(fields: [id_menu], references: [id])
+  izin_submenu SubmenuPermission[]
+  created_at   DateTime            @default(now())
+  created_by   Int                 @default(0)
+  modified_at  DateTime?           @db.DateTime(0)
+  modified_by  Int?                @default(0)
+  deleted_at   DateTime?           @db.DateTime(0)
+  deleted_by   Int?                @default(0)
+  restored_at  DateTime?           @db.DateTime(0)
+  restored_by  Int?                @default(0)
+  is_deleted   Boolean             @default(false)
+  is_restored  Boolean             @default(false)
+
+  @@index([id_menu])
+  @@map("db_submenu")
+}
+
+model MenuPermission {
+  id          Int                 @id @default(autoincrement())
+  nama        String
+  izin_user   UserPermission[]
+  id_menu     Int
+  menu        Menu                @relation(fields: [id_menu], references: [id])
+  submenu     SubmenuPermission[]
+  is_create   Boolean
+  is_update   Boolean
+  is_delete   Boolean
+  is_view     Boolean
+  created_at  DateTime            @default(now())
+  created_by  Int                 @default(0)
+  modified_at DateTime?           @db.DateTime(0)
+  modified_by Int?                @default(0)
+  deleted_at  DateTime?           @db.DateTime(0)
+  deleted_by  Int?                @default(0)
+  restored_at DateTime?           @db.DateTime(0)
+  restored_by Int?                @default(0)
+  is_deleted  Boolean             @default(false)
+  is_restored Boolean             @default(false)
+
+  @@index([id_menu])
+  @@map("db_izin_menu")
+}
+
+model SubmenuPermission {
+  id           Int            @id @default(autoincrement())
+  id_izin_menu Int
+  izin_menu    MenuPermission @relation(fields: [id_izin_menu], references: [id])
+  id_submenu   Int
+  submenu      Submenu        @relation(fields: [id_submenu], references: [id])
+  is_create    Boolean
+  is_update    Boolean
+  is_delete    Boolean
+  is_view      Boolean
+  created_at   DateTime       @default(now())
+  created_by   Int            @default(0)
+  modified_at  DateTime?      @db.DateTime(0)
+  modified_by  Int?           @default(0)
+  deleted_at   DateTime?      @db.DateTime(0)
+  deleted_by   Int?           @default(0)
+  restored_at  DateTime?      @db.DateTime(0)
+  restored_by  Int?           @default(0)
+  is_deleted   Boolean        @default(false)
+  is_restored  Boolean        @default(false)
+
+  @@index([id_izin_menu, id_submenu])
+  @@map("db_izin_submenu")
+}
+
+model UserPermission {
+  id           Int            @id @default(autoincrement())
+  id_izin_menu Int
+  izin_menu    MenuPermission @relation(fields: [id_izin_menu], references: [id])
+  id_user      Int
+  user         User           @relation(fields: [id_user], references: [id_user])
+  created_at   DateTime       @default(now())
+  created_by   Int            @default(0)
+  modified_at  DateTime?      @db.DateTime(0)
+  modified_by  Int?           @default(0)
+  deleted_at   DateTime?      @db.DateTime(0)
+  deleted_by   Int?           @default(0)
+  restored_at  DateTime?      @db.DateTime(0)
+  restored_by  Int?           @default(0)
+  is_deleted   Boolean        @default(false)
+  is_restored  Boolean        @default(false)
+
+  @@index([id_user, id_izin_menu])
+  @@map("db_izin_user")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -87,16 +185,16 @@ model Patient {
   kode_pos_asal           String    @db.VarChar(10)
   no_bpjs                 String    @db.VarChar(50)
   id_ms_pendidikan        Int
-  is_restored             Boolean   @default(false)
-  is_deleted              Boolean   @default(false)
-  restored_by             String?   @db.Char(36)
-  restored_at             DateTime? @db.DateTime(0)
-  deleted_by              String?   @db.Char(36)
-  deleted_at              DateTime? @db.DateTime(0)
-  modified_by             String?   @db.Char(36)
+  created_at              DateTime  @default(now())
+  created_by              Int       @default(0)
   modified_at             DateTime? @db.DateTime(0)
-  created_by              String    @default("0") @db.Char(36)
-  created_at              DateTime  @db.DateTime(0)
+  modified_by             Int?      @default(0)
+  deleted_at              DateTime? @db.DateTime(0)
+  deleted_by              Int?      @default(0)
+  restored_at             DateTime? @db.DateTime(0)
+  restored_by             Int?      @default(0)
+  is_deleted              Boolean   @default(false)
+  is_restored             Boolean   @default(false)
 
   @@id([id_pasien, kode_rm])
   @@map("db_pasien")
@@ -159,16 +257,16 @@ model Employee {
   status_pns              Int
   status_aktif            Int
   id_pelamar              Int
-  is_restored             Boolean   @default(false)
-  is_deleted              Boolean   @default(false)
-  restored_by             String?   @db.Char(36)
-  restored_at             DateTime? @db.DateTime(0)
-  deleted_by              String?   @db.Char(36)
-  deleted_at              DateTime? @db.DateTime(0)
-  modified_by             String?   @db.Char(36)
+  created_at              DateTime  @default(now())
+  created_by              Int       @default(0)
   modified_at             DateTime? @db.DateTime(0)
-  created_by              String    @default("0") @db.Char(36)
-  created_at              DateTime  @db.DateTime(0)
+  modified_by             Int?      @default(0)
+  deleted_at              DateTime? @db.DateTime(0)
+  deleted_by              Int?      @default(0)
+  restored_at             DateTime? @db.DateTime(0)
+  restored_by             Int?      @default(0)
+  is_deleted              Boolean   @default(false)
+  is_restored             Boolean   @default(false)
 
   @@index([id_ms_status_kawin], map: "id_status_kawin")
   @@map("db_pegawai")
@@ -184,14 +282,14 @@ model WorkUnit {
   status_antrian      Int       @default(0)
   id_unit_induk       Int
   status              Int       @default(1)
-  created_at          DateTime  @db.DateTime(0)
-  created_by          String    @default("0") @db.Char(36)
+  created_at          DateTime  @default(now())
+  created_by          Int       @default(0)
   modified_at         DateTime? @db.DateTime(0)
-  modified_by         String?   @db.Char(36)
+  modified_by         Int?      @default(0)
   deleted_at          DateTime? @db.DateTime(0)
-  deleted_by          String?   @db.Char(36)
+  deleted_by          Int?      @default(0)
   restored_at         DateTime? @db.DateTime(0)
-  restored_by         String?   @db.Char(36)
+  restored_by         Int?      @default(0)
   is_deleted          Boolean   @default(false)
   is_restored         Boolean   @default(false)
 
@@ -200,88 +298,27 @@ model WorkUnit {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model User {
-  id_user       Int       @id @default(autoincrement())
+  id_user       Int              @id @default(autoincrement())
   id_pegawai    Int
-  nama_user     String    @db.VarChar(100)
-  email_user    String    @unique @db.VarChar(100)
-  hp_user       String    @db.VarChar(20)
-  password_user String    @db.Text
-  status        Boolean
-  created_at    DateTime  @db.DateTime(0)
-  created_by    String    @default("0") @db.Char(36)
-  modified_at   DateTime? @db.DateTime(0)
-  modified_by   String?   @default("0") @db.Char(36)
-  deleted_at    DateTime? @db.DateTime(0)
-  deleted_by    String?   @db.Char(36)
-  restored_at   DateTime? @db.DateTime(0)
-  restored_by   String?   @db.Char(36)
-  is_deleted    Boolean   @default(false)
-  is_restored   Boolean   @default(false)
+  nama_user     String           @db.VarChar(100)
+  email_user    String           @unique @db.VarChar(100)
+  izin_user     UserPermission[]
+  hp_user       String           @db.VarChar(20)
+  password_user String           @db.Text
+  status        Boolean          @default(true)
+  created_at    DateTime         @default(now())
+  created_by    Int              @default(0)
+  modified_at   DateTime?        @db.DateTime(0)
+  modified_by   Int?             @default(0)
+  deleted_at    DateTime?        @db.DateTime(0)
+  deleted_by    Int?             @default(0)
+  restored_at   DateTime?        @db.DateTime(0)
+  restored_by   Int?             @default(0)
+  is_deleted    Boolean          @default(false)
+  is_restored   Boolean          @default(false)
 
+  @@index([email_user])
   @@map("db_user")
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model UserAccess {
-  id_akses    Int       @id @default(autoincrement())
-  id_level    Int
-  id_menu     Int
-  hak_add     Int
-  hak_edit    Int
-  hak_delete  Int
-  created_at  DateTime  @db.DateTime(0)
-  created_by  String    @default("0") @db.Char(36)
-  modified_at DateTime? @db.DateTime(0)
-  modified_by String?   @default("0") @db.Char(36)
-  deleted_at  DateTime? @db.DateTime(0)
-  deleted_by  String?   @db.Char(36)
-  restored_at DateTime? @db.DateTime(0)
-  restored_by String?   @db.Char(36)
-  is_deleted  Boolean   @default(false)
-  is_restored Boolean   @default(false)
-
-  @@map("db_user_akses")
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model UserLevel {
-  id_level    Int       @id @default(autoincrement())
-  nama_level  String    @db.VarChar(100)
-  status      Boolean
-  created_at  DateTime  @db.DateTime(0)
-  created_by  String    @default("0") @db.Char(36)
-  modified_at DateTime? @db.DateTime(0)
-  modified_by String?   @default("0") @db.Char(36)
-  deleted_at  DateTime? @db.DateTime(0)
-  deleted_by  String?   @db.Char(36)
-  restored_at DateTime? @db.DateTime(0)
-  restored_by String?   @db.Char(36)
-  is_deleted  Boolean   @default(false)
-  is_restored Boolean   @default(false)
-
-  @@map("db_user_level")
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model UserHasLevelAccess {
-  id_user_level_akses Int       @id @default(autoincrement())
-  jenis_user          Int
-  id_user             Int
-  id_pegawai          Int
-  id_level            Int
-  status              Boolean
-  created_at          DateTime  @db.DateTime(0)
-  created_by          String    @default("0") @db.Char(36)
-  modified_at         DateTime? @db.DateTime(0)
-  modified_by         String?   @default("0") @db.Char(36)
-  deleted_at          DateTime? @db.DateTime(0)
-  deleted_by          String?   @db.Char(36)
-  restored_at         DateTime? @db.DateTime(0)
-  restored_by         String?   @db.Char(36)
-  is_deleted          Boolean   @default(false)
-  is_restored         Boolean   @default(false)
-
-  @@map("db_user_level_akses")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -290,13 +327,13 @@ model Religion {
   nama_agama  String    @db.VarChar(50)
   status      Int       @default(1)
   created_at  DateTime  @default(now())
-  created_by  String    @default("0") @db.Char(36)
+  created_by  Int       @default(0)
   modified_at DateTime? @db.DateTime(0)
-  modified_by String?   @db.Char(36)
+  modified_by Int?      @default(0)
   deleted_at  DateTime? @db.DateTime(0)
-  deleted_by  String?   @db.Char(36)
+  deleted_by  Int?      @default(0)
   restored_at DateTime? @db.DateTime(0)
-  restored_by String?   @db.Char(36)
+  restored_by Int?      @default(0)
   is_deleted  Boolean   @default(false)
   is_restored Boolean   @default(false)
 
@@ -310,14 +347,14 @@ model Vilage {
   nama_desa       Int
   status_desa     Int       @default(0)
   status          Int       @default(1)
-  created_at      DateTime  @db.DateTime(0)
-  created_by      String    @default("0") @db.Char(36)
+  created_at      DateTime  @default(now())
+  created_by      Int       @default(0)
   modified_at     DateTime? @db.DateTime(0)
-  modified_by     String?   @db.Char(36)
+  modified_by     Int?      @default(0)
   deleted_at      DateTime? @db.DateTime(0)
-  deleted_by      String?   @db.Char(36)
+  deleted_by      Int?      @default(0)
   restored_at     DateTime? @db.DateTime(0)
-  restored_by     String?   @db.Char(36)
+  restored_by     Int?      @default(0)
   is_deleted      Boolean   @default(false)
   is_restored     Boolean   @default(false)
 
@@ -329,14 +366,14 @@ model BloodType {
   id_ms_golongan_darah Int       @id @default(autoincrement())
   nama_golongan_darah  String    @db.VarChar(2)
   status               Int       @default(1)
-  created_at           DateTime  @db.DateTime(0)
-  created_by           String    @default("0") @db.Char(36)
+  created_at           DateTime  @default(now())
+  created_by           Int       @default(0)
   modified_at          DateTime? @db.DateTime(0)
-  modified_by          String?   @db.Char(36)
+  modified_by          Int?      @default(0)
   deleted_at           DateTime? @db.DateTime(0)
-  deleted_by           String?   @db.Char(36)
+  deleted_by           Int?      @default(0)
   restored_at          DateTime? @db.DateTime(0)
-  restored_by          String?   @db.Char(36)
+  restored_by          Int?      @default(0)
   is_deleted           Boolean   @default(false)
   is_restored          Boolean   @default(false)
 
@@ -348,14 +385,14 @@ model Position {
   id_ms_jabatan Int       @id @default(autoincrement())
   nama_jabatan  String    @db.VarChar(200)
   status        Int       @default(1)
-  created_at    DateTime  @db.DateTime(0)
-  created_by    String    @default("0") @db.Char(36)
+  created_at    DateTime  @default(now())
+  created_by    Int       @default(0)
   modified_at   DateTime? @db.DateTime(0)
-  modified_by   String?   @db.Char(36)
+  modified_by   Int?      @default(0)
   deleted_at    DateTime? @db.DateTime(0)
-  deleted_by    String?   @db.Char(36)
+  deleted_by    Int?      @default(0)
   restored_at   DateTime? @db.DateTime(0)
-  restored_by   String?   @db.Char(36)
+  restored_by   Int?      @default(0)
   is_deleted    Boolean   @default(false)
   is_restored   Boolean   @default(false)
 
@@ -368,14 +405,14 @@ model TypeOfEmployees {
   id_ms_jenis_pegawai_status Int
   nama_jenis_pegawai         String    @db.VarChar(100)
   status                     Int       @default(1)
-  created_at                 DateTime  @db.DateTime(0)
-  created_by                 String    @default("0") @db.Char(36)
+  created_at                 DateTime  @default(now())
+  created_by                 Int       @default(0)
   modified_at                DateTime? @db.DateTime(0)
-  modified_by                String?   @db.Char(36)
+  modified_by                Int?      @default(0)
   deleted_at                 DateTime? @db.DateTime(0)
-  deleted_by                 String?   @db.Char(36)
+  deleted_by                 Int?      @default(0)
   restored_at                DateTime? @db.DateTime(0)
-  restored_by                String?   @db.Char(36)
+  restored_by                Int?      @default(0)
   is_deleted                 Boolean   @default(false)
   is_restored                Boolean   @default(false)
 
@@ -387,14 +424,14 @@ model TypeOfStatusOfficer {
   id_ms_jenis_pegawai_status Int       @id @default(autoincrement())
   status_jenis_pegawai       String    @db.VarChar(100)
   status                     Int       @default(1)
-  created_at                 DateTime  @db.DateTime(0)
-  created_by                 String    @default("0") @db.Char(36)
+  created_at                 DateTime  @default(now())
+  created_by                 Int       @default(0)
   modified_at                DateTime? @db.DateTime(0)
-  modified_by                String?   @db.Char(36)
+  modified_by                Int?      @default(0)
   deleted_at                 DateTime? @db.DateTime(0)
-  deleted_by                 String?   @db.Char(36)
+  deleted_by                 Int?      @default(0)
   restored_at                DateTime? @db.DateTime(0)
-  restored_by                String?   @db.Char(36)
+  restored_by                Int?      @default(0)
   is_deleted                 Boolean   @default(false)
   is_restored                Boolean   @default(false)
 
@@ -407,14 +444,14 @@ model Disctric {
   id_ms_kota      Int
   nama_kecamatan  Int
   status          Int       @default(1)
-  created_at      DateTime  @db.DateTime(0)
-  created_by      String    @default("0") @db.Char(36)
+  created_at      DateTime  @default(now())
+  created_by      Int       @default(0)
   modified_at     DateTime? @db.DateTime(0)
-  modified_by     String?   @db.Char(36)
+  modified_by     Int?      @default(0)
   deleted_at      DateTime? @db.DateTime(0)
-  deleted_by      String?   @db.Char(36)
+  deleted_by      Int?      @default(0)
   restored_at     DateTime? @db.DateTime(0)
-  restored_by     String?   @db.Char(36)
+  restored_by     Int?      @default(0)
   is_deleted      Boolean   @default(false)
   is_restored     Boolean   @default(false)
 
@@ -428,14 +465,14 @@ model City {
   nama_kota      Int
   status_kota    Int       @default(0)
   status         Int       @default(1)
-  created_at     DateTime  @db.DateTime(0)
-  created_by     String    @default("0") @db.Char(36)
+  created_at     DateTime  @default(now())
+  created_by     Int       @default(0)
   modified_at    DateTime? @db.DateTime(0)
-  modified_by    String?   @db.Char(36)
+  modified_by    Int?      @default(0)
   deleted_at     DateTime? @db.DateTime(0)
-  deleted_by     String?   @db.Char(36)
+  deleted_by     Int?      @default(0)
   restored_at    DateTime? @db.DateTime(0)
-  restored_by    String?   @db.Char(36)
+  restored_by    Int?      @default(0)
   is_deleted     Boolean   @default(false)
   is_restored    Boolean   @default(false)
 
@@ -448,14 +485,14 @@ model QueueCounter {
   nama_loket          Int
   ket_loket           String    @db.Text
   status              Int       @default(1)
-  created_at          DateTime  @db.DateTime(0)
-  created_by          String    @default("0") @db.Char(36)
+  created_at          DateTime  @default(now())
+  created_by          Int       @default(0)
   modified_at         DateTime? @db.DateTime(0)
-  modified_by         String?   @db.Char(36)
+  modified_by         Int?      @default(0)
   deleted_at          DateTime? @db.DateTime(0)
-  deleted_by          String?   @db.Char(36)
+  deleted_by          Int?      @default(0)
   restored_at         DateTime? @db.DateTime(0)
-  restored_by         String?   @db.Char(36)
+  restored_by         Int?      @default(0)
   is_deleted          Boolean   @default(false)
   is_restored         Boolean   @default(false)
 
@@ -467,14 +504,14 @@ model Country {
   id_ms_negara Int       @id @default(autoincrement())
   nama_negara  Int
   status       Int       @default(1)
-  created_at   DateTime  @db.DateTime(0)
-  created_by   String    @default("0") @db.Char(36)
+  created_at   DateTime  @default(now())
+  created_by   Int       @default(0)
   modified_at  DateTime? @db.DateTime(0)
-  modified_by  String?   @db.Char(36)
+  modified_by  Int?      @default(0)
   deleted_at   DateTime? @db.DateTime(0)
-  deleted_by   String?   @db.Char(36)
+  deleted_by   Int?      @default(0)
   restored_at  DateTime? @db.DateTime(0)
-  restored_by  String?   @db.Char(36)
+  restored_by  Int?      @default(0)
   is_deleted   Boolean   @default(false)
   is_restored  Boolean   @default(false)
 
@@ -486,14 +523,14 @@ model RankOfEmployees {
   id_ms_pangkat Int       @id @default(autoincrement())
   nama_pangkat  String    @db.VarChar(100)
   status        Int       @default(1)
-  created_at    DateTime  @db.DateTime(0)
-  created_by    String    @default("0") @db.Char(36)
+  created_at    DateTime  @default(now())
+  created_by    Int       @default(0)
   modified_at   DateTime? @db.DateTime(0)
-  modified_by   String?   @db.Char(36)
+  modified_by   Int?      @default(0)
   deleted_at    DateTime? @db.DateTime(0)
-  deleted_by    String?   @db.Char(36)
+  deleted_by    Int?      @default(0)
   restored_at   DateTime? @db.DateTime(0)
-  restored_by   String?   @db.Char(36)
+  restored_by   Int?      @default(0)
   is_deleted    Boolean   @default(false)
   is_restored   Boolean   @default(false)
 
@@ -506,14 +543,14 @@ model Province {
   id_ms_negara   Int
   nama_provinsi  Int
   status         Int       @default(1)
-  created_at     DateTime  @db.DateTime(0)
-  created_by     String    @default("0") @db.Char(36)
+  created_at     DateTime  @default(now())
+  created_by     Int       @default(0)
   modified_at    DateTime? @db.DateTime(0)
-  modified_by    String?   @db.Char(36)
+  modified_by    Int?      @default(0)
   deleted_at     DateTime? @db.DateTime(0)
-  deleted_by     String?   @db.Char(36)
+  deleted_by     Int?      @default(0)
   restored_at    DateTime? @db.DateTime(0)
-  restored_by    String?   @db.Char(36)
+  restored_by    Int?      @default(0)
   is_deleted     Boolean   @default(false)
   is_restored    Boolean   @default(false)
 
@@ -525,14 +562,14 @@ model Specialist {
   id_ms_spesialis Int       @id @default(autoincrement())
   nama_spesialis  String    @db.VarChar(100)
   status          Int       @default(1)
-  created_at      DateTime  @db.DateTime(0)
-  created_by      String    @default("0") @db.Char(36)
+  created_at      DateTime  @default(now())
+  created_by      Int       @default(0)
   modified_at     DateTime? @db.DateTime(0)
-  modified_by     String?   @db.Char(36)
+  modified_by     Int?      @default(0)
   deleted_at      DateTime? @db.DateTime(0)
-  deleted_by      String?   @db.Char(36)
+  deleted_by      Int?      @default(0)
   restored_at     DateTime? @db.DateTime(0)
-  restored_by     String?   @db.Char(36)
+  restored_by     Int?      @default(0)
   is_deleted      Boolean   @default(false)
   is_restored     Boolean   @default(false)
 
@@ -544,14 +581,14 @@ model MeritalStatus {
   id_ms_status_kawin Int       @id @default(autoincrement())
   nama_status_kawin  String    @db.VarChar(50)
   status             Int       @default(1)
-  created_at         DateTime  @db.DateTime(0)
-  created_by         String    @default("0") @db.Char(36)
+  created_at         DateTime  @default(now())
+  created_by         Int       @default(0)
   modified_at        DateTime? @db.DateTime(0)
-  modified_by        String?   @db.Char(36)
+  modified_by        Int?      @default(0)
   deleted_at         DateTime? @db.DateTime(0)
-  deleted_by         String?   @db.Char(36)
+  deleted_by         Int?      @default(0)
   restored_at        DateTime? @db.DateTime(0)
-  restored_by        String?   @db.Char(36)
+  restored_by        Int?      @default(0)
   is_deleted         Boolean   @default(false)
   is_restored        Boolean   @default(false)
 
@@ -563,14 +600,14 @@ model EmployeeStatus {
   id_ms_status_pegawai Int       @id @default(autoincrement())
   nama_status_pegawai  String    @db.VarChar(100)
   status               Int       @default(1)
-  created_at           DateTime  @db.DateTime(0)
-  created_by           String    @default("0") @db.Char(36)
+  created_at           DateTime  @default(now())
+  created_by           Int       @default(0)
   modified_at          DateTime? @db.DateTime(0)
-  modified_by          String?   @db.Char(36)
+  modified_by          Int?      @default(0)
   deleted_at           DateTime? @db.DateTime(0)
-  deleted_by           String?   @db.Char(36)
+  deleted_by           Int?      @default(0)
   restored_at          DateTime? @db.DateTime(0)
-  restored_by          String?   @db.Char(36)
+  restored_by          Int?      @default(0)
   is_deleted           Boolean   @default(false)
   is_restored          Boolean   @default(false)
 
@@ -582,14 +619,14 @@ model EducationLevel {
   id_ms_tingkat_pendidikan Int       @id @default(autoincrement())
   nama_tingkat_pendidikan  String    @db.VarChar(100)
   status                   Int       @default(1)
-  created_at               DateTime  @db.DateTime(0)
-  created_by               String    @default("0") @db.Char(36)
+  created_at               DateTime  @default(now())
+  created_by               Int       @default(0)
   modified_at              DateTime? @db.DateTime(0)
-  modified_by              String?   @db.Char(36)
+  modified_by              Int?      @default(0)
   deleted_at               DateTime? @db.DateTime(0)
-  deleted_by               String?   @db.Char(36)
+  deleted_by               Int?      @default(0)
   restored_at              DateTime? @db.DateTime(0)
-  restored_by              String?   @db.Char(36)
+  restored_by              Int?      @default(0)
   is_deleted               Boolean   @default(false)
   is_restored              Boolean   @default(false)
 
@@ -597,7 +634,7 @@ model EducationLevel {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model db_antrian {
+model Qeueu {
   id_antrian          Int       @id @default(autoincrement())
   jenis_pasien        Int
   jenis_penjamin      Int
@@ -613,20 +650,22 @@ model db_antrian {
   id_ms_loket_antrian Int
   status_panggil      Int
   status              Int       @default(1)
-  created_at          DateTime  @db.DateTime(0)
-  created_by          String    @default("0") @db.Char(36)
+  created_at          DateTime  @default(now())
+  created_by          Int       @default(0)
   modified_at         DateTime? @db.DateTime(0)
-  modified_by         String?   @db.Char(36)
+  modified_by         Int?      @default(0)
   deleted_at          DateTime? @db.DateTime(0)
-  deleted_by          String?   @db.Char(36)
+  deleted_by          Int?      @default(0)
   restored_at         DateTime? @db.DateTime(0)
-  restored_by         String?   @db.Char(36)
+  restored_by         Int?      @default(0)
   is_deleted          Boolean   @default(false)
   is_restored         Boolean   @default(false)
+
+  @@map("db_antrian")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model db_jadwal_dokter {
+model DoctorSchedule {
   id_jadwal_dokter  Int       @id @default(autoincrement())
   id_hari           Int
   tgl_praktek       DateTime  @db.Date
@@ -639,20 +678,22 @@ model db_jadwal_dokter {
   onsite_bpjs       Int
   onsite_umum       Int
   status            Int       @default(1)
-  created_at        DateTime  @db.DateTime(0)
-  created_by        String    @default("0") @db.Char(36)
+  created_at        DateTime  @default(now())
+  created_by        Int       @default(0)
   modified_at       DateTime? @db.DateTime(0)
-  modified_by       String?   @db.Char(36)
+  modified_by       Int?      @default(0)
   deleted_at        DateTime? @db.DateTime(0)
-  deleted_by        String?   @db.Char(36)
+  deleted_by        Int?      @default(0)
   restored_at       DateTime? @db.DateTime(0)
-  restored_by       String?   @db.Char(36)
+  restored_by       Int?      @default(0)
   is_deleted        Boolean   @default(false)
   is_restored       Boolean   @default(false)
+
+  @@map("db_jadwal_dokter")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model db_jadwal_dokter_ganti {
+model DoctorChangeSchedule {
   id_jadwal_dokter_ganti Int       @id @default(autoincrement())
   id_jadwal_dokter       Int
   tgl_praktek            DateTime  @db.Date
@@ -666,14 +707,16 @@ model db_jadwal_dokter_ganti {
   onsite_umum            Int
   keterangan_ganti       String    @db.Text
   status                 Int       @default(1)
-  created_at             DateTime  @db.DateTime(0)
-  created_by             String    @default("0") @db.Char(36)
+  created_at             DateTime  @default(now())
+  created_by             Int       @default(0)
   modified_at            DateTime? @db.DateTime(0)
-  modified_by            String?   @db.Char(36)
+  modified_by            Int?      @default(0)
   deleted_at             DateTime? @db.DateTime(0)
-  deleted_by             String?   @db.Char(36)
+  deleted_by             Int?      @default(0)
   restored_at            DateTime? @db.DateTime(0)
-  restored_by            String?   @db.Char(36)
+  restored_by            Int?      @default(0)
   is_deleted             Boolean   @default(false)
   is_restored            Boolean   @default(false)
+
+  @@map("db_jadwal_dokter_ganti")
 }
