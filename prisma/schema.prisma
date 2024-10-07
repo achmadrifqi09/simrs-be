@@ -502,7 +502,7 @@ model QueueCounter {
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Country {
   id_ms_negara Int       @id @default(autoincrement())
-  nama_negara  Int
+  nama_negara  String
   status       Int       @default(1)
   created_at   DateTime  @default(now())
   created_by   Int       @default(0)

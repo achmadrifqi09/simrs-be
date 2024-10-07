@@ -45,7 +45,7 @@ export class AppMiddleware implements NestMiddleware {
     }
 
     const clientTimestamp = moment.tz(payload.timestamp, 'Asia/Jakarta');
-    clientTimestamp.add(process.env.CLIENT_KEY_EXPIRED_TIME, 'minutes');
+    clientTimestamp.add(process.env.CLIENT_KEY_EXPIRED_TIME, 'hours');
     const currentDate = moment.tz('Asia/Jakarta');
 
     if (currentDate.isAfter(clientTimestamp)) {

@@ -1,21 +1,21 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../../prisma/prisma.service';
-import { ReligionPayloadDTO } from '../dto/religion.dto';
-import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import {
   SoftDeleteDTO,
   StatusUpdateDTO,
 } from '../../../../common/dto/common.dto';
+import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
+import { CountryPayloadDTO } from '../dto/country.dto';
 
 @Dependencies([PrismaService])
 @Injectable()
-export class ReligionRepository {
+export class CountryRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findAllReligion(keyword?: string) {
-    return this.prismaService.religion.findMany({
+  async findAllCountry(keyword?: string) {
+    return this.prismaService.country.findMany({
       where: {
-        nama_agama: {
+        nama_negara: {
           contains: keyword,
         },
         is_deleted: false,
@@ -23,52 +23,52 @@ export class ReligionRepository {
     });
   }
 
-  async updateStatusReligion(id: number, religion: StatusUpdateDTO) {
+  async updateStatusCountry(id: number, country: StatusUpdateDTO) {
     try {
-      return await this.prismaService.religion.update({
+      return await this.prismaService.country.update({
         where: {
-          id_ms_agama: Number(id),
+          id_ms_negara: Number(id),
           is_deleted: false,
         },
-        data: religion,
+        data: country,
       });
     } catch (error) {
       PrismaErrorHandler.handle(error);
     }
   }
 
-  async createReligion(religion: ReligionPayloadDTO) {
+  async createCountry(country: CountryPayloadDTO) {
     try {
-      return await this.prismaService.religion.create({
-        data: religion,
+      return await this.prismaService.country.create({
+        data: country,
       });
     } catch (error) {
       PrismaErrorHandler.handle(error);
     }
   }
 
-  async softDeleteReligion(id: number, payload: SoftDeleteDTO) {
+  async softDeleteCountry(id: number, payload: SoftDeleteDTO) {
     try {
-      return await this.prismaService.religion.update({
+      return await this.prismaService.country.update({
         where: {
-          id_ms_agama: Number(id),
-          is_deleted: false,
-        },
-        data: payload,
-      });
-    } catch (error) {
-      PrismaErrorHandler.handle(error);
-    }
-  }
-
-  async updateReligion(id: number, payload: ReligionPayloadDTO) {
-    try {
-      return await this.prismaService.religion.update({
-        where: {
-          id_ms_agama: Number(id),
+          id_ms_negara: Number(id),
           is_deleted: false,
         },
         data: payload,
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
+  }
+
+  async updateCountry(id: number, country: CountryPayloadDTO) {
+    try {
+      return await this.prismaService.country.update({
+        where: {
+          id_ms_negara: Number(id),
+          is_deleted: false,
+        },
+        data: country,
       });
     } catch (error) {
       PrismaErrorHandler.handle(error);

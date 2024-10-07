@@ -4,6 +4,7 @@ import { BloodTypeModule } from './blood-type/blood-type.module';
 import { StructuralPositionModule } from './structural-position/structural-position.module';
 import { MaritalStatusModule } from './marital-status/marital-status.module';
 import { EmployeeStatusModule } from './employee-status/employee-status.module';
+import { CountryModule } from './country/country.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { EmployeeStatusModule } from './employee-status/employee-status.module';
     StructuralPositionModule,
     MaritalStatusModule,
     EmployeeStatusModule,
+    CountryModule,
   ],
 })
 export class MasterModule {}

@@ -486,7 +486,7 @@ CREATE TABLE `ms_loket_antrian` (
 -- CreateTable
 CREATE TABLE `ms_negara` (
     `id_ms_negara` INTEGER NOT NULL AUTO_INCREMENT,
-    `nama_negara` INTEGER NOT NULL,
+    `nama_negara` VARCHAR(191) NOT NULL,
     `status` INTEGER NOT NULL DEFAULT 1,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `created_by` INTEGER NOT NULL DEFAULT 0,

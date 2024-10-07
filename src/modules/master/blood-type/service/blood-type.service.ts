@@ -44,17 +44,7 @@ export class BloodTypeService {
   }
 
   async finAllBloodType(keyword?: string) {
-    const result = await this.bloodTypeRepository.findAllBloodType(
-      keyword || '',
-    );
-
-    const bloodTypes: BloodTypeDTO[] = result.map((bloodType) => ({
-      id_ms_golongan_darah: bloodType.id_ms_golongan_darah,
-      nama_golongan_darah: bloodType.nama_golongan_darah,
-      status: bloodType.status,
-    }));
-
-    return bloodTypes;
+    return this.bloodTypeRepository.findAllBloodType(keyword || '');
   }
 
   async bloodTypeSoftDelete(id: number, req: any) {

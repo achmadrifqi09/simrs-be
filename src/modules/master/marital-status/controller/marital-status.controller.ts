@@ -41,7 +41,7 @@ export class MaritalStatusController {
   }
 
   @Patch('/:id')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   @Header('Content-Type', 'application/json')
   async updateMaritalStatus(
     @Param('id') id: number,
@@ -58,6 +58,7 @@ export class MaritalStatusController {
 
   @Patch('/:id/status')
   @Header('Content-Type', 'application/json')
+  @HttpCode(HttpStatus.OK)
   async updateMaritalStatusVisibility(
     @Param('id') id: number,
     @Req() req: any,

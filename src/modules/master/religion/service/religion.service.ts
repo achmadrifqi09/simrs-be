@@ -45,9 +45,9 @@ export class ReligionService {
     return this.religionRepository.updateReligion(id, religion);
   }
 
-  async updateStatusReligion(id: number, bloodType: StatusUpdateDTO, req: any) {
+  async updateStatusReligion(id: number, religion: StatusUpdateDTO, req: any) {
     const payload: StatusUpdateDTO = {
-      status: Number(bloodType.status),
+      status: Number(religion.status),
       modified_by: req?.user?.id,
       modified_at: generateCurrentDate(),
     };

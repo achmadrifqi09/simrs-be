@@ -25,7 +25,7 @@ export class StructuralPositionRepository {
 
   async createStructuralPosition(structuralPosition: PositionPayloadDTO) {
     try {
-      return this.prismaService.position.create({
+      return await this.prismaService.position.create({
         data: structuralPosition,
       });
     } catch (error) {
@@ -66,10 +66,9 @@ export class StructuralPositionRepository {
 
   async softDeleteStructuralPosition(id: number, payload: SoftDeleteDTO) {
     try {
-      return this.prismaService.position.update({
+      return await this.prismaService.position.update({
         where: {
           id_ms_jabatan: Number(id),
-          is_deleted: false,
         },
         data: payload,
       });

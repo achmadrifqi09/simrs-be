@@ -14,7 +14,7 @@ export class BloodTypeRepository {
 
   async createBloodType(bloodType: BloodTypePayloadDTO) {
     try {
-      return this.prismaService.bloodType.create({
+      return await this.prismaService.bloodType.create({
         data: bloodType,
       });
     } catch (error) {
@@ -63,7 +63,7 @@ export class BloodTypeRepository {
 
   async bloodTypeSoftDelete(id: number, payload: SoftDeleteDTO) {
     try {
-      return this.prismaService.bloodType.update({
+      return await this.prismaService.bloodType.update({
         where: {
           id_ms_golongan_darah: Number(id),
           is_deleted: false,

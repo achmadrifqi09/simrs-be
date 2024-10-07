@@ -43,6 +43,7 @@ export class BloodTypeController {
 
   @Patch('/:id/status')
   @Header('Content-Type', 'application/json')
+  @HttpCode(HttpStatus.OK)
   async updateStatusBloodType(
     @Param('id') id: number,
     @Req() req: any,
@@ -54,6 +55,7 @@ export class BloodTypeController {
 
   @Patch('/:id')
   @Header('Content-Type', 'application/json')
+  @HttpCode(HttpStatus.OK)
   async updateBloodType(
     @Param('id') id: number,
     @Req() req: any,

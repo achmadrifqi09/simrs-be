@@ -25,7 +25,7 @@ export class MaritalStatusRepository {
 
   async createMaritalStatus(maritalStatus: MaritalStatusPayloadDTO) {
     try {
-      return this.prismaService.maritalStatus.create({
+      return await this.prismaService.maritalStatus.create({
         data: maritalStatus,
       });
     } catch (error) {
@@ -63,7 +63,7 @@ export class MaritalStatusRepository {
 
   async softDeleteMaritalStatus(id: number, payload: SoftDeleteDTO) {
     try {
-      return this.prismaService.maritalStatus.update({
+      return await this.prismaService.maritalStatus.update({
         where: {
           id_ms_status_kawin: Number(id),
           is_deleted: false,
