@@ -14,10 +14,4 @@ type ReligionDTO = {
   status: number;
 };
 
-type ReligionSoftDeleteDTO = {
-  is_deleted: boolean;
-  deleted_by: number;
-  deleted_at: Date;
-};
-
-export type { ReligionPayloadDTO, ReligionDTO, ReligionSoftDeleteDTO };
+export type { ReligionPayloadDTO, ReligionDTO };

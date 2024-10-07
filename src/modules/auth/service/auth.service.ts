@@ -1,4 +1,10 @@
-import { Dependencies, HttpException, HttpStatus, Injectable, Post } from '@nestjs/common';
+import {
+  Dependencies,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  Post,
+} from '@nestjs/common';
 import { UserService } from '../../user/service/user.service';
 import { LoginDTO } from '../dto/auth.dto';
 import * as bcrypt from 'bcrypt';

@@ -577,7 +577,7 @@ model Specialist {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model MeritalStatus {
+model MaritalStatus {
   id_ms_status_kawin Int       @id @default(autoincrement())
   nama_status_kawin  String    @db.VarChar(50)
   status             Int       @default(1)

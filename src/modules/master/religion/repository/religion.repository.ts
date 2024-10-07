@@ -1,7 +1,11 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../../prisma/prisma.service';
-import { ReligionPayloadDTO, ReligionSoftDeleteDTO } from '../dto/religion.dto';
+import { ReligionPayloadDTO } from '../dto/religion.dto';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
+import {
+  SoftDeleteDTO,
+  StatusUpdateDTO,
+} from '../../../../common/dto/common.dto';
 
 @Dependencies([PrismaService])
 @Injectable()
@@ -19,17 +23,36 @@ export class ReligionRepository {
     });
   }
 
-  async createReligion(religion: ReligionPayloadDTO) {
-    return this.prismaService.religion.create({
-      data: religion,
-    });
+  async updateStatusReligion(id: number, religion: StatusUpdateDTO) {
+    try {
+      return await this.prismaService.religion.update({
+        where: {
+          id_ms_agama: Number(id),
+          is_deleted: false,
+        },
+        data: religion,
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
   }
 
-  async softDeleteReligion(id: number, payload: ReligionSoftDeleteDTO) {
+  async createReligion(religion: ReligionPayloadDTO) {
+    try {
+      return this.prismaService.religion.create({
+        data: religion,
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
+  }
+
+  async softDeleteReligion(id: number, payload: SoftDeleteDTO) {
     try {
       return this.prismaService.religion.update({
         where: {
           id_ms_agama: Number(id),
+          is_deleted: false,
         },
         data: payload,
       });
@@ -43,6 +66,7 @@ export class ReligionRepository {
       return await this.prismaService.religion.update({
         where: {
           id_ms_agama: Number(id),
+          is_deleted: false,
         },
         data: payload,
       });

@@ -22,7 +22,7 @@ module.exports = {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
     'eol-last': ['error', 'always'],
-    'multiline-ternary': ['error', 'never'],
+    "multiline-ternary": "off",
     "import/no-commonjs": ["error", { "allowRequire": true }]
   }
 };

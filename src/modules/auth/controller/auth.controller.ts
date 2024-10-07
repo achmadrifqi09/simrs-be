@@ -5,8 +5,7 @@ import { LoginDTO } from '../dto/auth.dto';
 
 @Controller('/api/v1/auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {
-  }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('/login')
   @Header('Content-Type', 'application/json')

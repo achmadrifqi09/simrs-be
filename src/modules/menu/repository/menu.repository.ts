@@ -7,25 +7,6 @@ export class MenuRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async findAll() {
-    // return this.prismaService.menu.findMany({
-    //   where: { status: true },
-    //   select: {
-    //     id: true,
-    //     label: true,
-    //     order: true,
-    //     icon: true,
-    //     pathname: true,
-    //     is_submenu: true,
-    //     submenu: {
-    //       select: {
-    //         label: true,
-    //         pathname: true,
-    //         id_menu: true,
-    //       },
-    //     },
-    //   },
-    // });
-
     return this.prismaService.userPermission.findMany({
       where: {
         id_user: 1,

@@ -1,28 +1,19 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { ReligionRepository } from '../repository/religion.repository';
-import {
-  ReligionDTO,
-  ReligionPayloadDTO,
-  ReligionSoftDeleteDTO,
-} from '../dto/religion.dto';
+import { ReligionPayloadDTO } from '../dto/religion.dto';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
+import {
+  SoftDeleteDTO,
+  StatusUpdateDTO,
+} from '../../../../common/dto/common.dto';
 
 @Dependencies([ReligionRepository])
 @Injectable()
 export class ReligionService {
-  constructor(private readonly religionRepository: ReligionRepository) {
-  }
+  constructor(private readonly religionRepository: ReligionRepository) {}
 
   async finAllReligion(keyword?: string) {
-    const result = await this.religionRepository.findAllReligion(keyword || '');
-
-    const religions: ReligionDTO[] = result.map((religion) => ({
-      id_ms_agama: religion.id_ms_agama,
-      nama_agama: religion.nama_agama,
-      status: religion.status,
-    }));
-
-    return religions;
+    return this.religionRepository.findAllReligion(keyword || '');
   }
 
   async createReligion(religion: ReligionPayloadDTO, req: any) {
@@ -36,7 +27,7 @@ export class ReligionService {
   }
 
   async softDeleteReligion(id: number, req: any) {
-    const deletePayload: ReligionSoftDeleteDTO = {
+    const deletePayload: SoftDeleteDTO = {
       is_deleted: true,
       deleted_by: req.user?.id,
       deleted_at: generateCurrentDate(),
@@ -52,5 +43,14 @@ export class ReligionService {
       modified_at: generateCurrentDate(),
     };
     return this.religionRepository.updateReligion(id, religion);
+  }
+
+  async updateStatusReligion(id: number, bloodType: StatusUpdateDTO, req: any) {
+    const payload: StatusUpdateDTO = {
+      status: Number(bloodType.status),
+      modified_by: req?.user?.id,
+      modified_at: generateCurrentDate(),
+    };
+    return this.religionRepository.updateStatusReligion(id, payload);
   }
 }

@@ -138,9 +138,12 @@ export const menuSeeder = async (): Promise<Menu[]> => {
           pathname: '/master/structural-position',
         },
         { label: 'Kategori Pegawai', pathname: '/master/employee-category' },
+        { label: 'Jenis Pegawai', pathname: '/master/employee-type' },
         { label: 'Status Pegawai', pathname: '/master/employee-status' },
         { label: 'Status Kawin', pathname: '/master/marital-status' },
         { label: 'Status Keluarga', pathname: '/master/family-status' },
+        { label: 'Status Sosial', pathname: '/master/social-status' },
+        { label: 'Pangkat/Golongan', pathname: '/master/rank-or-class' },
       ],
     },
   ];

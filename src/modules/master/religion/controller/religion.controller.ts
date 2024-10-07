@@ -13,11 +13,15 @@ import {
   Req,
 } from '@nestjs/common';
 import { ReligionService } from '../service/religion.service';
-import { religionSchema } from '../validation/religion-schema';
+import {
+  religionUpdateStatusValidation,
+  religionValidation,
+} from '../validation/religion.validation';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
 import { ReligionPayloadDTO } from '../dto/religion.dto';
+import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
 
-@Controller('/api/v1/religion')
+@Controller('/api/v1/master/religion')
 export class ReligionController {
   constructor(private readonly religionService: ReligionService) {}
 
@@ -32,7 +36,7 @@ export class ReligionController {
   @Header('Content-Type', 'application/json')
   async createReligion(
     @Req() req: any,
-    @Body(new ZodPipe(religionSchema)) religion: ReligionPayloadDTO,
+    @Body(new ZodPipe(religionValidation)) religion: ReligionPayloadDTO,
   ) {
     return this.religionService.createReligion(religion, req);
   }
@@ -43,7 +47,7 @@ export class ReligionController {
   async updateReligion(
     @Param('id') id: number,
     @Req() req: any,
-    @Body(new ZodPipe(religionSchema)) religion: ReligionPayloadDTO,
+    @Body(new ZodPipe(religionValidation)) religion: ReligionPayloadDTO,
   ) {
     return this.religionService.updateReligion(id, religion, req);
   }
@@ -51,5 +55,16 @@ export class ReligionController {
   @Delete('/:id')
   async softDeleteReligion(@Param('id') id: number, @Req() req: any) {
     return this.religionService.softDeleteReligion(id, req);
+  }
+
+  @Patch('/:id/status')
+  @Header('Content-Type', 'application/json')
+  async updateStatusReligion(
+    @Param('id') id: number,
+    @Req() req: any,
+    @Body(new ZodPipe(religionUpdateStatusValidation))
+    religion: StatusUpdateDTO,
+  ) {
+    return this.religionService.updateStatusReligion(id, religion, req);
   }
 }
