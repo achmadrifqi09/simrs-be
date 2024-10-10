@@ -6,6 +6,7 @@ export const userPermissionSeeder = async (
   user: User,
   menuPermissions: MenuPermission[],
 ) => {
+  console.log('Seeding user permission...');
   menuPermissions.map(async (permission: MenuPermission) => {
     await prismaClient.userPermission.create({
       data: {

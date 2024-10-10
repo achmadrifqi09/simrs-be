@@ -5,6 +5,7 @@ import { permissionSeeder } from './module-seeder/permission.seeder';
 import { Menu, MenuPermission } from './types/menu';
 import { userPermissionSeeder } from './module-seeder/user-permission.seeder';
 import { clientSeeder } from './module-seeder/client.seeder';
+import { regionSeeder } from './module-seeder/region.seeder';
 
 async function main() {
   const user = await userSeeder();
@@ -12,6 +13,7 @@ async function main() {
   const permissions: MenuPermission[] = await permissionSeeder(menus);
   await clientSeeder();
   await userPermissionSeeder(user, permissions);
+  await regionSeeder();
 }
 
 main()

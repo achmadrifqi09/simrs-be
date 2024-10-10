@@ -1,5 +1,5 @@
 type CountryPayloadDTO = {
-  nama_negara: string;
+  nama: string;
   status: number;
   created_by?: number;
   created_at?: Date;
@@ -7,6 +7,5 @@ type CountryPayloadDTO = {
   modified_by?: number;
   deleted_at?: Date;
 };
-
 
 export type { CountryPayloadDTO };

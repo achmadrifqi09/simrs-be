@@ -147,6 +147,7 @@ export const menuSeeder = async (): Promise<Menu[]> => {
       ],
     },
   ];
+  console.log('Seeding menu...');
   return Promise.all(
     menus.map(async (menu) => {
       const menuResult = await prismaClient.menu.create({

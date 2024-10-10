@@ -15,7 +15,7 @@ export class CountryRepository {
   async findAllCountry(keyword?: string) {
     return this.prismaService.country.findMany({
       where: {
-        nama_negara: {
+        nama: {
           contains: keyword,
         },
         is_deleted: false,
@@ -27,7 +27,7 @@ export class CountryRepository {
     try {
       return await this.prismaService.country.update({
         where: {
-          id_ms_negara: Number(id),
+          id: Number(id),
           is_deleted: false,
         },
         data: country,
@@ -51,7 +51,7 @@ export class CountryRepository {
     try {
       return await this.prismaService.country.update({
         where: {
-          id_ms_negara: Number(id),
+          id: Number(id),
           is_deleted: false,
         },
         data: payload,
@@ -65,7 +65,7 @@ export class CountryRepository {
     try {
       return await this.prismaService.country.update({
         where: {
-          id_ms_negara: Number(id),
+          id: Number(id),
           is_deleted: false,
         },
         data: country,

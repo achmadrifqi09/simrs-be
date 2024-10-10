@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import * as process from 'node:process';
 
 export const userSeeder = async () => {
+  console.log('Seeding user default...');
   const password: string = await bcrypt.hash(
     process.env.USER_DEFAULT_PASSWORD || 'PASSWORD',
     12,

@@ -4,6 +4,7 @@ import { prismaClient } from '../prisma';
 export const permissionSeeder = async (
   resultMenuSeeder: Menu[],
 ): Promise<MenuPermission[]> => {
+  console.log('Seeding permission...');
   return Promise.all(
     resultMenuSeeder.map(async (menu: Menu) => {
       const permissionName: string = `${menu.label} full access`;

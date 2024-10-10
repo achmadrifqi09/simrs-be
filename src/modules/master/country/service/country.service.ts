@@ -18,7 +18,7 @@ export class CountryService {
 
   async createCountry(country: CountryPayloadDTO, req: any) {
     country = {
-      nama_negara: country.nama_negara,
+      nama: country.nama,
       status: isNaN(Number(country.status)) ? 1 : Number(country.status),
       created_by: req.user?.id,
       created_at: generateCurrentDate(),
@@ -37,7 +37,7 @@ export class CountryService {
 
   async updateCountry(id: number, country: CountryPayloadDTO, req: any) {
     country = {
-      nama_negara: country.nama_negara,
+      nama: country.nama,
       status: isNaN(Number(country.status)) ? 1 : Number(country.status),
       modified_by: req.user?.id,
       modified_at: generateCurrentDate(),

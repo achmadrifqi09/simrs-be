@@ -1,0 +1,187 @@
+[
+  {
+    "id": "11",
+    "nama": "ACEH",
+    "id_negara": 1
+  },
+  {
+    "id": "12",
+    "nama": "SUMATERA UTARA",
+    "id_negara": 1
+  },
+  {
+    "id": "13",
+    "nama": "SUMATERA BARAT",
+    "id_negara": 1
+  },
+  {
+    "id": "14",
+    "nama": "RIAU",
+    "id_negara": 1
+  },
+  {
+    "id": "15",
+    "nama": "JAMBI",
+    "id_negara": 1
+  },
+  {
+    "id": "16",
+    "nama": "SUMATERA SELATAN",
+    "id_negara": 1
+  },
+  {
+    "id": "17",
+    "nama": "BENGKULU",
+    "id_negara": 1
+  },
+  {
+    "id": "18",
+    "nama": "LAMPUNG",
+    "id_negara": 1
+  },
+  {
+    "id": "19",
+    "nama": "KEPULAUAN BANGKA BELITUNG",
+    "id_negara": 1
+  },
+  {
+    "id": "21",
+    "nama": "KEPULAUAN RIAU",
+    "id_negara": 1
+  },
+  {
+    "id": "31",
+    "nama": "DKI JAKARTA",
+    "id_negara": 1
+  },
+  {
+    "id": "32",
+    "nama": "JAWA BARAT",
+    "id_negara": 1
+  },
+  {
+    "id": "33",
+    "nama": "JAWA TENGAH",
+    "id_negara": 1
+  },
+  {
+    "id": "34",
+    "nama": "DAERAH ISTIMEWA YOGYAKARTA",
+    "id_negara": 1
+  },
+  {
+    "id": "35",
+    "nama": "JAWA TIMUR",
+    "id_negara": 1
+  },
+  {
+    "id": "36",
+    "nama": "BANTEN",
+    "id_negara": 1
+  },
+  {
+    "id": "51",
+    "nama": "BALI",
+    "id_negara": 1
+  },
+  {
+    "id": "52",
+    "nama": "NUSA TENGGARA BARAT",
+    "id_negara": 1
+  },
+  {
+    "id": "53",
+    "nama": "NUSA TENGGARA TIMUR",
+    "id_negara": 1
+  },
+  {
+    "id": "61",
+    "nama": "KALIMANTAN BARAT",
+    "id_negara": 1
+  },
+  {
+    "id": "62",
+    "nama": "KALIMANTAN TENGAH",
+    "id_negara": 1
+  },
+  {
+    "id": "63",
+    "nama": "KALIMANTAN SELATAN",
+    "id_negara": 1
+  },
+  {
+    "id": "64",
+    "nama": "KALIMANTAN TIMUR",
+    "id_negara": 1
+  },
+  {
+    "id": "65",
+    "nama": "KALIMANTAN UTARA",
+    "id_negara": 1
+  },
+  {
+    "id": "71",
+    "nama": "SULAWESI UTARA",
+    "id_negara": 1
+  },
+  {
+    "id": "72",
+    "nama": "SULAWESI TENGAH",
+    "id_negara": 1
+  },
+  {
+    "id": "73",
+    "nama": "SULAWESI SELATAN",
+    "id_negara": 1
+  },
+  {
+    "id": "74",
+    "nama": "SULAWESI TENGGARA",
+    "id_negara": 1
+  },
+  {
+    "id": "75",
+    "nama": "GORONTALO",
+    "id_negara": 1
+  },
+  {
+    "id": "76",
+    "nama": "SULAWESI BARAT",
+    "id_negara": 1
+  },
+  {
+    "id": "81",
+    "nama": "MALUKU",
+    "id_negara": 1
+  },
+  {
+    "id": "82",
+    "nama": "MALUKU UTARA",
+    "id_negara": 1
+  },
+  {
+    "id": "91",
+    "nama": "PAPUA",
+    "id_negara": 1
+  },
+  {
+    "id": "92",
+    "nama": "PAPUA BARAT",
+    "id_negara": 1
+  },
+  {
+    "id": "93",
+    "nama": "PAPUA SELATAN",
+    "id_negara": 1
+  },
+  {
+    "id": "94",
+    "nama": "PAPUA TENGAH",
+    "id_negara": 1
+  },
+  {
+    "id": "95",
+    "nama": "PAPUA PEGUNUNGAN",
+    "id_negara": 1
+  }
+]

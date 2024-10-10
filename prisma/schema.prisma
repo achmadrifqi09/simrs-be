@@ -35,8 +35,6 @@ model Menu {
   pathname    String?          @db.VarChar(100)
   status      Boolean          @default(true)
   is_submenu  Boolean?         @default(false)
-  submenu     Submenu[]
-  izin_menu   MenuPermission[]
   created_at  DateTime         @default(now())
   created_by  Int              @default(0)
   modified_at DateTime?        @db.DateTime(0)
@@ -47,6 +45,8 @@ model Menu {
   restored_by Int?             @default(0)
   is_deleted  Boolean          @default(false)
   is_restored Boolean          @default(false)
+  izin_menu   MenuPermission[]
+  submenu     Submenu[]
 
   @@map("db_menu")
 }
@@ -56,8 +56,6 @@ model Submenu {
   label        String
   pathname     String
   id_menu      Int
-  menu         Menu                @relation(fields: [id_menu], references: [id])
-  izin_submenu SubmenuPermission[]
   created_at   DateTime            @default(now())
   created_by   Int                 @default(0)
   modified_at  DateTime?           @db.DateTime(0)
@@ -68,6 +66,8 @@ model Submenu {
   restored_by  Int?                @default(0)
   is_deleted   Boolean             @default(false)
   is_restored  Boolean             @default(false)
+  izin_submenu SubmenuPermission[]
+  menu         Menu                @relation(fields: [id_menu], references: [id])
 
   @@index([id_menu])
   @@map("db_submenu")
@@ -76,10 +76,7 @@ model Submenu {
 model MenuPermission {
   id          Int                 @id @default(autoincrement())
   nama        String
-  izin_user   UserPermission[]
   id_menu     Int
-  menu        Menu                @relation(fields: [id_menu], references: [id])
-  submenu     SubmenuPermission[]
   is_create   Boolean
   is_update   Boolean
   is_delete   Boolean
@@ -94,6 +91,9 @@ model MenuPermission {
   restored_by Int?                @default(0)
   is_deleted  Boolean             @default(false)
   is_restored Boolean             @default(false)
+  menu        Menu                @relation(fields: [id_menu], references: [id])
+  submenu     SubmenuPermission[]
+  izin_user   UserPermission[]
 
   @@index([id_menu])
   @@map("db_izin_menu")
@@ -102,9 +102,7 @@ model MenuPermission {
 model SubmenuPermission {
   id           Int            @id @default(autoincrement())
   id_izin_menu Int
-  izin_menu    MenuPermission @relation(fields: [id_izin_menu], references: [id])
   id_submenu   Int
-  submenu      Submenu        @relation(fields: [id_submenu], references: [id])
   is_create    Boolean
   is_update    Boolean
   is_delete    Boolean
@@ -119,17 +117,18 @@ model SubmenuPermission {
   restored_by  Int?           @default(0)
   is_deleted   Boolean        @default(false)
   is_restored  Boolean        @default(false)
+  izin_menu    MenuPermission @relation(fields: [id_izin_menu], references: [id])
+  submenu      Submenu        @relation(fields: [id_submenu], references: [id])
 
   @@index([id_izin_menu, id_submenu])
+  @@index([id_submenu], map: "db_izin_submenu_id_submenu_fkey")
   @@map("db_izin_submenu")
 }
 
 model UserPermission {
   id           Int            @id @default(autoincrement())
   id_izin_menu Int
-  izin_menu    MenuPermission @relation(fields: [id_izin_menu], references: [id])
   id_user      Int
-  user         User           @relation(fields: [id_user], references: [id_user])
   created_at   DateTime       @default(now())
   created_by   Int            @default(0)
   modified_at  DateTime?      @db.DateTime(0)
@@ -140,8 +139,11 @@ model UserPermission {
   restored_by  Int?           @default(0)
   is_deleted   Boolean        @default(false)
   is_restored  Boolean        @default(false)
+  izin_menu    MenuPermission @relation(fields: [id_izin_menu], references: [id])
+  user         User           @relation(fields: [id_user], references: [id_user])
 
   @@index([id_user, id_izin_menu])
+  @@index([id_izin_menu], map: "db_izin_user_id_izin_menu_fkey")
   @@map("db_izin_user")
 }
 
@@ -302,7 +304,6 @@ model User {
   id_pegawai    Int
   nama_user     String           @db.VarChar(100)
   email_user    String           @unique @db.VarChar(100)
-  izin_user     UserPermission[]
   hp_user       String           @db.VarChar(20)
   password_user String           @db.Text
   status        Boolean          @default(true)
@@ -316,6 +317,7 @@ model User {
   restored_by   Int?             @default(0)
   is_deleted    Boolean          @default(false)
   is_restored   Boolean          @default(false)
+  izin_user     UserPermission[]
 
   @@index([email_user])
   @@map("db_user")
@@ -338,27 +340,6 @@ model Religion {
   is_restored Boolean   @default(false)
 
   @@map("ms_agama")
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model Vilage {
-  id_ms_desa      Int       @id @default(autoincrement())
-  id_ms_kecamatan Int
-  nama_desa       Int
-  status_desa     Int       @default(0)
-  status          Int       @default(1)
-  created_at      DateTime  @default(now())
-  created_by      Int       @default(0)
-  modified_at     DateTime? @db.DateTime(0)
-  modified_by     Int?      @default(0)
-  deleted_at      DateTime? @db.DateTime(0)
-  deleted_by      Int?      @default(0)
-  restored_at     DateTime? @db.DateTime(0)
-  restored_by     Int?      @default(0)
-  is_deleted      Boolean   @default(false)
-  is_restored     Boolean   @default(false)
-
-  @@map("ms_desa")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -439,47 +420,6 @@ model TypeOfStatusOfficer {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model Disctric {
-  id_ms_kecamatan Int       @id @default(autoincrement())
-  id_ms_kota      Int
-  nama_kecamatan  Int
-  status          Int       @default(1)
-  created_at      DateTime  @default(now())
-  created_by      Int       @default(0)
-  modified_at     DateTime? @db.DateTime(0)
-  modified_by     Int?      @default(0)
-  deleted_at      DateTime? @db.DateTime(0)
-  deleted_by      Int?      @default(0)
-  restored_at     DateTime? @db.DateTime(0)
-  restored_by     Int?      @default(0)
-  is_deleted      Boolean   @default(false)
-  is_restored     Boolean   @default(false)
-
-  @@map("ms_kecamatan")
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model City {
-  id_ms_kota     Int       @id @default(autoincrement())
-  id_ms_provinsi Int
-  nama_kota      Int
-  status_kota    Int       @default(0)
-  status         Int       @default(1)
-  created_at     DateTime  @default(now())
-  created_by     Int       @default(0)
-  modified_at    DateTime? @db.DateTime(0)
-  modified_by    Int?      @default(0)
-  deleted_at     DateTime? @db.DateTime(0)
-  deleted_by     Int?      @default(0)
-  restored_at    DateTime? @db.DateTime(0)
-  restored_by    Int?      @default(0)
-  is_deleted     Boolean   @default(false)
-  is_restored    Boolean   @default(false)
-
-  @@map("ms_kota")
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model QueueCounter {
   id_ms_loket_antrian Int       @id @default(autoincrement())
   nama_loket          Int
@@ -500,23 +440,23 @@ model QueueCounter {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model Country {
-  id_ms_negara Int       @id @default(autoincrement())
-  nama_negara  String
-  status       Int       @default(1)
-  created_at   DateTime  @default(now())
-  created_by   Int       @default(0)
-  modified_at  DateTime? @db.DateTime(0)
-  modified_by  Int?      @default(0)
-  deleted_at   DateTime? @db.DateTime(0)
-  deleted_by   Int?      @default(0)
-  restored_at  DateTime? @db.DateTime(0)
-  restored_by  Int?      @default(0)
-  is_deleted   Boolean   @default(false)
-  is_restored  Boolean   @default(false)
-
-  @@map("ms_negara")
-}
+// model Country {
+//   id_ms_negara Int       @id @default(autoincrement())
+//   nama_negara  String
+//   status       Int       @default(1)
+//   created_at   DateTime  @default(now())
+//   created_by   Int       @default(0)
+//   modified_at  DateTime? @db.DateTime(0)
+//   modified_by  Int?      @default(0)
+//   deleted_at   DateTime? @db.DateTime(0)
+//   deleted_by   Int?      @default(0)
+//   restored_at  DateTime? @db.DateTime(0)
+//   restored_by  Int?      @default(0)
+//   is_deleted   Boolean   @default(false)
+//   is_restored  Boolean   @default(false)
+//
+//   @@map("ms_negara")
+// }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model RankOfEmployees {
@@ -535,26 +475,6 @@ model RankOfEmployees {
   is_restored   Boolean   @default(false)
 
   @@map("ms_pangkat")
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model Province {
-  id_ms_provinsi Int       @id @default(autoincrement())
-  id_ms_negara   Int
-  nama_provinsi  Int
-  status         Int       @default(1)
-  created_at     DateTime  @default(now())
-  created_by     Int       @default(0)
-  modified_at    DateTime? @db.DateTime(0)
-  modified_by    Int?      @default(0)
-  deleted_at     DateTime? @db.DateTime(0)
-  deleted_by     Int?      @default(0)
-  restored_at    DateTime? @db.DateTime(0)
-  restored_by    Int?      @default(0)
-  is_deleted     Boolean   @default(false)
-  is_restored    Boolean   @default(false)
-
-  @@map("ms_provinsi")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -719,4 +639,116 @@ model DoctorChangeSchedule {
   is_restored            Boolean   @default(false)
 
   @@map("db_jadwal_dokter_ganti")
+}
+
+model Village {
+  id           String    @id @db.Char(10)
+  id_kecamatan String    @db.Char(6)
+  nama         String    @db.VarChar(255)
+  created_at   DateTime  @default(now())
+  created_by   Int       @default(0)
+  modified_at  DateTime? @db.DateTime(0)
+  modified_by  Int?      @default(0)
+  deleted_at   DateTime? @db.DateTime(0)
+  deleted_by   Int?      @default(0)
+  restored_at  DateTime? @db.DateTime(0)
+  restored_by  Int?      @default(0)
+  is_deleted   Boolean   @default(false)
+  is_restored  Boolean   @default(false)
+  ms_kecamatan District  @relation(fields: [id_kecamatan], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_kecamatan")
+
+  @@index([id_kecamatan], map: "fk_kecamatan")
+  @@index([nama], map: "idx_village_nama")
+  @@index([is_deleted], map: "idx_village_is_deleted")
+  @@map("ms_desa")
+}
+
+model Regency {
+  id           String     @id @db.Char(4)
+  id_provinsi  String     @db.Char(2)
+  nama         String     @db.VarChar(255)
+  created_at   DateTime   @default(now())
+  created_by   Int        @default(0)
+  modified_at  DateTime?  @db.DateTime(0)
+  modified_by  Int?       @default(0)
+  deleted_at   DateTime?  @db.DateTime(0)
+  deleted_by   Int?       @default(0)
+  restored_at  DateTime?  @db.DateTime(0)
+  restored_by  Int?       @default(0)
+  is_deleted   Boolean    @default(false)
+  is_restored  Boolean    @default(false)
+  ms_provinsi  Province   @relation(fields: [id_provinsi], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_provinsi")
+  ms_kecamatan District[]
+
+  @@index([id_provinsi], map: "fk_provinsi")
+  @@index([nama], map: "idx_regency_nama")
+  @@index([is_deleted], map: "idx_regency_is_deleted")
+  @@map("ms_kabkot")
+}
+
+model District {
+  id          String    @id @db.Char(6)
+  id_kabkot   String    @db.Char(4)
+  nama        String    @db.VarChar(255)
+  created_at  DateTime  @default(now())
+  created_by  Int       @default(0)
+  modified_at DateTime? @db.DateTime(0)
+  modified_by Int?      @default(0)
+  deleted_at  DateTime? @db.DateTime(0)
+  deleted_by  Int?      @default(0)
+  restored_at DateTime? @db.DateTime(0)
+  restored_by Int?      @default(0)
+  is_deleted  Boolean   @default(false)
+  is_restored Boolean   @default(false)
+  ms_desa     Village[]
+  ms_kabkot   Regency   @relation(fields: [id_kabkot], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_kabkot")
+
+  @@index([id_kabkot], map: "fk_kabkot")
+  @@index([nama], map: "idx_district_nama")
+  @@index([is_deleted], map: "idx_district_is_deleted")
+  @@map("ms_kecamatan")
+}
+
+model Province {
+  id          String    @id @db.Char(2)
+  nama        String    @db.VarChar(255)
+  id_negara   Int
+  created_at  DateTime  @default(now())
+  created_by  Int       @default(0)
+  modified_at DateTime? @db.DateTime(0)
+  modified_by Int?      @default(0)
+  deleted_at  DateTime? @db.DateTime(0)
+  deleted_by  Int?      @default(0)
+  restored_at DateTime? @db.DateTime(0)
+  restored_by Int?      @default(0)
+  is_deleted  Boolean   @default(false)
+  is_restored Boolean   @default(false)
+  ms_kabkot   Regency[]
+  ms_negara   Country   @relation(fields: [id_negara], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_negara")
+
+  @@index([id_negara], map: "fk_negara")
+  @@index([nama], map: "idx_province_nama")
+  @@index([is_deleted], map: "idx_province_is_deleted")
+  @@map("ms_provinsi")
+}
+
+model Country {
+  id          Int        @id @default(autoincrement())
+  nama        String     @db.VarChar(255)
+  status      Int        @default(1)
+  created_at  DateTime   @default(now())
+  created_by  Int        @default(0)
+  modified_at DateTime?  @db.DateTime(0)
+  modified_by Int?       @default(0)
+  deleted_at  DateTime?  @db.DateTime(0)
+  deleted_by  Int?       @default(0)
+  restored_at DateTime?  @db.DateTime(0)
+  restored_by Int?       @default(0)
+  is_deleted  Boolean    @default(false)
+  is_restored Boolean    @default(false)
+  ms_provinsi Province[]
+
+  @@index([nama], map: "idx_country_nama")
+  @@index([is_deleted], map: "idx_country_is_deleted")
+  @@map("ms_negara")
 }

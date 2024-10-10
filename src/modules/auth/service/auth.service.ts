@@ -9,9 +9,8 @@ import { UserService } from '../../user/service/user.service';
 import { LoginDTO } from '../dto/auth.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import * as moment from 'moment-timezone';
-import * as process from 'node:process';
 import { AuthRepository } from '../repository/auth.repository';
+import { generateExpiresDate } from '../../../utils/date-formatter';
 
 @Dependencies([UserService, JwtService, AuthRepository])
 @Injectable()
@@ -57,17 +56,10 @@ export class AuthService {
       name: user.nama_user,
     };
 
-    const loginDate = moment.tz('Asia/Jakarta');
-    const expires = loginDate.add(
-      Number(process.env.JWT_TOKEN_EXPIRED_TIME || 1),
-      'hours',
-    );
-    const formattedExpires = expires.format('YYYY-MM-DD HH:mm:ss');
-
     return {
       ...payload,
       token: await this.jwtService.signAsync(payload),
-      expires: formattedExpires,
+      expires: generateExpiresDate(),
       permissions: user.izin_user,
     };
   }
