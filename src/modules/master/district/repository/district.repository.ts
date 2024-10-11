@@ -1,41 +1,41 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../../prisma/prisma.service';
-import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
-import { RegencyPayloadDTO } from '../dto/regency.dto';
 import { Prisma } from '@prisma/client';
+import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
+import { DistrictPayloadDTO } from '../dto/district.dto';
 import { SoftDeleteDTO } from '../../../../common/dto/common.dto';
 
 @Dependencies([PrismaService])
 @Injectable()
-export class RegencyRepository {
+export class DistrictRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findAllRegency(
+  async findAllDistrict(
     keyword?: string,
-    provinceId?: string,
+    regencyId?: string,
     cursor?: number,
     take?: number,
   ) {
-    const whereClause: Prisma.RegencyWhereInput = {
+    const whereClause: Prisma.DistrictWhereInput = {
       nama: {
         contains: keyword,
       },
       is_deleted: false,
     };
 
-    if (provinceId) {
-      whereClause.id_provinsi = provinceId;
+    if (regencyId) {
+      whereClause.id_kabkot = regencyId;
     }
 
-    const result = await this.prismaService.regency.findMany({
+    const result = await this.prismaService.district.findMany({
       take: Number(take),
       skip: Number(cursor) ?? undefined,
       where: whereClause,
       select: {
         id: true,
-        id_provinsi: true,
+        id_kabkot: true,
         nama: true,
-        ms_provinsi: {
+        ms_kabkot: {
           select: {
             nama: true,
           },
@@ -45,7 +45,6 @@ export class RegencyRepository {
         id: 'desc',
       },
     });
-
     return {
       results: result,
       pagination: {
@@ -55,33 +54,33 @@ export class RegencyRepository {
     };
   }
 
-  async createRegency(regency: RegencyPayloadDTO) {
+  async createDistrict(district: DistrictPayloadDTO) {
     try {
-      return await this.prismaService.regency.create({
-        data: regency,
+      return await this.prismaService.district.create({
+        data: district,
       });
     } catch (error) {
       PrismaErrorHandler.handle(error);
     }
   }
 
-  async updateRegency(id: string, regency: RegencyPayloadDTO) {
+  async updateDistrict(id: string, district: DistrictPayloadDTO) {
     try {
-      return await this.prismaService.regency.update({
+      return await this.prismaService.district.update({
         where: {
           id: id,
           is_deleted: false,
         },
-        data: regency,
+        data: district,
       });
     } catch (error) {
       PrismaErrorHandler.handle(error);
     }
   }
 
-  async regencySoftDelete(id: string, payload: SoftDeleteDTO) {
+  async districtSoftDelete(id: string, payload: SoftDeleteDTO) {
     try {
-      return await this.prismaService.regency.update({
+      return await this.prismaService.district.update({
         where: {
           id: id,
           is_deleted: false,

@@ -1,10 +1,13 @@
 import {
   Body,
-  Controller, Delete,
+  Controller,
+  Delete,
   Get,
   Header,
   HttpCode,
-  HttpStatus, Param, Patch,
+  HttpStatus,
+  Param,
+  Patch,
   Post,
   Query,
   Req,
@@ -13,8 +16,6 @@ import { RegencyService } from '../service/regency.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
 import { regencyValidation } from '../validation/regency.validation';
 import { RegencyPayloadDTO } from '../dto/regency.dto';
-import { provinceValidation } from '../../province/validation/province.validation';
-import { ProvincePayloadDTO } from '../../province/dto/province.dto';
 
 @Controller('/api/v1/master/regency')
 export class RegencyController {
@@ -44,7 +45,7 @@ export class RegencyController {
   @Patch('/:id')
   @Header('Content-Type', 'application/json')
   @HttpCode(HttpStatus.OK)
-  async updateBloodType(
+  async updateRegency(
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(regencyValidation))
