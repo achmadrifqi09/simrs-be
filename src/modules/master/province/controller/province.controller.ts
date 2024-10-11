@@ -47,7 +47,7 @@ export class ProvinceController {
   @Patch('/:id')
   @Header('Content-Type', 'application/json')
   @HttpCode(HttpStatus.OK)
-  async updateBloodType(
+  async updateProvince(
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(provinceValidation))
@@ -58,7 +58,7 @@ export class ProvinceController {
 
   @Delete('/:id')
   @Header('Content-Type', 'application/json')
-  async softDeleteBloodType(@Param('id') id: number | string, @Req() req: any) {
+  async provinceSoftDelete(@Param('id') id: number | string, @Req() req: any) {
     return this.provinceService.provinceSoftDelete(id, req);
   }
 }

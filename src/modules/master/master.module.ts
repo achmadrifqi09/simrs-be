@@ -6,6 +6,7 @@ import { MaritalStatusModule } from './marital-status/marital-status.module';
 import { EmployeeStatusModule } from './employee-status/employee-status.module';
 import { CountryModule } from './country/country.module';
 import { ProvinceModule } from './province/province.module';
+import { RegencyModule } from './regency/regency.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ProvinceModule } from './province/province.module';
     EmployeeStatusModule,
     CountryModule,
     ProvinceModule,
+    RegencyModule,
   ],
 })
 export class MasterModule {}
