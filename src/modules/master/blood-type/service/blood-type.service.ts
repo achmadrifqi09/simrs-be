@@ -1,6 +1,6 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { BloodTypeRepository } from '../repository/blood-type.respository';
-import { BloodTypeDTO, BloodTypePayloadDTO } from '../dto/blood-type.dto';
+import { BloodTypePayloadDTO } from '../dto/blood-type.dto';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import {
   SoftDeleteDTO,

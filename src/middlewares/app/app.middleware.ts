@@ -7,6 +7,7 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Cipher } from '../../utils/cipher';
 import * as moment from 'moment-timezone';
+import { generateCurrentDate } from '../../utils/date-formatter';
 
 @Injectable()
 export class AppMiddleware implements NestMiddleware {
@@ -44,13 +45,12 @@ export class AppMiddleware implements NestMiddleware {
       );
     }
 
-    const clientTimestamp = moment.tz(payload.timestamp, 'Asia/Jakarta');
-    clientTimestamp.add(process.env.CLIENT_KEY_EXPIRED_TIME, 'hours');
-    const currentDate = moment.tz('Asia/Jakarta');
-
-    if (currentDate.isAfter(clientTimestamp)) {
+    const clientTimestamp = moment.utc(payload.timestamp);
+    clientTimestamp.add(process.env.CLIENT_KEY_EXPIRED_TIME, 'minutes');
+    const currentTimestamp = moment.utc(generateCurrentDate());
+    if (currentTimestamp.isAfter(clientTimestamp)) {
       throw new HttpException(
-        'Client key tidak valid',
+        'Client signature tidak valid',
         HttpStatus.UNAUTHORIZED,
       );
     }

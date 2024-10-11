@@ -2,6 +2,8 @@ import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../../prisma/prisma.service';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import { Prisma } from '@prisma/client';
+import { ProvincePayloadDTO } from '../dto/province.dto';
+import { SoftDeleteDTO } from '../../../../common/dto/common.dto';
 
 @Dependencies([PrismaService])
 @Injectable()
@@ -29,8 +31,18 @@ export class ProvinceRepository {
       take: Number(take),
       skip: Number(cursor) ?? undefined,
       where: whereClause,
+      select: {
+        id: true,
+        id_negara: true,
+        nama: true,
+        ms_negara: {
+          select: {
+            nama: true,
+          },
+        },
+      },
       orderBy: {
-        id: 'asc',
+        id: 'desc',
       },
     });
 
@@ -50,6 +62,44 @@ export class ProvinceRepository {
           id: id,
           is_deleted: false,
         },
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
+  }
+
+  async createProvince(province: ProvincePayloadDTO) {
+    try {
+      return await this.prismaService.province.create({
+        data: province,
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
+  }
+
+  async updateProvince(id: string, province: ProvincePayloadDTO) {
+    try {
+      return await this.prismaService.province.update({
+        where: {
+          id: id,
+          is_deleted: false,
+        },
+        data: province,
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
+  }
+
+  async provinceSoftDelete(id: string, payload: SoftDeleteDTO) {
+    try {
+      return await this.prismaService.province.update({
+        where: {
+          id: id,
+          is_deleted: false,
+        },
+        data: payload,
       });
     } catch (error) {
       PrismaErrorHandler.handle(error);

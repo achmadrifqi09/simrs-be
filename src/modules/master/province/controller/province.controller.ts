@@ -1,5 +1,22 @@
-import { Controller, Dependencies, Get, Header, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Dependencies,
+  Get,
+  Header,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Query,
+  Req,
+} from '@nestjs/common';
 import { ProvinceService } from '../service/province.service';
+import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
+import { provinceValidation } from '../validation/province.validation';
+import { ProvincePayloadDTO } from '../dto/province.dto';
 
 @Dependencies([ProvinceService])
 @Controller('/api/v1/master/province')
@@ -15,5 +32,33 @@ export class ProvinceController {
     @Query('take') take: number,
   ) {
     return this.provinceService.findAllProvince(keyword, countryId, skip, take);
+  }
+
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  @Header('Content-Type', 'application/json')
+  async createProvince(
+    @Req() req: any,
+    @Body(new ZodPipe(provinceValidation)) province: ProvincePayloadDTO,
+  ) {
+    return this.provinceService.createProvince(province, req);
+  }
+
+  @Patch('/:id')
+  @Header('Content-Type', 'application/json')
+  @HttpCode(HttpStatus.OK)
+  async updateBloodType(
+    @Param('id') id: number,
+    @Req() req: any,
+    @Body(new ZodPipe(provinceValidation))
+    province: ProvincePayloadDTO,
+  ) {
+    return this.provinceService.updateProvince(id, province, req);
+  }
+
+  @Delete('/:id')
+  @Header('Content-Type', 'application/json')
+  async softDeleteBloodType(@Param('id') id: number | string, @Req() req: any) {
+    return this.provinceService.provinceSoftDelete(id, req);
   }
 }
