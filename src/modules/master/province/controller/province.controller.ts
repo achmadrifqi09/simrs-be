@@ -48,7 +48,7 @@ export class ProvinceController {
   @Header('Content-Type', 'application/json')
   @HttpCode(HttpStatus.OK)
   async updateProvince(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Req() req: any,
     @Body(new ZodPipe(provinceValidation))
     province: ProvincePayloadDTO,

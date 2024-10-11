@@ -9,6 +9,7 @@ import { ProvinceModule } from './province/province.module';
 import { RegencyModule } from './regency/regency.module';
 import { DistrictModule } from './district/district.module';
 import { SpecialistModule } from './specialist/specialist.module';
+import { VillageModule } from './village/village.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { SpecialistModule } from './specialist/specialist.module';
     RegencyModule,
     DistrictModule,
     SpecialistModule,
+    VillageModule,
   ],
 })
 export class MasterModule {}

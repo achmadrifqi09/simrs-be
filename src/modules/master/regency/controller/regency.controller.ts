@@ -46,7 +46,7 @@ export class RegencyController {
   @Header('Content-Type', 'application/json')
   @HttpCode(HttpStatus.OK)
   async updateRegency(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Req() req: any,
     @Body(new ZodPipe(regencyValidation))
     regency: RegencyPayloadDTO,
