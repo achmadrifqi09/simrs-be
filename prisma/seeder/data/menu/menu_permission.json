@@ -1,0 +1,452 @@
+[
+  {
+    "id": 1,
+    "id_user": 1,
+    "id_menu": 1,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "dashboard"
+  },
+  {
+    "id": 2,
+    "id_user": 1,
+    "id_menu": 2,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "data-pasien"
+  },
+  {
+    "id": 3,
+    "id_user": 1,
+    "id_menu": 3,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "antrean"
+  },
+  {
+    "id": 4,
+    "id_user": 1,
+    "id_menu": 4,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "data-antrean"
+  },
+  {
+    "id": 5,
+    "id_user": 1,
+    "id_menu": 5,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "panggil-antrean"
+  },
+  {
+    "id": 6,
+    "id_user": 1,
+    "id_menu": 6,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "master-loket-antrean"
+  },
+  {
+    "id": 7,
+    "id_user": 1,
+    "id_menu": 7,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "pendaftaran-pasien"
+  },
+  {
+    "id": 8,
+    "id_user": 1,
+    "id_menu": 8,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "pendaftaran-onsite"
+  },
+  {
+    "id": 9,
+    "id_user": 1,
+    "id_menu": 9,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "online-dan-reservasi"
+  },
+  {
+    "id": 10,
+    "id_user": 1,
+    "id_menu": 10,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "rawat-jalan"
+  },
+  {
+    "id": 11,
+    "id_user": 1,
+    "id_menu": 11,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "panggil-antrean-rajal"
+  },
+  {
+    "id": 12,
+    "id_user": 1,
+    "id_menu": 12,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "pemeriksaan-rajal"
+  },
+  {
+    "id": 13,
+    "id_user": 1,
+    "id_menu": 13,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "jadwal-praktik-dokter"
+  },
+  {
+    "id": 14,
+    "id_user": 1,
+    "id_menu": 14,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "penjadwalan-dokter"
+  },
+  {
+    "id": 15,
+    "id_user": 1,
+    "id_menu": 15,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "jadwal-dokter-hari-ini"
+  },
+  {
+    "id": 16,
+    "id_user": 1,
+    "id_menu": 16,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "tambah-kuota-dokter"
+  },
+  {
+    "id": 17,
+    "id_user": 1,
+    "id_menu": 17,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "izin-libur"
+  },
+  {
+    "id": 18,
+    "id_user": 1,
+    "id_menu": 18,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "kamar"
+  },
+  {
+    "id": 19,
+    "id_user": 1,
+    "id_menu": 19,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "jenis-kamar"
+  },
+  {
+    "id": 20,
+    "id_user": 1,
+    "id_menu": 20,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "kelas-kamar"
+  },
+  {
+    "id": 21,
+    "id_user": 1,
+    "id_menu": 21,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "kamar-dan-bed"
+  },
+  {
+    "id": 22,
+    "id_user": 1,
+    "id_menu": 22,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "ketersediaan-kamar"
+  },
+  {
+    "id": 23,
+    "id_user": 1,
+    "id_menu": 23,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "pagawai"
+  },
+  {
+    "id": 24,
+    "id_user": 1,
+    "id_menu": 24,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "data-pegawai"
+  },
+  {
+    "id": 25,
+    "id_user": 1,
+    "id_menu": 25,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "unit-kerja"
+  },
+  {
+    "id": 26,
+    "id_user": 1,
+    "id_menu": 26,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "data-bpjs"
+  },
+  {
+    "id": 27,
+    "id_user": 1,
+    "id_menu": 27,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "dokter-bpjs"
+  },
+  {
+    "id": 28,
+    "id_user": 1,
+    "id_menu": 28,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "unit-bpjs"
+  },
+  {
+    "id": 29,
+    "id_user": 1,
+    "id_menu": 29,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "data-master"
+  },
+  {
+    "id": 30,
+    "id_user": 1,
+    "id_menu": 30,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "agama"
+  },
+  {
+    "id": 31,
+    "id_user": 1,
+    "id_menu": 31,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "negara"
+  },
+  {
+    "id": 32,
+    "id_user": 1,
+    "id_menu": 32,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "provinsi"
+  },
+  {
+    "id": 33,
+    "id_user": 1,
+    "id_menu": 33,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "kabupaten-kota"
+  },
+  {
+    "id": 34,
+    "id_user": 1,
+    "id_menu": 34,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "kecamatan"
+  },
+  {
+    "id": 35,
+    "id_user": 1,
+    "id_menu": 35,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "kelurahan-desa"
+  },
+  {
+    "id": 36,
+    "id_user": 1,
+    "id_menu": 36,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "golongan-darah"
+  },
+  {
+    "id": 37,
+    "id_user": 1,
+    "id_menu": 37,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "spesialis-dokter"
+  },
+  {
+    "id": 38,
+    "id_user": 1,
+    "id_menu": 38,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "jabatan-struktural"
+  },
+  {
+    "id": 39,
+    "id_user": 1,
+    "id_menu": 39,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "kategori-pegawai"
+  },
+  {
+    "id": 40,
+    "id_user": 1,
+    "id_menu": 40,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "jenis-pegawai"
+  },
+  {
+    "id": 41,
+    "id_user": 1,
+    "id_menu": 41,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "status-pegawai"
+  },
+  {
+    "id": 42,
+    "id_user": 1,
+    "id_menu": 42,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "status-kawin"
+  },
+  {
+    "id": 43,
+    "id_user": 1,
+    "id_menu": 43,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "status-keluarga"
+  },
+  {
+    "id": 44,
+    "id_user": 1,
+    "id_menu": 44,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "status-sosial"
+  },
+  {
+    "id": 45,
+    "id_user": 1,
+    "id_menu": 45,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true,
+    "tag": "pangkat-golongan"
+  }
+]

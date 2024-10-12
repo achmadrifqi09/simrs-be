@@ -20,33 +20,14 @@ CREATE TABLE `db_client` (
 -- CreateTable
 CREATE TABLE `db_menu` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `label` VARCHAR(100) NOT NULL,
+    `parent_id` INTEGER NULL,
     `order` INTEGER NOT NULL,
-    `icon` VARCHAR(100) NULL,
-    `pathname` VARCHAR(100) NULL,
-    `status` BOOLEAN NOT NULL DEFAULT true,
-    `is_submenu` BOOLEAN NULL DEFAULT false,
-    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `created_by` INTEGER NOT NULL DEFAULT 0,
-    `modified_at` DATETIME(0) NULL,
-    `modified_by` INTEGER NULL DEFAULT 0,
-    `deleted_at` DATETIME(0) NULL,
-    `deleted_by` INTEGER NULL DEFAULT 0,
-    `restored_at` DATETIME(0) NULL,
-    `restored_by` INTEGER NULL DEFAULT 0,
-    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
-    `is_restored` BOOLEAN NOT NULL DEFAULT false,
-
-    UNIQUE INDEX `db_menu_order_key`(`order`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `db_submenu` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
     `label` VARCHAR(191) NOT NULL,
-    `pathname` VARCHAR(191) NOT NULL,
-    `id_menu` INTEGER NOT NULL,
+    `icon` VARCHAR(191) NULL,
+    `pathname` VARCHAR(191) NULL,
+    `tag` VARCHAR(191) NOT NULL,
+    `is_submenu` BOOLEAN NOT NULL,
+    `status` BOOLEAN NOT NULL DEFAULT true,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `created_by` INTEGER NOT NULL DEFAULT 0,
     `modified_at` DATETIME(0) NULL,
@@ -58,64 +39,22 @@ CREATE TABLE `db_submenu` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
-    INDEX `db_submenu_id_menu_idx`(`id_menu`),
+    UNIQUE INDEX `db_menu_tag_key`(`tag`),
+    INDEX `db_menu_parent_id_idx`(`parent_id`),
+    INDEX `db_menu_pathname_idx`(`pathname`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `db_izin_menu` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `nama` VARCHAR(191) NOT NULL,
-    `id_menu` INTEGER NOT NULL,
-    `is_create` BOOLEAN NOT NULL,
-    `is_update` BOOLEAN NOT NULL,
-    `is_delete` BOOLEAN NOT NULL,
-    `is_view` BOOLEAN NOT NULL,
-    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `created_by` INTEGER NOT NULL DEFAULT 0,
-    `modified_at` DATETIME(0) NULL,
-    `modified_by` INTEGER NULL DEFAULT 0,
-    `deleted_at` DATETIME(0) NULL,
-    `deleted_by` INTEGER NULL DEFAULT 0,
-    `restored_at` DATETIME(0) NULL,
-    `restored_by` INTEGER NULL DEFAULT 0,
-    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
-    `is_restored` BOOLEAN NOT NULL DEFAULT false,
-
-    INDEX `db_izin_menu_id_menu_idx`(`id_menu`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `db_izin_submenu` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `id_izin_menu` INTEGER NOT NULL,
-    `id_submenu` INTEGER NOT NULL,
-    `is_create` BOOLEAN NOT NULL,
-    `is_update` BOOLEAN NOT NULL,
-    `is_delete` BOOLEAN NOT NULL,
-    `is_view` BOOLEAN NOT NULL,
-    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `created_by` INTEGER NOT NULL DEFAULT 0,
-    `modified_at` DATETIME(0) NULL,
-    `modified_by` INTEGER NULL DEFAULT 0,
-    `deleted_at` DATETIME(0) NULL,
-    `deleted_by` INTEGER NULL DEFAULT 0,
-    `restored_at` DATETIME(0) NULL,
-    `restored_by` INTEGER NULL DEFAULT 0,
-    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
-    `is_restored` BOOLEAN NOT NULL DEFAULT false,
-
-    INDEX `db_izin_submenu_id_izin_menu_id_submenu_idx`(`id_izin_menu`, `id_submenu`),
-    INDEX `db_izin_submenu_id_submenu_fkey`(`id_submenu`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `db_izin_user` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `id_izin_menu` INTEGER NOT NULL,
     `id_user` INTEGER NOT NULL,
+    `id_menu` INTEGER NOT NULL,
+    `tag` VARCHAR(191) NOT NULL,
+    `can_view` BOOLEAN NOT NULL,
+    `can_create` BOOLEAN NOT NULL,
+    `can_update` BOOLEAN NOT NULL,
+    `can_delete` BOOLEAN NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `created_by` INTEGER NOT NULL DEFAULT 0,
     `modified_at` DATETIME(0) NULL,
@@ -127,8 +66,8 @@ CREATE TABLE `db_izin_user` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
-    INDEX `db_izin_user_id_user_id_izin_menu_idx`(`id_user`, `id_izin_menu`),
-    INDEX `db_izin_user_id_izin_menu_fkey`(`id_izin_menu`),
+    INDEX `db_izin_menu_id_user_idx`(`id_user`),
+    INDEX `db_izin_menu_id_menu_idx`(`id_menu`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -716,22 +655,13 @@ CREATE TABLE `ms_negara` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `db_submenu` ADD CONSTRAINT `db_submenu_id_menu_fkey` FOREIGN KEY (`id_menu`) REFERENCES `db_menu`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `db_menu` ADD CONSTRAINT `db_menu_parent_id_fkey` FOREIGN KEY (`parent_id`) REFERENCES `db_menu`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_izin_menu` ADD CONSTRAINT `db_izin_menu_id_user_fkey` FOREIGN KEY (`id_user`) REFERENCES `db_user`(`id_user`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `db_izin_menu` ADD CONSTRAINT `db_izin_menu_id_menu_fkey` FOREIGN KEY (`id_menu`) REFERENCES `db_menu`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `db_izin_submenu` ADD CONSTRAINT `db_izin_submenu_id_izin_menu_fkey` FOREIGN KEY (`id_izin_menu`) REFERENCES `db_izin_menu`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `db_izin_submenu` ADD CONSTRAINT `db_izin_submenu_id_submenu_fkey` FOREIGN KEY (`id_submenu`) REFERENCES `db_submenu`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `db_izin_user` ADD CONSTRAINT `db_izin_user_id_izin_menu_fkey` FOREIGN KEY (`id_izin_menu`) REFERENCES `db_izin_menu`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `db_izin_user` ADD CONSTRAINT `db_izin_user_id_user_fkey` FOREIGN KEY (`id_user`) REFERENCES `db_user`(`id_user`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ms_desa` ADD CONSTRAINT `fk_kecamatan` FOREIGN KEY (`id_kecamatan`) REFERENCES `ms_kecamatan`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;

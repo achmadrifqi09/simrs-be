@@ -15,29 +15,29 @@ export class UserRepository {
         email_user: true,
         password_user: true,
         status: true,
-        izin_user: {
-          select: {
-            izin_menu: {
-              select: {
-                nama: true,
-                id_menu: true,
-                is_view: true,
-                is_create: true,
-                is_update: true,
-                is_delete: true,
-                submenu: {
-                  select: {
-                    id_submenu: true,
-                    is_view: true,
-                    is_create: true,
-                    is_update: true,
-                    is_delete: true,
-                  },
-                },
-              },
-            },
-          },
-        },
+        // izin_user: {
+        //   select: {
+        //     izin_menu: {
+        //       select: {
+        //         nama: true,
+        //         id_menu: true,
+        //         can_view: true,
+        //         can_create: true,
+        //         can_update: true,
+        //         can_delete: true,
+        //         submenu: {
+        //           select: {
+        //             id_submenu: true,
+        //             can_view: true,
+        //             can_create: true,
+        //             can_update: true,
+        //             can_delete: true,
+        //           },
+        //         },
+        //       },
+        //     },
+        //   },
+        // },
       },
     });
   }

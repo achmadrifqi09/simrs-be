@@ -16,6 +16,7 @@ import { AuthMiddleware } from './middlewares/auth/auth.middleware';
 import { ReligionModule } from './modules/master/religion/religion.module';
 import { MasterModule } from './modules/master/master.module';
 import { MenuModule } from './modules/menu/menu.module';
+import { PermissionModule } from './modules/permission/permission.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { MenuModule } from './modules/menu/menu.module';
     ReligionModule,
     MasterModule,
     MenuModule,
+    PermissionModule,
   ],
   controllers: [AppController],
   providers: [

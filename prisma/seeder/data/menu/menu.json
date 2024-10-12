@@ -1,0 +1,455 @@
+[
+  {
+    "id": 1,
+    "parent_id": null,
+    "order": 1,
+    "label": "Dashboard",
+    "icon": "LuGaugeCircle",
+    "pathname": "/",
+    "is_submenu": false,
+    "status": true,
+    "tag": "dashboard"
+  },
+  {
+    "id": 2,
+    "parent_id": null,
+    "order": 2,
+    "label": "Data Pasien",
+    "icon": "LuLayoutList",
+    "pathname": "/patient",
+    "is_submenu": false,
+    "status": true,
+    "tag": "data-pasien"
+  },
+  {
+    "id": 3,
+    "parent_id": null,
+    "order": 3,
+    "label": "Antrean",
+    "icon": "LuTicket",
+    "is_submenu": true,
+    "status": true,
+    "tag": "antrean"
+  },
+  {
+    "id": 4,
+    "parent_id": 3,
+    "order": 1,
+    "label": "Data Antrean",
+    "pathname": "/queue/data",
+    "is_submenu": false,
+    "status": true,
+    "tag": "data-antrean"
+  },
+  {
+    "id": 5,
+    "parent_id": 3,
+    "order": 2,
+    "label": "Panggil Antrean",
+    "pathname": "/queue/call",
+    "is_submenu": false,
+    "status": true,
+    "tag": "panggil-antrean"
+  },
+  {
+    "id": 6,
+    "parent_id": 3,
+    "order": 3,
+    "label": "Master Loket Antrean",
+    "pathname": "/queue/counter",
+    "is_submenu": false,
+    "status": true,
+    "tag": "master-loket-antrean"
+  },
+  {
+    "id": 7,
+    "parent_id": null,
+    "order": 4,
+    "label": "Pendaftaran Pasien",
+    "icon": "LuFileEdit",
+    "is_submenu": true,
+    "status": true,
+    "tag": "pendaftaran-pasien"
+  },
+  {
+    "id": 8,
+    "parent_id": 7,
+    "order": 1,
+    "label": "Pendaftaran Onsite",
+    "pathname": "/register/onsite",
+    "is_submenu": false,
+    "status": true,
+    "tag": "pendaftaran-onsite"
+  },
+  {
+    "id": 9,
+    "parent_id": 7,
+    "order": 2,
+    "label": "Online dan Reservasi",
+    "pathname": "/register/online-reservation",
+    "is_submenu": false,
+    "status": true,
+    "tag": "online-dan-reservasi"
+  },
+  {
+    "id": 10,
+    "parent_id": null,
+    "order": 5,
+    "label": "Rawat Jalan",
+    "icon": "LuPersonStanding",
+    "is_submenu": true,
+    "status": true,
+    "tag": "rawat-jalan"
+  },
+  {
+    "id": 11,
+    "parent_id": 10,
+    "order": 1,
+    "label": "Panggil Antrean Rajal",
+    "pathname": "/outpatient/call-queue",
+    "is_submenu": false,
+    "status": true,
+    "tag": "panggil-antrean-rajal"
+  },
+  {
+    "id": 12,
+    "parent_id": 10,
+    "order": 2,
+    "label": "Pemeriksaan Rajal",
+    "pathname": "/outpatient/examination",
+    "is_submenu": false,
+    "status": true,
+    "tag": "pemeriksaan-rajal"
+  },
+  {
+    "id": 13,
+    "parent_id": null,
+    "order": 6,
+    "label": "Jadwal Praktik Dokter",
+    "icon": "LuCalendarDays",
+    "is_submenu": true,
+    "status": true,
+    "tag": "jadwal-praktik-dokter"
+  },
+  {
+    "id": 14,
+    "parent_id": 13,
+    "order": 1,
+    "label": "Penjadwalan Dokter",
+    "pathname": "/doctor-schedule/scheduling",
+    "is_submenu": false,
+    "status": true,
+    "tag": "penjadwalan-dokter"
+  },
+  {
+    "id": 15,
+    "parent_id": 13,
+    "order": 2,
+    "label": "Jadwal Dokter Hari ini",
+    "pathname": "/doctor-schedule/today-schedule",
+    "is_submenu": false,
+    "status": true,
+    "tag": "jadwal-dokter-hari-ini"
+  },
+  {
+    "id": 16,
+    "parent_id": 13,
+    "order": 3,
+    "label": "Tambah Kuota Dokter",
+    "pathname": "/doctor-schedule/doctor-quota",
+    "is_submenu": false,
+    "status": true,
+    "tag": "tambah-kuota-dokter"
+  },
+  {
+    "id": 17,
+    "parent_id": 13,
+    "order": 4,
+    "label": "Izin Libur",
+    "pathname": "/doctor-schedule/vacation",
+    "is_submenu": false,
+    "status": true,
+    "tag": "izin-libur"
+  },
+  {
+    "id": 18,
+    "parent_id": null,
+    "order": 7,
+    "label": "Kamar",
+    "icon": "LuBedSingle",
+    "is_submenu": true,
+    "status": true,
+    "tag": "kamar"
+  },
+  {
+    "id": 19,
+    "parent_id": 18,
+    "order": 1,
+    "label": "Jenis Kamar",
+    "pathname": "/room/type",
+    "is_submenu": false,
+    "status": true,
+    "tag": "jenis-kamar"
+  },
+  {
+    "id": 20,
+    "parent_id": 18,
+    "order": 2,
+    "label": "Kelas Kamar",
+    "pathname": "/room/class",
+    "is_submenu": false,
+    "status": true,
+    "tag": "kelas-kamar"
+  },
+  {
+    "id": 21,
+    "parent_id": 18,
+    "order": 3,
+    "label": "Kamar dan Bed",
+    "pathname": "/room/bed",
+    "is_submenu": false,
+    "status": true,
+    "tag": "kamar-dan-bed"
+  },
+  {
+    "id": 22,
+    "parent_id": 18,
+    "order": 4,
+    "label": "Ketersediaan Kamar",
+    "pathname": "/room/availability",
+    "is_submenu": false,
+    "status": true,
+    "tag": "ketersediaan-kamar"
+  },
+  {
+    "id": 23,
+    "parent_id": null,
+    "order": 8,
+    "label": "Pagawai",
+    "icon": "LuContact",
+    "is_submenu": true,
+    "status": true,
+    "tag": "pagawai"
+  },
+  {
+    "id": 24,
+    "parent_id": 23,
+    "order": 1,
+    "label": "Data Pegawai",
+    "pathname": "/employee",
+    "is_submenu": false,
+    "status": true,
+    "tag": "data-pegawai"
+  },
+  {
+    "id": 25,
+    "parent_id": null,
+    "order": 9,
+    "label": "Unit Kerja",
+    "icon": "LuBuilding",
+    "is_submenu": false,
+    "pathname": "/work-unit",
+    "status": true,
+    "tag": "unit-kerja"
+  },
+  {
+    "id": 26,
+    "parent_id": null,
+    "order": 10,
+    "label": "Data BPJS",
+    "icon": "LuBadgeCheck",
+    "is_submenu": true,
+    "status": true,
+    "tag": "data-bpjs"
+  },
+  {
+    "id": 27,
+    "parent_id": 26,
+    "order": 1,
+    "label": "Dokter BPJS",
+    "pathname": "/bpjs/doctor",
+    "is_submenu": false,
+    "status": true,
+    "tag": "dokter-bpjs"
+  },
+  {
+    "id": 28,
+    "parent_id": 26,
+    "order": 2,
+    "label": "Unit BPJS",
+    "pathname": "/bpjs/unit",
+    "is_submenu": false,
+    "status": true,
+    "tag": "unit-bpjs"
+  },
+  {
+    "id": 29,
+    "parent_id": null,
+    "order": 11,
+    "label": "Data Master",
+    "icon": "LuDatabase",
+    "is_submenu": true,
+    "status": true,
+    "tag": "data-master"
+  },
+  {
+    "id": 30,
+    "parent_id": 29,
+    "order": 1,
+    "label": "Agama",
+    "pathname": "/master/religion",
+    "is_submenu": false,
+    "status": true,
+    "tag": "agama"
+  },
+  {
+    "id": 31,
+    "parent_id": 29,
+    "order": 2,
+    "label": "Negara",
+    "pathname": "/master/country",
+    "is_submenu": false,
+    "status": true,
+    "tag": "negara"
+  },
+  {
+    "id": 32,
+    "parent_id": 29,
+    "order": 3,
+    "label": "Provinsi",
+    "pathname": "/master/province",
+    "is_submenu": false,
+    "status": true,
+    "tag": "provinsi"
+  },
+  {
+    "id": 33,
+    "parent_id": 29,
+    "order": 4,
+    "label": "Kabupaten/Kota",
+    "pathname": "/master/regency",
+    "is_submenu": false,
+    "status": true,
+    "tag": "kabupaten-kota"
+  },
+  {
+    "id": 34,
+    "parent_id": 29,
+    "order": 5,
+    "label": "Kecamatan",
+    "pathname": "/master/district",
+    "is_submenu": false,
+    "status": true,
+    "tag": "kecamatan"
+  },
+  {
+    "id": 35,
+    "parent_id": 29,
+    "order": 6,
+    "label": "Kelurahan/Desa",
+    "pathname": "/master/village",
+    "is_submenu": false,
+    "status": true,
+    "tag": "kelurahan-desa"
+  },
+  {
+    "id": 36,
+    "parent_id": 29,
+    "order": 7,
+    "label": "Golongan Darah",
+    "pathname": "/master/blood-type",
+    "is_submenu": false,
+    "status": true,
+    "tag": "golongan-darah"
+  },
+  {
+    "id": 37,
+    "parent_id": 29,
+    "order": 8,
+    "label": "Spesialis Dokter",
+    "pathname": "/master/doctor-specialist",
+    "is_submenu": false,
+    "status": true,
+    "tag": "spesialis-dokter"
+  },
+  {
+    "id": 38,
+    "parent_id": 29,
+    "order": 9,
+    "label": "Jabatan Struktural",
+    "pathname": "/master/structural-position",
+    "is_submenu": false,
+    "status": true,
+    "tag": "jabatan-struktural"
+  },
+  {
+    "id": 39,
+    "parent_id": 29,
+    "order": 10,
+    "label": "Kategori Pegawai",
+    "pathname": "/master/employee-category",
+    "is_submenu": false,
+    "status": true,
+    "tag": "kategori-pegawai"
+  },
+  {
+    "id": 40,
+    "parent_id": 29,
+    "order": 11,
+    "label": "Jenis Pegawai",
+    "pathname": "/master/employee-type",
+    "is_submenu": false,
+    "status": true,
+    "tag": "jenis-pegawai"
+  },
+  {
+    "id": 41,
+    "parent_id": 29,
+    "order": 12,
+    "label": "Status Pegawai",
+    "pathname": "/master/employee-status",
+    "is_submenu": false,
+    "status": true,
+    "tag": "status-pegawai"
+  },
+  {
+    "id": 42,
+    "parent_id": 29,
+    "order": 13,
+    "label": "Status Kawin",
+    "pathname": "/master/marital-status",
+    "is_submenu": false,
+    "status": true,
+    "tag": "status-kawin"
+  },
+  {
+    "id": 43,
+    "parent_id": 29,
+    "order": 14,
+    "label": "Status Keluarga",
+    "pathname": "/master/family-status",
+    "is_submenu": false,
+    "status": true,
+    "tag": "status-keluarga"
+  },
+  {
+    "id": 44,
+    "parent_id": 29,
+    "order": 15,
+    "label": "Status Sosial",
+    "pathname": "/master/social-status",
+    "is_submenu": false,
+    "status": true,
+    "tag": "status-sosial"
+  },
+  {
+    "id": 45,
+    "parent_id": 29,
+    "order": 16,
+    "label": "Pangkat/Golongan",
+    "pathname": "/master/rank-or-class",
+    "is_submenu": false,
+    "status": true,
+    "tag": "pangkat-golongan"
+  }
+]

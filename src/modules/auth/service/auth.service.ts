@@ -60,7 +60,7 @@ export class AuthService {
       ...payload,
       token: await this.jwtService.signAsync(payload),
       expires: generateExpiresDate(),
-      permissions: user.izin_user,
+      // permissions: user.izin_user,
     };
   }
 

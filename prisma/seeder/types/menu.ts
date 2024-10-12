@@ -18,10 +18,10 @@ type Submenu = {
 type MenuPermission = {
   id: number;
   nama: string;
-  is_create: boolean;
-  is_delete: boolean;
-  is_update: boolean;
-  is_view: boolean;
+  can_create: boolean;
+  can_delete: boolean;
+  can_update: boolean;
+  can_view: boolean;
   submenus?: SubmenuPermission[];
 };
 
@@ -29,10 +29,10 @@ type SubmenuPermission = {
   id: number;
   id_izin_menu: number;
   id_submenu: number;
-  is_create: boolean;
-  is_delete: boolean;
-  is_update: boolean;
-  is_view: boolean;
+  can_create: boolean;
+  can_delete: boolean;
+  can_update: boolean;
+  can_view: boolean;
 };
 
 export type { Menu, Submenu, MenuPermission };

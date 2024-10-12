@@ -6,18 +6,31 @@ import { MenuRepository } from '../repository/menu.repository';
 export class MenuService {
   constructor(private readonly menuRepository: MenuRepository) {}
 
-  async findAll() {
-    const userMenus = await this.menuRepository.findAll();
+  private buildMenuTree(menus: any[], parentId: number | null = null): any[] {
+    return menus
+      .filter((menu) => menu.parent_id === parentId)
+      .map((menu) => ({
+        ...menu,
+        children: this.buildMenuTree(menus, menu.id),
+      }));
+  }
 
-    const formattedMenus = userMenus.map((permission) => ({
-      ...permission.izin_menu.menu,
-      submenu: permission.izin_menu.menu.submenu.map((sub) => ({
-        ...sub,
-        id_menu: permission.izin_menu.menu.id,
-      })),
+  async findMenuByUserId(userId: number) {
+    const menus = await this.menuRepository.getMenuByUserId(userId);
+    const formattedMenus = menus.map((menu) => ({
+      id: menu.id,
+      parent_id: menu.parent_id,
+      order: menu.order,
+      label: menu.label,
+      icon: menu.icon,
+      pathname: menu.pathname,
+      is_submenu: menu.is_submenu,
+      can_create: menu.menu_permission[0]?.can_create ?? false,
+      can_update: menu.menu_permission[0]?.can_update ?? false,
+      can_delete: menu.menu_permission[0]?.can_delete ?? false,
+      children: [],
     }));
 
-    formattedMenus.sort((a, b) => a.order - b.order);
-    return formattedMenus;
+    return this.buildMenuTree(formattedMenus);
   }
 }

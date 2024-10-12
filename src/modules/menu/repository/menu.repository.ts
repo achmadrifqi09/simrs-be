@@ -5,51 +5,39 @@ import { PrismaService } from '../../../prisma/prisma.service';
 @Injectable()
 export class MenuRepository {
   constructor(private readonly prismaService: PrismaService) {}
-
-  async findAll() {
-    return this.prismaService.userPermission.findMany({
+  async getMenuByUserId(userId: number) {
+    return this.prismaService.menu.findMany({
       where: {
-        id_user: 1,
         is_deleted: false,
-      },
-      select: {
-        izin_menu: {
-          select: {
-            menu: {
-              select: {
-                id: true,
-                label: true,
-                order: true,
-                icon: true,
-                pathname: true,
-                is_submenu: true,
-                submenu: {
-                  where: {
-                    is_deleted: false,
-                    izin_submenu: {
-                      some: {
-                        izin_menu: {
-                          izin_user: {
-                            some: {
-                              id_user: 1,
-                              is_deleted: false,
-                            },
-                          },
-                        },
-                      },
-                    },
-                  },
-                  select: {
-                    id: true,
-                    label: true,
-                    pathname: true,
-                  },
-                },
-              },
-            },
+        menu_permission: {
+          some: {
+            id_user: userId,
+            can_view: true,
+            is_deleted: false,
           },
         },
       },
+      select: {
+        id: true,
+        parent_id: true,
+        order: true,
+        label: true,
+        icon: true,
+        pathname: true,
+        is_submenu: true,
+        menu_permission: {
+          where: {
+            id_user: userId,
+            is_deleted: false,
+          },
+          select: {
+            can_create: true,
+            can_update: true,
+            can_delete: true,
+          },
+        },
+      },
+      orderBy: [{ parent_id: 'asc' }, { order: 'asc' }],
     });
   }
 }
