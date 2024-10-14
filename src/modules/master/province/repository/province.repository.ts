@@ -17,9 +17,7 @@ export class ProvinceRepository {
     take?: number,
   ) {
     const whereClause: Prisma.ProvinceWhereInput = {
-      nama: {
-        contains: keyword,
-      },
+      OR: [{ nama: { contains: keyword } }, { id: { contains: keyword } }],
       is_deleted: false,
     };
 
