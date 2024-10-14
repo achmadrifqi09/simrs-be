@@ -11,8 +11,7 @@ import { Prisma } from '@prisma/client';
 @Dependencies([PrismaService])
 @Injectable()
 export class CountryRepository {
-  constructor(private readonly prismaService: PrismaService) {
-  }
+  constructor(private readonly prismaService: PrismaService) {}
 
   async findAllCountry(keyword?: string) {
     const whereClause: Prisma.CountryWhereInput = {

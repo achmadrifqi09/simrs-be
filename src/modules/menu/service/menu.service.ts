@@ -1,4 +1,9 @@
-import { Dependencies, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  Dependencies,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { MenuRepository } from '../repository/menu.repository';
 
 @Dependencies([MenuRepository])

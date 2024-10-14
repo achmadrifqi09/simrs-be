@@ -10,6 +10,7 @@ import { RegencyModule } from './regency/regency.module';
 import { DistrictModule } from './district/district.module';
 import { SpecialistModule } from './specialist/specialist.module';
 import { VillageModule } from './village/village.module';
+import { RankOfEmployeesModule } from './employee-rank/employee-rank.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { VillageModule } from './village/village.module';
     DistrictModule,
     SpecialistModule,
     VillageModule,
+    RankOfEmployeesModule,
   ],
 })
 export class MasterModule {}

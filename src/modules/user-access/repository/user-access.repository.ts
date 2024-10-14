@@ -4,8 +4,7 @@ import { PrismaService } from '../../../prisma/prisma.service';
 @Dependencies([PrismaService])
 @Injectable()
 export class UserAccessRepository {
-  constructor(private readonly prismaService: PrismaService) {
-  }
+  constructor(private readonly prismaService: PrismaService) {}
 
   async findManyUserAccessByUserId(userId: number) {
     return this.prismaService.userAccess.findMany({
