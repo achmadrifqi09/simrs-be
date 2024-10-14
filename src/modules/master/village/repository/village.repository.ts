@@ -17,9 +17,7 @@ export class VillageRepository {
     take?: number,
   ) {
     const whereClause: Prisma.VillageWhereInput = {
-      nama: {
-        contains: keyword,
-      },
+      OR: [{ nama: { contains: keyword } }, { id: { contains: keyword } }],
       is_deleted: false,
     };
 

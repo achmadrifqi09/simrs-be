@@ -17,9 +17,7 @@ export class RegencyRepository {
     take?: number,
   ) {
     const whereClause: Prisma.RegencyWhereInput = {
-      nama: {
-        contains: keyword,
-      },
+      OR: [{ nama: { contains: keyword } }, { id: { contains: keyword } }],
       is_deleted: false,
     };
 

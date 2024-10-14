@@ -17,9 +17,7 @@ export class DistrictRepository {
     take?: number,
   ) {
     const whereClause: Prisma.DistrictWhereInput = {
-      nama: {
-        contains: keyword,
-      },
+      OR: [{ nama: { contains: keyword } }, { id: { contains: keyword } }],
       is_deleted: false,
     };
 
