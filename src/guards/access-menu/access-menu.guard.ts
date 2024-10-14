@@ -6,18 +6,17 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Observable } from 'rxjs';
-import { PermissionService } from '../../modules/permission/service/permission.service';
 import {
   PERMISSION_KEY,
   PermissionMetadata,
 } from '../../decorators/permission.decorator';
+import { UserAccessService } from '../../modules/user-access/service/user-access.service';
 
 @Injectable()
-export class PermissionMenuGuard implements CanActivate {
+export class AccessMenuGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private readonly permissionService: PermissionService,
+    private readonly userAccessService: UserAccessService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -27,24 +26,28 @@ export class PermissionMenuGuard implements CanActivate {
     );
 
     if (!permissionMetadata) {
-      return true; // No metadata, allow access
+      return true;
     }
 
     const { tagMenu, actionType } = permissionMetadata;
     const request = context.switchToHttp().getRequest();
     const userId = request?.user?.id;
+    const levelAccessIds = request?.user?.level_access_id;
 
     if (!userId)
       throw new HttpException('Anda tidak memiliki izin', HttpStatus.FORBIDDEN);
 
-    const permission = await this.permissionService.findUserMenuPermission(
-      userId,
+    const accessUser = await this.userAccessService.findAccessPermissionByTag(
       tagMenu,
+      levelAccessIds,
     );
 
-    if (!permission)
-      throw new HttpException('Anda tidak memiliki izin', HttpStatus.FORBIDDEN);
+    if (!accessUser)
+      throw new HttpException(
+        'Anda tidak memiliki izin untuk sumber daya terkait',
+        HttpStatus.FORBIDDEN,
+      );
 
-    return !!permission[actionType];
+    return !!accessUser[actionType];
   }
 }

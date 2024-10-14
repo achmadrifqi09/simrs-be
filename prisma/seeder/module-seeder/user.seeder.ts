@@ -11,6 +11,7 @@ export const userSeeder = async () => {
 
   return prismaClient.user.create({
     data: {
+      id_user: 1,
       id_pegawai: 0,
       nama_user: 'Super Admin',
       email_user: 'superadmin@ummhospital.com',

@@ -5,39 +5,32 @@ import { PrismaService } from '../../../prisma/prisma.service';
 @Injectable()
 export class MenuRepository {
   constructor(private readonly prismaService: PrismaService) {}
-  async getMenuByUserId(userId: number) {
-    return this.prismaService.menu.findMany({
+
+  async findMenuByLevelAccess(levelAccessIds: number[]) {
+    return this.prismaService.accessLevelPermission.findMany({
       where: {
-        is_deleted: false,
-        menu_permission: {
-          some: {
-            id_user: userId,
-            can_view: true,
-            is_deleted: false,
-          },
+        id_level_akses: {
+          in: levelAccessIds,
         },
+        is_deleted: false,
       },
       select: {
-        id: true,
-        parent_id: true,
-        order: true,
-        label: true,
-        icon: true,
-        pathname: true,
-        is_submenu: true,
-        menu_permission: {
-          where: {
-            id_user: userId,
-            is_deleted: false,
-          },
+        id_menu: true,
+        menu: {
           select: {
-            can_create: true,
-            can_update: true,
-            can_delete: true,
+            id: true,
+            parent_id: true,
+            order: true,
+            label: true,
+            icon: true,
+            pathname: true,
+            tag: true,
+            is_submenu: true,
+            status: true,
           },
         },
       },
-      orderBy: [{ parent_id: 'asc' }, { order: 'asc' }],
+      distinct: ['id_menu'],
     });
   }
 }

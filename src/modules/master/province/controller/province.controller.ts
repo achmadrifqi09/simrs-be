@@ -18,7 +18,7 @@ import { ProvinceService } from '../service/province.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
 import { provinceValidation } from '../validation/province.validation';
 import { ProvincePayloadDTO } from '../dto/province.dto';
-import { PermissionMenuGuard } from '../../../../guards/permission-menu/permission-menu.guard';
+import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
 import { Action } from '../../../../common/enums/action.enum';
 import { Permission } from '../../../../decorators/permission.decorator';
 
@@ -41,7 +41,7 @@ export class ProvinceController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')
-  @UseGuards(PermissionMenuGuard)
+  @UseGuards(AccessMenuGuard)
   @Permission('provinsi', Action.CAN_CREATE)
   async createProvince(
     @Req() req: any,
@@ -53,7 +53,7 @@ export class ProvinceController {
   @Patch('/:id')
   @Header('Content-Type', 'application/json')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(PermissionMenuGuard)
+  @UseGuards(AccessMenuGuard)
   @Permission('provinsi', Action.CAN_UPDATE)
   async updateProvince(
     @Param('id') id: string,
@@ -66,7 +66,7 @@ export class ProvinceController {
 
   @Delete('/:id')
   @Header('Content-Type', 'application/json')
-  @UseGuards(PermissionMenuGuard)
+  @UseGuards(AccessMenuGuard)
   @Permission('provinsi', Action.CAN_DELETE)
   async provinceSoftDelete(@Param('id') id: number | string, @Req() req: any) {
     return this.provinceService.provinceSoftDelete(id, req);

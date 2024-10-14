@@ -18,6 +18,32 @@ CREATE TABLE `db_client` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `db_user` (
+    `id_user` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_pegawai` INTEGER NOT NULL,
+    `nama_user` VARCHAR(100) NOT NULL,
+    `email_user` VARCHAR(100) NOT NULL,
+    `hp_user` VARCHAR(20) NOT NULL,
+    `password_user` TEXT NOT NULL,
+    `status` BOOLEAN NOT NULL DEFAULT true,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `created_by` INTEGER NOT NULL DEFAULT 0,
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` INTEGER NULL DEFAULT 0,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` INTEGER NULL DEFAULT 0,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` INTEGER NULL DEFAULT 0,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    UNIQUE INDEX `db_user_email_user_key`(`email_user`),
+    INDEX `db_user_email_user_idx`(`email_user`),
+    INDEX `db_user_id_pegawai_idx`(`id_pegawai`),
+    PRIMARY KEY (`id_user`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `db_menu` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `parent_id` INTEGER NULL,
@@ -42,15 +68,38 @@ CREATE TABLE `db_menu` (
     UNIQUE INDEX `db_menu_tag_key`(`tag`),
     INDEX `db_menu_parent_id_idx`(`parent_id`),
     INDEX `db_menu_pathname_idx`(`pathname`),
+    INDEX `db_menu_tag_idx`(`tag`),
+    INDEX `db_menu_is_deleted_idx`(`is_deleted`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `db_izin_menu` (
+CREATE TABLE `db_level_akses` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `id_user` INTEGER NOT NULL,
+    `nama` VARCHAR(191) NOT NULL,
+    `status` BOOLEAN NOT NULL DEFAULT true,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `created_by` INTEGER NOT NULL DEFAULT 0,
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` INTEGER NULL DEFAULT 0,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` INTEGER NULL DEFAULT 0,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` INTEGER NULL DEFAULT 0,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    INDEX `db_level_akses_nama_idx`(`nama`),
+    INDEX `db_level_akses_status_idx`(`status`),
+    INDEX `db_level_akses_is_deleted_idx`(`is_deleted`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `db_izin_level_akses` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_level_akses` INTEGER NOT NULL,
     `id_menu` INTEGER NOT NULL,
-    `tag` VARCHAR(191) NOT NULL,
     `can_view` BOOLEAN NOT NULL,
     `can_create` BOOLEAN NOT NULL,
     `can_update` BOOLEAN NOT NULL,
@@ -66,8 +115,32 @@ CREATE TABLE `db_izin_menu` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
-    INDEX `db_izin_menu_id_user_idx`(`id_user`),
-    INDEX `db_izin_menu_id_menu_idx`(`id_menu`),
+    INDEX `db_izin_level_akses_id_level_akses_id_menu_idx`(`id_level_akses`, `id_menu`),
+    INDEX `db_izin_level_akses_is_deleted_idx`(`is_deleted`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `db_akses_user` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_user` INTEGER NOT NULL,
+    `id_level_akses` INTEGER NOT NULL,
+    `id_pegawai` INTEGER NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `created_by` INTEGER NOT NULL DEFAULT 0,
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` INTEGER NULL DEFAULT 0,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` INTEGER NULL DEFAULT 0,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` INTEGER NULL DEFAULT 0,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    INDEX `db_akses_user_id_user_idx`(`id_user`),
+    INDEX `db_akses_user_id_level_akses_idx`(`id_level_akses`),
+    INDEX `db_akses_user_id_pegawai_idx`(`id_pegawai`),
+    INDEX `db_akses_user_is_deleted_idx`(`is_deleted`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -219,31 +292,6 @@ CREATE TABLE `db_unit_kerja` (
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
     PRIMARY KEY (`id_unit_kerja`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `db_user` (
-    `id_user` INTEGER NOT NULL AUTO_INCREMENT,
-    `id_pegawai` INTEGER NOT NULL,
-    `nama_user` VARCHAR(100) NOT NULL,
-    `email_user` VARCHAR(100) NOT NULL,
-    `hp_user` VARCHAR(20) NOT NULL,
-    `password_user` TEXT NOT NULL,
-    `status` BOOLEAN NOT NULL DEFAULT true,
-    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `created_by` INTEGER NOT NULL DEFAULT 0,
-    `modified_at` DATETIME(0) NULL,
-    `modified_by` INTEGER NULL DEFAULT 0,
-    `deleted_at` DATETIME(0) NULL,
-    `deleted_by` INTEGER NULL DEFAULT 0,
-    `restored_at` DATETIME(0) NULL,
-    `restored_by` INTEGER NULL DEFAULT 0,
-    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
-    `is_restored` BOOLEAN NOT NULL DEFAULT false,
-
-    UNIQUE INDEX `db_user_email_user_key`(`email_user`),
-    INDEX `db_user_email_user_idx`(`email_user`),
-    PRIMARY KEY (`id_user`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -658,10 +706,16 @@ CREATE TABLE `ms_negara` (
 ALTER TABLE `db_menu` ADD CONSTRAINT `db_menu_parent_id_fkey` FOREIGN KEY (`parent_id`) REFERENCES `db_menu`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `db_izin_menu` ADD CONSTRAINT `db_izin_menu_id_user_fkey` FOREIGN KEY (`id_user`) REFERENCES `db_user`(`id_user`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `db_izin_level_akses` ADD CONSTRAINT `db_izin_level_akses_id_menu_fkey` FOREIGN KEY (`id_menu`) REFERENCES `db_menu`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `db_izin_menu` ADD CONSTRAINT `db_izin_menu_id_menu_fkey` FOREIGN KEY (`id_menu`) REFERENCES `db_menu`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `db_izin_level_akses` ADD CONSTRAINT `db_izin_level_akses_id_level_akses_fkey` FOREIGN KEY (`id_level_akses`) REFERENCES `db_level_akses`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_akses_user` ADD CONSTRAINT `db_akses_user_id_user_fkey` FOREIGN KEY (`id_user`) REFERENCES `db_user`(`id_user`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_akses_user` ADD CONSTRAINT `db_akses_user_id_level_akses_fkey` FOREIGN KEY (`id_level_akses`) REFERENCES `db_level_akses`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ms_desa` ADD CONSTRAINT `fk_kecamatan` FOREIGN KEY (`id_kecamatan`) REFERENCES `ms_kecamatan`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;

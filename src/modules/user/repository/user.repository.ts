@@ -8,7 +8,7 @@ export class UserRepository {
 
   async findByEmail(email: string) {
     return this.prismaService.user.findFirst({
-      where: { email_user: email },
+      where: { email_user: email, status: true },
       select: {
         id_user: true,
         nama_user: true,

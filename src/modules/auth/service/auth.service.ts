@@ -11,14 +11,16 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { AuthRepository } from '../repository/auth.repository';
 import { generateExpiresDate } from '../../../utils/date-formatter';
+import { UserAccessService } from '../../user-access/service/user-access.service';
 
-@Dependencies([UserService, JwtService, AuthRepository])
+@Dependencies([UserService, JwtService, AuthRepository, UserAccessService])
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly authRepository: AuthRepository,
+    private readonly userAccessService: UserAccessService,
   ) {}
 
   @Post()
@@ -50,25 +52,31 @@ export class AuthService {
       );
     }
 
+    const userAccess = await this.userAccessService.findManyUserAccess(
+      user.id_user,
+    );
+    const levelAccessIds = userAccess.map((access) => access.id_level_akses);
+
     const payload = {
       id: user.id_user,
       email: user.email_user,
       name: user.nama_user,
+      level_access_id: levelAccessIds,
     };
 
     return {
-      ...payload,
+      id: user.id_user,
+      email: user.email_user,
+      name: user.nama_user,
       token: await this.jwtService.signAsync(payload),
       expires: generateExpiresDate(),
-      // permissions: user.izin_user,
     };
   }
 
   async verifyToken(token: string) {
     try {
       return await this.jwtService.verifyAsync(token);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
+    } catch {
       throw new HttpException('Token tidak valid', HttpStatus.UNAUTHORIZED);
     }
   }

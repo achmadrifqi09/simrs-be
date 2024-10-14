@@ -5,11 +5,13 @@ import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PrismaModule } from '../../prisma/prisma.module';
 import { AuthRepository } from './repository/auth.repository';
+import { UserAccessModule } from '../user-access/user-access.module';
 
 @Module({
   imports: [
     PrismaModule,
     UserModule,
+    UserAccessModule,
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET_KEY,

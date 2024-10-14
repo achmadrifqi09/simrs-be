@@ -1,38 +1,12 @@
 type Menu = {
   id?: number;
+  parent_id?: number;
+  order?: number;
   label: string;
-  order: number;
-  icon?: string;
   pathname?: string;
-  status: boolean;
   is_submenu: boolean;
-  submenus?: Submenu[];
+  status: boolean;
+  tag: string;
 };
 
-type Submenu = {
-  id?: number;
-  label: string;
-  pathname: string;
-};
-
-type MenuPermission = {
-  id: number;
-  nama: string;
-  can_create: boolean;
-  can_delete: boolean;
-  can_update: boolean;
-  can_view: boolean;
-  submenus?: SubmenuPermission[];
-};
-
-type SubmenuPermission = {
-  id: number;
-  id_izin_menu: number;
-  id_submenu: number;
-  can_create: boolean;
-  can_delete: boolean;
-  can_update: boolean;
-  can_view: boolean;
-};
-
-export type { Menu, Submenu, MenuPermission };
+export type { Menu };

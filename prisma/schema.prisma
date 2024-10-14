@@ -26,46 +26,66 @@ model AppClient {
   @@map("db_client")
 }
 
+model User {
+  id_user       Int          @id @default(autoincrement())
+  id_pegawai    Int
+  nama_user     String       @db.VarChar(100)
+  email_user    String       @unique @db.VarChar(100)
+  hp_user       String       @db.VarChar(20)
+  password_user String       @db.Text
+  status        Boolean      @default(true)
+  created_at    DateTime     @default(now())
+  created_by    Int          @default(0)
+  modified_at   DateTime?    @db.DateTime(0)
+  modified_by   Int?         @default(0)
+  deleted_at    DateTime?    @db.DateTime(0)
+  deleted_by    Int?         @default(0)
+  restored_at   DateTime?    @db.DateTime(0)
+  restored_by   Int?         @default(0)
+  is_deleted    Boolean      @default(false)
+  is_restored   Boolean      @default(false)
+  akses_user    UserAccess[]
+
+  @@index([email_user])
+  @@index([id_pegawai])
+  @@map("db_user")
+}
+
 model Menu {
-  id              Int              @id @default(autoincrement())
-  parent_id       Int?
-  order           Int
-  label           String
-  icon            String?
-  pathname        String?
-  tag             String           @unique
-  is_submenu      Boolean
-  status          Boolean          @default(true)
-  parent          Menu?            @relation("MenuToMenu", fields: [parent_id], references: [id])
-  children        Menu[]           @relation("MenuToMenu")
-  created_at      DateTime         @default(now())
-  created_by      Int              @default(0)
-  modified_at     DateTime?        @db.DateTime(0)
-  modified_by     Int?             @default(0)
-  deleted_at      DateTime?        @db.DateTime(0)
-  deleted_by      Int?             @default(0)
-  restored_at     DateTime?        @db.DateTime(0)
-  restored_by     Int?             @default(0)
-  is_deleted      Boolean          @default(false)
-  is_restored     Boolean          @default(false)
-  menu_permission MenuPermission[]
+  id               Int                     @id @default(autoincrement())
+  parent_id        Int?
+  order            Int
+  label            String
+  icon             String?
+  pathname         String?
+  tag              String                  @unique
+  is_submenu       Boolean
+  status           Boolean                 @default(true)
+  parent           Menu?                   @relation("MenuToMenu", fields: [parent_id], references: [id])
+  children         Menu[]                  @relation("MenuToMenu")
+  created_at       DateTime                @default(now())
+  created_by       Int                     @default(0)
+  modified_at      DateTime?               @db.DateTime(0)
+  modified_by      Int?                    @default(0)
+  deleted_at       DateTime?               @db.DateTime(0)
+  deleted_by       Int?                    @default(0)
+  restored_at      DateTime?               @db.DateTime(0)
+  restored_by      Int?                    @default(0)
+  is_deleted       Boolean                 @default(false)
+  is_restored      Boolean                 @default(false)
+  izin_akses_level AccessLevelPermission[]
 
   @@index([parent_id])
   @@index([pathname])
+  @@index([tag])
+  @@index([is_deleted])
   @@map("db_menu")
 }
 
-model MenuPermission {
+model AccessLevel {
   id          Int       @id @default(autoincrement())
-  id_user     Int
-  id_menu     Int
-  tag         String
-  can_view    Boolean
-  can_create  Boolean
-  can_update  Boolean
-  can_delete  Boolean
-  user        User      @relation(fields: [id_user], references: [id_user])
-  menu        Menu      @relation(fields: [id_menu], references: [id])
+  nama        String
+  status      Boolean   @default(true)
   created_at  DateTime  @default(now())
   created_by  Int       @default(0)
   modified_at DateTime? @db.DateTime(0)
@@ -77,130 +97,122 @@ model MenuPermission {
   is_deleted  Boolean   @default(false)
   is_restored Boolean   @default(false)
 
-  @@index([id_user])
-  @@index([id_menu])
-  @@map("db_izin_menu")
+  izin_level_akses AccessLevelPermission[]
+  akses_user       UserAccess[]
+
+  @@index([nama])
+  @@index([status])
+  @@index([is_deleted])
+  @@map("db_level_akses")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model AccessLevelPermission {
+  id             Int       @id @default(autoincrement())
+  id_level_akses Int
+  id_menu        Int
+  can_view       Boolean
+  can_create     Boolean
+  can_update     Boolean
+  can_delete     Boolean
+  created_at     DateTime  @default(now())
+  created_by     Int       @default(0)
+  modified_at    DateTime? @db.DateTime(0)
+  modified_by    Int?      @default(0)
+  deleted_at     DateTime? @db.DateTime(0)
+  deleted_by     Int?      @default(0)
+  restored_at    DateTime? @db.DateTime(0)
+  restored_by    Int?      @default(0)
+  is_deleted     Boolean   @default(false)
+  is_restored    Boolean   @default(false)
+
+  menu        Menu        @relation(fields: [id_menu], references: [id])
+  akses_level AccessLevel @relation(fields: [id_level_akses], references: [id])
+
+  @@index([id_level_akses, id_menu])
+  @@index([is_deleted])
+  @@map("db_izin_level_akses")
+}
+
+model UserAccess {
+  id             Int       @id @default(autoincrement())
+  id_user        Int
+  id_level_akses Int
+  id_pegawai     Int
+  created_at     DateTime  @default(now())
+  created_by     Int       @default(0)
+  modified_at    DateTime? @db.DateTime(0)
+  modified_by    Int?      @default(0)
+  deleted_at     DateTime? @db.DateTime(0)
+  deleted_by     Int?      @default(0)
+  restored_at    DateTime? @db.DateTime(0)
+  restored_by    Int?      @default(0)
+  is_deleted     Boolean   @default(false)
+  is_restored    Boolean   @default(false)
+
+  user        User        @relation(fields: [id_user], references: [id_user])
+  level_akses AccessLevel @relation(fields: [id_level_akses], references: [id])
+
+  @@index([id_user])
+  @@index([id_level_akses])
+  @@index([id_pegawai])
+  @@index([is_deleted])
+  @@map("db_akses_user")
+}
+
 // model Menu {
-//   id          Int              @id @default(autoincrement())
-//   label       String           @db.VarChar(100)
-//   order       Int              @unique
-//   icon        String?          @db.VarChar(100)
-//   pathname    String?          @db.VarChar(100)
-//   status      Boolean          @default(true)
-//   is_submenu  Boolean?         @default(false)
-//   created_at  DateTime         @default(now())
-//   created_by  Int              @default(0)
-//   modified_at DateTime?        @db.DateTime(0)
-//   modified_by Int?             @default(0)
-//   deleted_at  DateTime?        @db.DateTime(0)
-//   deleted_by  Int?             @default(0)
-//   restored_at DateTime?        @db.DateTime(0)
-//   restored_by Int?             @default(0)
-//   is_deleted  Boolean          @default(false)
-//   is_restored Boolean          @default(false)
-//   izin_menu   MenuPermission[]
-//   submenu     Submenu[]
+//   id              Int              @id @default(autoincrement())
+//   parent_id       Int?
+//   order           Int
+//   label           String
+//   icon            String?
+//   pathname        String?
+//   tag             String           @unique
+//   is_submenu      Boolean
+//   status          Boolean          @default(true)
+//   parent          Menu?            @relation("MenuToMenu", fields: [parent_id], references: [id])
+//   children        Menu[]           @relation("MenuToMenu")
+//   created_at      DateTime         @default(now())
+//   created_by      Int              @default(0)
+//   modified_at     DateTime?        @db.DateTime(0)
+//   modified_by     Int?             @default(0)
+//   deleted_at      DateTime?        @db.DateTime(0)
+//   deleted_by      Int?             @default(0)
+//   restored_at     DateTime?        @db.DateTime(0)
+//   restored_by     Int?             @default(0)
+//   is_deleted      Boolean          @default(false)
+//   is_restored     Boolean          @default(false)
+//   menu_permission MenuPermission[]
 //
+//   @@index([parent_id])
+//   @@index([pathname])
 //   @@map("db_menu")
 // }
 //
-// model Submenu {
-//   id           Int                 @id @default(autoincrement())
-//   label        String
-//   pathname     String
-//   id_menu      Int
-//   created_at   DateTime            @default(now())
-//   created_by   Int                 @default(0)
-//   modified_at  DateTime?           @db.DateTime(0)
-//   modified_by  Int?                @default(0)
-//   deleted_at   DateTime?           @db.DateTime(0)
-//   deleted_by   Int?                @default(0)
-//   restored_at  DateTime?           @db.DateTime(0)
-//   restored_by  Int?                @default(0)
-//   is_deleted   Boolean             @default(false)
-//   is_restored  Boolean             @default(false)
-//   izin_submenu SubmenuPermission[]
-//   menu         Menu                @relation(fields: [id_menu], references: [id])
-//
-//   @@index([id_menu])
-//   @@map("db_submenu")
-// }
-//
 // model MenuPermission {
-//   id          Int                 @id @default(autoincrement())
-//   nama        String
+//   id          Int       @id @default(autoincrement())
+//   id_user     Int
 //   id_menu     Int
+//   tag         String
+//   can_view    Boolean
 //   can_create  Boolean
 //   can_update  Boolean
 //   can_delete  Boolean
-//   can_view    Boolean
-//   created_at  DateTime            @default(now())
-//   created_by  Int                 @default(0)
-//   modified_at DateTime?           @db.DateTime(0)
-//   modified_by Int?                @default(0)
-//   deleted_at  DateTime?           @db.DateTime(0)
-//   deleted_by  Int?                @default(0)
-//   restored_at DateTime?           @db.DateTime(0)
-//   restored_by Int?                @default(0)
-//   is_deleted  Boolean             @default(false)
-//   is_restored Boolean             @default(false)
-//   menu        Menu                @relation(fields: [id_menu], references: [id])
-//   submenu     SubmenuPermission[]
-//   izin_user   UserPermission[]
+//   user        User      @relation(fields: [id_user], references: [id_user])
+//   menu        Menu      @relation(fields: [id_menu], references: [id])
+//   created_at  DateTime  @default(now())
+//   created_by  Int       @default(0)
+//   modified_at DateTime? @db.DateTime(0)
+//   modified_by Int?      @default(0)
+//   deleted_at  DateTime? @db.DateTime(0)
+//   deleted_by  Int?      @default(0)
+//   restored_at DateTime? @db.DateTime(0)
+//   restored_by Int?      @default(0)
+//   is_deleted  Boolean   @default(false)
+//   is_restored Boolean   @default(false)
 //
+//   @@index([id_user])
 //   @@index([id_menu])
 //   @@map("db_izin_menu")
-// }
-//
-// model SubmenuPermission {
-//   id           Int            @id @default(autoincrement())
-//   id_izin_menu Int
-//   id_submenu   Int
-//   can_create   Boolean
-//   can_update   Boolean
-//   can_delete   Boolean
-//   can_view     Boolean
-//   created_at   DateTime       @default(now())
-//   created_by   Int            @default(0)
-//   modified_at  DateTime?      @db.DateTime(0)
-//   modified_by  Int?           @default(0)
-//   deleted_at   DateTime?      @db.DateTime(0)
-//   deleted_by   Int?           @default(0)
-//   restored_at  DateTime?      @db.DateTime(0)
-//   restored_by  Int?           @default(0)
-//   is_deleted   Boolean        @default(false)
-//   is_restored  Boolean        @default(false)
-//   izin_menu    MenuPermission @relation(fields: [id_izin_menu], references: [id])
-//   submenu      Submenu        @relation(fields: [id_submenu], references: [id])
-//
-//   @@index([id_izin_menu, id_submenu])
-//   @@index([id_submenu], map: "db_izin_submenu_id_submenu_fkey")
-//   @@map("db_izin_submenu")
-// }
-//
-// model UserPermission {
-//   id           Int            @id @default(autoincrement())
-//   id_izin_menu Int
-//   id_user      Int
-//   created_at   DateTime       @default(now())
-//   created_by   Int            @default(0)
-//   modified_at  DateTime?      @db.DateTime(0)
-//   modified_by  Int?           @default(0)
-//   deleted_at   DateTime?      @db.DateTime(0)
-//   deleted_by   Int?           @default(0)
-//   restored_at  DateTime?      @db.DateTime(0)
-//   restored_by  Int?           @default(0)
-//   is_deleted   Boolean        @default(false)
-//   is_restored  Boolean        @default(false)
-//   izin_menu    MenuPermission @relation(fields: [id_izin_menu], references: [id])
-//   user         User           @relation(fields: [id_user], references: [id_user])
-//
-//   @@index([id_user, id_izin_menu])
-//   @@index([id_izin_menu], map: "db_izin_user_id_izin_menu_fkey")
-//   @@map("db_izin_user")
 // }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -355,31 +367,31 @@ model WorkUnit {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model User {
-  id_user         Int              @id @default(autoincrement())
-  id_pegawai      Int
-  nama_user       String           @db.VarChar(100)
-  email_user      String           @unique @db.VarChar(100)
-  hp_user         String           @db.VarChar(20)
-  password_user   String           @db.Text
-  status          Boolean          @default(true)
-  created_at      DateTime         @default(now())
-  created_by      Int              @default(0)
-  modified_at     DateTime?        @db.DateTime(0)
-  modified_by     Int?             @default(0)
-  deleted_at      DateTime?        @db.DateTime(0)
-  deleted_by      Int?             @default(0)
-  restored_at     DateTime?        @db.DateTime(0)
-  restored_by     Int?             @default(0)
-  is_deleted      Boolean          @default(false)
-  is_restored     Boolean          @default(false)
-  // UserPermission UserPermission[]
-  menu_permission MenuPermission[]
-
-  // izin_user     UserPermission[]
-  @@index([email_user])
-  @@map("db_user")
-}
+// model User {
+//   id_user         Int              @id @default(autoincrement())
+//   id_pegawai      Int
+//   nama_user       String           @db.VarChar(100)
+//   email_user      String           @unique @db.VarChar(100)
+//   hp_user         String           @db.VarChar(20)
+//   password_user   String           @db.Text
+//   status          Boolean          @default(true)
+//   created_at      DateTime         @default(now())
+//   created_by      Int              @default(0)
+//   modified_at     DateTime?        @db.DateTime(0)
+//   modified_by     Int?             @default(0)
+//   deleted_at      DateTime?        @db.DateTime(0)
+//   deleted_by      Int?             @default(0)
+//   restored_at     DateTime?        @db.DateTime(0)
+//   restored_by     Int?             @default(0)
+//   is_deleted      Boolean          @default(false)
+//   is_restored     Boolean          @default(false)
+//   // UserPermission UserPermission[]
+//   menu_permission MenuPermission[]
+//
+//   // izin_user     UserPermission[]
+//   @@index([email_user])
+//   @@map("db_user")
+// }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Religion {
