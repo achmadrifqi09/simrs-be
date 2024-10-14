@@ -6,18 +6,26 @@ import {
 } from '../../../../common/dto/common.dto';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import { CountryPayloadDTO } from '../dto/country.dto';
+import { Prisma } from '@prisma/client';
 
 @Dependencies([PrismaService])
 @Injectable()
 export class CountryRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {
+  }
 
   async findAllCountry(keyword?: string) {
+    const whereClause: Prisma.CountryWhereInput = {
+      OR: [{ nama: { contains: keyword } }],
+      is_deleted: false,
+    };
+
+    if (Number(keyword)) {
+      whereClause['OR'].push({ id: Number(keyword) });
+    }
+
     return this.prismaService.country.findMany({
-      where: {
-        OR: [{ nama: { contains: keyword } }],
-        is_deleted: false,
-      },
+      where: whereClause,
     });
   }
 
