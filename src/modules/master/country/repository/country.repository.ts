@@ -15,7 +15,7 @@ export class CountryRepository {
   async findAllCountry(keyword?: string) {
     return this.prismaService.country.findMany({
       where: {
-        OR: [{ nama: { contains: keyword } }, { id: { contains: keyword } }],
+        OR: [{ nama: { contains: keyword } }],
         is_deleted: false,
       },
     });
