@@ -455,7 +455,7 @@
   {
     "id": 46,
     "parent_id": 29,
-    "order": 16,
+    "order": 17,
     "label": "Tingkat Pendidikan",
     "pathname": "/master/education-level",
     "is_submenu": false,

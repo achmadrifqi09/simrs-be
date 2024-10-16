@@ -159,62 +159,6 @@ model UserAccess {
   @@map("db_akses_user")
 }
 
-// model Menu {
-//   id              Int              @id @default(autoincrement())
-//   parent_id       Int?
-//   order           Int
-//   label           String
-//   icon            String?
-//   pathname        String?
-//   tag             String           @unique
-//   is_submenu      Boolean
-//   status          Boolean          @default(true)
-//   parent          Menu?            @relation("MenuToMenu", fields: [parent_id], references: [id])
-//   children        Menu[]           @relation("MenuToMenu")
-//   created_at      DateTime         @default(now())
-//   created_by      Int              @default(0)
-//   modified_at     DateTime?        @db.DateTime(0)
-//   modified_by     Int?             @default(0)
-//   deleted_at      DateTime?        @db.DateTime(0)
-//   deleted_by      Int?             @default(0)
-//   restored_at     DateTime?        @db.DateTime(0)
-//   restored_by     Int?             @default(0)
-//   is_deleted      Boolean          @default(false)
-//   is_restored     Boolean          @default(false)
-//   menu_permission MenuPermission[]
-//
-//   @@index([parent_id])
-//   @@index([pathname])
-//   @@map("db_menu")
-// }
-//
-// model MenuPermission {
-//   id          Int       @id @default(autoincrement())
-//   id_user     Int
-//   id_menu     Int
-//   tag         String
-//   can_view    Boolean
-//   can_create  Boolean
-//   can_update  Boolean
-//   can_delete  Boolean
-//   user        User      @relation(fields: [id_user], references: [id_user])
-//   menu        Menu      @relation(fields: [id_menu], references: [id])
-//   created_at  DateTime  @default(now())
-//   created_by  Int       @default(0)
-//   modified_at DateTime? @db.DateTime(0)
-//   modified_by Int?      @default(0)
-//   deleted_at  DateTime? @db.DateTime(0)
-//   deleted_by  Int?      @default(0)
-//   restored_at DateTime? @db.DateTime(0)
-//   restored_by Int?      @default(0)
-//   is_deleted  Boolean   @default(false)
-//   is_restored Boolean   @default(false)
-//
-//   @@index([id_user])
-//   @@index([id_menu])
-//   @@map("db_izin_menu")
-// }
-
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Patient {
   id_pasien               Int       @default(autoincrement())
@@ -365,33 +309,6 @@ model WorkUnit {
 
   @@map("db_unit_kerja")
 }
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-// model User {
-//   id_user         Int              @id @default(autoincrement())
-//   id_pegawai      Int
-//   nama_user       String           @db.VarChar(100)
-//   email_user      String           @unique @db.VarChar(100)
-//   hp_user         String           @db.VarChar(20)
-//   password_user   String           @db.Text
-//   status          Boolean          @default(true)
-//   created_at      DateTime         @default(now())
-//   created_by      Int              @default(0)
-//   modified_at     DateTime?        @db.DateTime(0)
-//   modified_by     Int?             @default(0)
-//   deleted_at      DateTime?        @db.DateTime(0)
-//   deleted_by      Int?             @default(0)
-//   restored_at     DateTime?        @db.DateTime(0)
-//   restored_by     Int?             @default(0)
-//   is_deleted      Boolean          @default(false)
-//   is_restored     Boolean          @default(false)
-//   // UserPermission UserPermission[]
-//   menu_permission MenuPermission[]
-//
-//   // izin_user     UserPermission[]
-//   @@index([email_user])
-//   @@map("db_user")
-// }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Religion {
@@ -803,3 +720,42 @@ model Country {
   @@index([is_deleted], map: "idx_country_is_deleted")
   @@map("ms_negara")
 }
+
+model FamilyStatus {
+  id                   Int       @id @default(autoincrement())
+  nama_status_keluarga String
+  status               Boolean
+  created_at           DateTime  @default(now())
+  created_by           Int       @default(0)
+  modified_at          DateTime? @db.DateTime(0)
+  modified_by          Int?      @default(0)
+  deleted_at           DateTime? @db.DateTime(0)
+  deleted_by           Int?      @default(0)
+  restored_at          DateTime? @db.DateTime(0)
+  restored_by          Int?      @default(0)
+  is_deleted           Boolean   @default(false)
+  is_restored          Boolean   @default(false)
+
+  @@map("ms_status_keluarga")
+}
+
+model SocialStatus {
+  id                 Int       @id @default(autoincrement())
+  nama_status_sosial String
+  status             Boolean
+  created_at         DateTime  @default(now())
+  created_by         Int       @default(0)
+  modified_at        DateTime? @db.DateTime(0)
+  modified_by        Int?      @default(0)
+  deleted_at         DateTime? @db.DateTime(0)
+  deleted_by         Int?      @default(0)
+  restored_at        DateTime? @db.DateTime(0)
+  restored_by        Int?      @default(0)
+  is_deleted         Boolean   @default(false)
+  is_restored        Boolean   @default(false)
+
+  @@map("ms_status_sosoal")
+}
+
+// janis pegawai
+// kategori pegawai
