@@ -19,6 +19,7 @@ export class UserAccessService {
         can_update: permission.can_update,
         menu: {
           pathname: permission.menu.pathname,
+          tag: permission.menu.tag,
         },
       })),
     );
