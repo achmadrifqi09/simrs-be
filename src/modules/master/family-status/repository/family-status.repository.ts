@@ -41,14 +41,14 @@ export class FamilyStatusRepository {
     }
   }
 
-  async updateFamilyStatus(id: number, payload: FamilyStatusPayloadDTO) {
+  async updateFamilyStatus(id: number, familyStatus: FamilyStatusPayloadDTO) {
     try {
       return await this.prismaService.familyStatus.update({
         where: {
           id: Number(id),
           is_deleted: false,
         },
-        data: payload,
+        data: familyStatus,
       });
     } catch (error) {
       PrismaErrorHandler.handle(error);

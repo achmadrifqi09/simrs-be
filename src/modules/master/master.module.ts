@@ -12,6 +12,7 @@ import { SpecialistModule } from './specialist/specialist.module';
 import { VillageModule } from './village/village.module';
 import { RankOfEmployeesModule } from './employee-rank/employee-rank.module';
 import { FamilyStatusModule } from './family-status/family-status.module';
+import { SocialStatusModule } from './social-status/social-status.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { FamilyStatusModule } from './family-status/family-status.module';
     VillageModule,
     RankOfEmployeesModule,
     FamilyStatusModule,
+    SocialStatusModule,
   ],
 })
 export class MasterModule {}
