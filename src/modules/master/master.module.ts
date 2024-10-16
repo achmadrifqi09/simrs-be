@@ -11,6 +11,7 @@ import { DistrictModule } from './district/district.module';
 import { SpecialistModule } from './specialist/specialist.module';
 import { VillageModule } from './village/village.module';
 import { RankOfEmployeesModule } from './employee-rank/employee-rank.module';
+import { FamilyStatusModule } from './family-status/family-status.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { RankOfEmployeesModule } from './employee-rank/employee-rank.module';
     SpecialistModule,
     VillageModule,
     RankOfEmployeesModule,
+    FamilyStatusModule,
   ],
 })
 export class MasterModule {}

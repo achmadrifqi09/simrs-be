@@ -724,7 +724,7 @@ model Country {
 model FamilyStatus {
   id                   Int       @id @default(autoincrement())
   nama_status_keluarga String
-  status               Boolean
+  status               Int       @default(1)
   created_at           DateTime  @default(now())
   created_by           Int       @default(0)
   modified_at          DateTime? @db.DateTime(0)
@@ -742,7 +742,7 @@ model FamilyStatus {
 model SocialStatus {
   id                 Int       @id @default(autoincrement())
   nama_status_sosial String
-  status             Boolean
+  status             Int       @default(1)
   created_at         DateTime  @default(now())
   created_by         Int       @default(0)
   modified_at        DateTime? @db.DateTime(0)
@@ -754,8 +754,5 @@ model SocialStatus {
   is_deleted         Boolean   @default(false)
   is_restored        Boolean   @default(false)
 
-  @@map("ms_status_sosoal")
+  @@map("ms_status_sosial")
 }
-
-// janis pegawai
-// kategori pegawai
