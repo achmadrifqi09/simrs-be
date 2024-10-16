@@ -1,4 +1,9 @@
-import { Dependencies, Injectable } from '@nestjs/common';
+import {
+  Dependencies,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { StructuralPositionRepository } from '../repository/structural-position.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { PositionPayloadDTO } from '../dto/structural-position.dto';
@@ -14,9 +19,17 @@ export class StructuralPositionService {
     private readonly structuralPositionRepository: StructuralPositionRepository,
   ) {}
 
-  async findAllStructuralPosition(keyword?: string) {
+  async findAllStructuralPosition(keyword?: string, status?: number) {
+    if (typeof status !== 'undefined' && !/^[01]$/.test(status.toString())) {
+      throw new HttpException(
+        'Format status tidak sesuai',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     return this.structuralPositionRepository.findAllStructuralPosition(
-      keyword || '',
+      keyword ?? '',
+      status,
     );
   }
 

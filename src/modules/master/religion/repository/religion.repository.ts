@@ -6,20 +6,29 @@ import {
   SoftDeleteDTO,
   StatusUpdateDTO,
 } from '../../../../common/dto/common.dto';
+import { Prisma } from '@prisma/client';
 
 @Dependencies([PrismaService])
 @Injectable()
 export class ReligionRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findAllReligion(keyword?: string) {
-    return this.prismaService.religion.findMany({
-      where: {
-        nama_agama: {
-          contains: keyword,
-        },
-        is_deleted: false,
+  async findAllReligion(keyword?: string, status?: number) {
+    const whereClause: Prisma.ReligionWhereInput = {
+      nama_agama: {
+        contains: keyword,
       },
+      is_deleted: false,
+    };
+
+    if (status) {
+      whereClause['AND'] = {
+        status: Number(status),
+      };
+    }
+
+    return this.prismaService.religion.findMany({
+      where: whereClause,
     });
   }
 

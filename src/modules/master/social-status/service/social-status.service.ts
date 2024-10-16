@@ -1,4 +1,9 @@
-import { Dependencies, Injectable } from '@nestjs/common';
+import {
+  Dependencies,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { SocialStatusRepository } from '../repository/social-status.repository';
 import { SocialStatusPayloadDTO } from '../dto/social-status.dto';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
@@ -12,10 +17,17 @@ export class SocialStatusService {
   ) {}
 
   async findAllSocialStatus(keyword?: string, status?: number) {
-    if (status) {
-      return this.socialStatusRepository.findAllByStatus(Number(status));
+    if (typeof status !== 'undefined' && !/^[01]$/.test(status.toString())) {
+      throw new HttpException(
+        'Format status tidak sesuai',
+        HttpStatus.BAD_REQUEST,
+      );
     }
-    return this.socialStatusRepository.findAllSocialStatus(keyword || '');
+
+    return this.socialStatusRepository.findAllSocialStatus(
+      keyword ?? '',
+      status,
+    );
   }
 
   async createSocialStatus(socialStatus: SocialStatusPayloadDTO, req: any) {

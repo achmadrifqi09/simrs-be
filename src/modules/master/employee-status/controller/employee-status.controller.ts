@@ -29,8 +29,11 @@ export class EmployeeStatusController {
 
   @Get()
   @Header('Content-Type', 'application/json')
-  async findAllEmployeeStatus(@Query('keyword') keyword: string) {
-    return this.employeeStatusService.findAllEmployeeStatus(keyword);
+  async findAllEmployeeStatus(
+    @Query('keyword') keyword: string,
+    @Query('status') status: number,
+  ) {
+    return this.employeeStatusService.findAllEmployeeStatus(keyword, status);
   }
 
   @Post()

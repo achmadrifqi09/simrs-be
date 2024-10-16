@@ -6,20 +6,29 @@ import {
   SoftDeleteDTO,
   StatusUpdateDTO,
 } from '../../../../common/dto/common.dto';
+import { Prisma } from '@prisma/client';
 
 @Dependencies([PrismaService])
 @Injectable()
 export class StructuralPositionRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findAllStructuralPosition(keyword: string) {
-    return this.prismaService.position.findMany({
-      where: {
-        nama_jabatan: {
-          contains: keyword,
-        },
-        is_deleted: false,
+  async findAllStructuralPosition(keyword: string, status?: number) {
+    const whereClause: Prisma.PositionWhereInput = {
+      nama_jabatan: {
+        contains: keyword,
       },
+      is_deleted: false,
+    };
+
+    if (status) {
+      whereClause['AND'] = {
+        status: Number(status),
+      };
+    }
+
+    return this.prismaService.position.findMany({
+      where: whereClause,
     });
   }
 

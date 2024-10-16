@@ -6,20 +6,29 @@ import {
 } from '../../../../common/dto/common.dto';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import { SpecialistPayloadDTO } from '../dto/specialist.dto';
+import { Prisma } from '@prisma/client';
 
 @Dependencies([PrismaService])
 @Injectable()
 export class SpecialistRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findAllSpecialist(keyword?: string) {
-    return this.prismaService.specialist.findMany({
-      where: {
-        nama_spesialis: {
-          contains: keyword,
-        },
-        is_deleted: false,
+  async findAllSpecialist(keyword?: string, status?: number) {
+    const whereClause: Prisma.SpecialistWhereInput = {
+      nama_spesialis: {
+        contains: keyword,
       },
+      is_deleted: false,
+    };
+
+    if (status) {
+      whereClause['AND'] = {
+        status: Number(status),
+      };
+    }
+
+    return this.prismaService.specialist.findMany({
+      where: whereClause,
     });
   }
 

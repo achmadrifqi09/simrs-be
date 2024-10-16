@@ -14,8 +14,10 @@ import {
 } from '@nestjs/common';
 import { FamilyStatusService } from '../service/family-status.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
-import { bloodTypeUpdateStatusValidation } from '../../blood-type/validation/blood-type.validation';
-import { familyStatusValidation } from '../validation/family-status.validation';
+import {
+  familyStatusValidation,
+  familyStatusVisibilityValidation,
+} from '../validation/family-status.validation';
 import { FamilyStatusPayloadDTO } from '../dto/family-status.dto';
 import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
 
@@ -61,7 +63,7 @@ export class FamilyStatusController {
   async updateVisibilityFamilyStatus(
     @Param('id') id: number,
     @Req() req: any,
-    @Body(new ZodPipe(bloodTypeUpdateStatusValidation))
+    @Body(new ZodPipe(familyStatusVisibilityValidation))
     familyStatus: StatusUpdateDTO,
   ) {
     return this.familyStatusService.updateVisibilityFamilyStatus(

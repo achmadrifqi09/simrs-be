@@ -29,8 +29,14 @@ export class StructuralPositionController {
 
   @Get()
   @Header('Content-Type', 'application/json')
-  async findAllStructuralPosition(@Query('keyword') keyword: string) {
-    return this.structuralPositionService.findAllStructuralPosition(keyword);
+  async findAllStructuralPosition(
+    @Query('keyword') keyword: string,
+    @Query('status') status: number,
+  ) {
+    return this.structuralPositionService.findAllStructuralPosition(
+      keyword,
+      status,
+    );
   }
 
   @Post()

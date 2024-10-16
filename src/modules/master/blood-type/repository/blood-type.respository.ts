@@ -6,6 +6,7 @@ import {
   SoftDeleteDTO,
   StatusUpdateDTO,
 } from '../../../../common/dto/common.dto';
+import { Prisma } from '@prisma/client';
 
 @Dependencies([PrismaService])
 @Injectable()
@@ -50,14 +51,22 @@ export class BloodTypeRepository {
     }
   }
 
-  async findAllBloodType(keyword?: string) {
-    return this.prismaService.bloodType.findMany({
-      where: {
-        nama_golongan_darah: {
-          contains: keyword,
-        },
-        is_deleted: false,
+  async findAllBloodType(keyword?: string, status?: number) {
+    const whereClause: Prisma.BloodTypeWhereInput = {
+      nama_golongan_darah: {
+        contains: keyword,
       },
+      is_deleted: false,
+    };
+
+    if (status) {
+      whereClause['AND'] = {
+        status: Number(status),
+      };
+    }
+
+    return this.prismaService.bloodType.findMany({
+      where: whereClause,
     });
   }
 

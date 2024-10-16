@@ -27,8 +27,11 @@ export class CountryController {
 
   @Get()
   @Header('Content-Type', 'application/json')
-  async findAllCountry(@Query('keyword') keyword: string) {
-    return this.countryService.findAllCountry(keyword);
+  async findAllCountry(
+    @Query('keyword') keyword: string,
+    @Query('status') status: number,
+  ) {
+    return this.countryService.findAllCountry(keyword, status);
   }
 
   @Post()

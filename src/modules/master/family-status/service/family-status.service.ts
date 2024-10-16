@@ -1,4 +1,9 @@
-import { Dependencies, Injectable } from '@nestjs/common';
+import {
+  Dependencies,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { FamilyStatusRepository } from '../repository/family-status.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { FamilyStatusPayloadDTO } from '../dto/family-status.dto';
@@ -6,6 +11,7 @@ import {
   SoftDeleteDTO,
   StatusUpdateDTO,
 } from '../../../../common/dto/common.dto';
+import { stat } from 'fs';
 
 @Dependencies([FamilyStatusRepository])
 @Injectable()
@@ -15,10 +21,17 @@ export class FamilyStatusService {
   ) {}
 
   async findAllFamilyStatus(keyword?: string, status?: number) {
-    if (status) {
-      return this.familyStatusRepository.findAllByStatus(Number(status));
+    if (typeof status !== 'undefined' && !/^[01]$/.test(status.toString())) {
+      throw new HttpException(
+        'Format status tidak sesuai',
+        HttpStatus.BAD_REQUEST,
+      );
     }
-    return this.familyStatusRepository.findAllFamilyStatus(keyword || '');
+
+    return this.familyStatusRepository.findAllFamilyStatus(
+      keyword ?? '',
+      status,
+    );
   }
 
   async createFamilyStatus(familyStatus: FamilyStatusPayloadDTO, req: any) {

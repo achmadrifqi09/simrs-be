@@ -27,8 +27,11 @@ export class SpecialistController {
 
   @Get()
   @Header('Content-Type', 'application/json')
-  async findAllSpecialist(@Query('keyword') keyword: string) {
-    return this.specialistService.findAllSpecialist(keyword);
+  async findAllSpecialist(
+    @Query('keyword') keyword: string,
+    @Query('status') status: number,
+  ) {
+    return this.specialistService.findAllSpecialist(keyword, status);
   }
 
   @Post()

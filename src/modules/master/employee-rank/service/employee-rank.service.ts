@@ -1,4 +1,9 @@
-import { Dependencies, Injectable } from '@nestjs/common';
+import {
+  Dependencies,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { RankOfEmployeesRepository } from '../repository/employee-rank.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import {
@@ -14,8 +19,18 @@ export class RankOfEmployeesService {
     private readonly rankOfEmployeesRepository: RankOfEmployeesRepository,
   ) {}
 
-  async findAllRankOfEmployees(keyword?: string) {
-    return this.rankOfEmployeesRepository.findAllRankOfEmployees(keyword || '');
+  async findAllRankOfEmployees(keyword?: string, status?: number) {
+    if (typeof status !== 'undefined' && !/^[01]$/.test(status.toString())) {
+      throw new HttpException(
+        'Format status tidak sesuai',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.rankOfEmployeesRepository.findAllRankOfEmployees(
+      keyword ?? '',
+      status,
+    );
   }
 
   async createRankOfEmployees(

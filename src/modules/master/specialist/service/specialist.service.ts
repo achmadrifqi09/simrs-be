@@ -1,4 +1,9 @@
-import { Dependencies, Injectable } from '@nestjs/common';
+import {
+  Dependencies,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { SpecialistRepository } from '../repository/specialist.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import {
@@ -12,8 +17,15 @@ import { SpecialistPayloadDTO } from '../dto/specialist.dto';
 export class SpecialistService {
   constructor(private readonly specialistRepository: SpecialistRepository) {}
 
-  async findAllSpecialist(keyword?: string) {
-    return this.specialistRepository.findAllSpecialist(keyword || '');
+  async findAllSpecialist(keyword?: string, status?: number) {
+    if (typeof status !== 'undefined' && !/^[01]$/.test(status.toString())) {
+      throw new HttpException(
+        'Format status tidak sesuai',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.specialistRepository.findAllSpecialist(keyword ?? '', status);
   }
 
   async createSpecialist(specialist: SpecialistPayloadDTO, req: any) {

@@ -29,8 +29,11 @@ export class RankOfEmployeesController {
 
   @Get()
   @Header('Content-Type', 'application/json')
-  async findAllRankOfEmployees(@Query('keyword') keyword: string) {
-    return this.rankOfEmployeesService.findAllRankOfEmployees(keyword);
+  async findAllRankOfEmployees(
+    @Query('keyword') keyword: string,
+    @Query('status') status: number,
+  ) {
+    return this.rankOfEmployeesService.findAllRankOfEmployees(keyword, status);
   }
 
   @Post()

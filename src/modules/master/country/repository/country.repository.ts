@@ -13,14 +13,18 @@ import { Prisma } from '@prisma/client';
 export class CountryRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findAllCountry(keyword?: string) {
+  async findAllCountry(keyword?: string, status?: number) {
     const whereClause: Prisma.CountryWhereInput = {
-      OR: [{ nama: { contains: keyword } }],
+      nama: {
+        contains: keyword,
+      },
       is_deleted: false,
     };
 
-    if (Number(keyword)) {
-      whereClause['OR'].push({ id: Number(keyword) });
+    if (status) {
+      whereClause['AND'] = {
+        status: Number(status),
+      };
     }
 
     return this.prismaService.country.findMany({

@@ -1,4 +1,9 @@
-import { Dependencies, Injectable } from '@nestjs/common';
+import {
+  Dependencies,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { ReligionRepository } from '../repository/religion.repository';
 import { ReligionPayloadDTO } from '../dto/religion.dto';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
@@ -12,8 +17,15 @@ import {
 export class ReligionService {
   constructor(private readonly religionRepository: ReligionRepository) {}
 
-  async finAllReligion(keyword?: string) {
-    return this.religionRepository.findAllReligion(keyword || '');
+  async finAllReligion(keyword?: string, status?: number) {
+    if (typeof status !== 'undefined' && !/^[01]$/.test(status.toString())) {
+      throw new HttpException(
+        'Format status tidak sesuai',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.religionRepository.findAllReligion(keyword ?? '', status);
   }
 
   async createReligion(religion: ReligionPayloadDTO, req: any) {

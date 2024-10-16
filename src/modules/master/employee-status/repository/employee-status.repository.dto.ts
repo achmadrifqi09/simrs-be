@@ -6,20 +6,29 @@ import {
   SoftDeleteDTO,
   StatusUpdateDTO,
 } from '../../../../common/dto/common.dto';
+import { Prisma } from '@prisma/client';
 
 @Dependencies([PrismaService])
 @Injectable()
 export class EmployeeStatusRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findAllEmployeeStatus(keyword: string) {
-    return this.prismaService.employeeStatus.findMany({
-      where: {
-        nama_status_pegawai: {
-          contains: keyword,
-        },
-        is_deleted: false,
+  async findAllEmployeeStatus(keyword: string, status?: number) {
+    const whereClause: Prisma.EmployeeStatusWhereInput = {
+      nama_status_pegawai: {
+        contains: keyword,
       },
+      is_deleted: false,
+    };
+
+    if (status) {
+      whereClause['AND'] = {
+        status: Number(status),
+      };
+    }
+
+    return this.prismaService.employeeStatus.findMany({
+      where: whereClause,
     });
   }
 

@@ -13,6 +13,7 @@ import { VillageModule } from './village/village.module';
 import { RankOfEmployeesModule } from './employee-rank/employee-rank.module';
 import { FamilyStatusModule } from './family-status/family-status.module';
 import { SocialStatusModule } from './social-status/social-status.module';
+import { EducationLevelModule } from './education-level/education-level.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { SocialStatusModule } from './social-status/social-status.module';
     RankOfEmployeesModule,
     FamilyStatusModule,
     SocialStatusModule,
+    EducationLevelModule,
   ],
 })
 export class MasterModule {}

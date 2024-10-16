@@ -27,8 +27,11 @@ export class BloodTypeController {
 
   @Get()
   @Header('Content-Type', 'application/json')
-  async findAllBloodType(@Query('keyword') keyword: string) {
-    return this.bloodTypeService.finAllBloodType(keyword);
+  async findAllBloodType(
+    @Query('keyword') keyword: string,
+    @Query('status') status: number,
+  ) {
+    return this.bloodTypeService.finAllBloodType(keyword, status);
   }
 
   @Post()

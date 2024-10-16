@@ -6,28 +6,29 @@ import {
   SoftDeleteDTO,
   StatusUpdateDTO,
 } from '../../../../common/dto/common.dto';
+import { Prisma } from '@prisma/client';
 
 @Dependencies([PrismaService])
 @Injectable()
 export class FamilyStatusRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findAllFamilyStatus(keyword?: string) {
-    return this.prismaService.familyStatus.findMany({
-      where: {
-        nama_status_keluarga: {
-          contains: keyword,
-        },
-        is_deleted: false,
+  async findAllFamilyStatus(keyword?: string, status?: number) {
+    const whereClause: Prisma.FamilyStatusWhereInput = {
+      nama_status_keluarga: {
+        contains: keyword,
       },
-    });
-  }
+      is_deleted: false,
+    };
 
-  async findAllByStatus(status: number) {
+    if (status) {
+      whereClause['AND'] = {
+        status: Number(status),
+      };
+    }
+    console.log(whereClause);
     return this.prismaService.familyStatus.findMany({
-      where: {
-        status: status,
-      },
+      where: whereClause,
     });
   }
 

@@ -27,8 +27,11 @@ export class ReligionController {
 
   @Get()
   @Header('Content-Type', 'application/json')
-  async findAllReligion(@Query('keyword') keyword: string) {
-    return this.religionService.finAllReligion(keyword);
+  async findAllReligion(
+    @Query('keyword') keyword: string,
+    @Query('status') status: number,
+  ) {
+    return this.religionService.finAllReligion(keyword, status);
   }
 
   @Post()

@@ -1,4 +1,9 @@
-import { Dependencies, Injectable } from '@nestjs/common';
+import {
+  Dependencies,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { MaritalStatusRepository } from '../repository/marital-status.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { MaritalStatusPayloadDTO } from '../dto/marital-status.dto';
@@ -14,8 +19,18 @@ export class MaritalStatusService {
     private readonly maritalStatusRepository: MaritalStatusRepository,
   ) {}
 
-  async findAllMaritalStatus(keyword?: string) {
-    return this.maritalStatusRepository.findAllMaritalStatus(keyword || '');
+  async findAllMaritalStatus(keyword?: string, status?: number) {
+    if (typeof status !== 'undefined' && !/^[01]$/.test(status.toString())) {
+      throw new HttpException(
+        'Format status tidak sesuai',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.maritalStatusRepository.findAllMaritalStatus(
+      keyword ?? '',
+      status,
+    );
   }
 
   async createMaritalStatus(maritalStatus: MaritalStatusPayloadDTO, req: any) {

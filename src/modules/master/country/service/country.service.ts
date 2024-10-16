@@ -1,4 +1,9 @@
-import { Dependencies, Injectable } from '@nestjs/common';
+import {
+  Dependencies,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { CountryRepository } from '../repository/country.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import {
@@ -12,8 +17,15 @@ import { CountryPayloadDTO } from '../dto/country.dto';
 export class CountryService {
   constructor(private readonly countryRepository: CountryRepository) {}
 
-  async findAllCountry(keyword?: string) {
-    return this.countryRepository.findAllCountry(keyword || '');
+  async findAllCountry(keyword?: string, status?: number) {
+    if (typeof status !== 'undefined' && !/^[01]$/.test(status.toString())) {
+      throw new HttpException(
+        'Format status tidak sesuai',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.countryRepository.findAllCountry(keyword ?? '', status);
   }
 
   async createCountry(country: CountryPayloadDTO, req: any) {

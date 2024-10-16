@@ -25,8 +25,11 @@ export class MaritalStatusController {
 
   @Get()
   @Header('Content-Type', 'application/json')
-  async findAllMaritalStatus(@Query('keyword') keyword: string) {
-    return this.maritalStatusService.findAllMaritalStatus(keyword);
+  async findAllMaritalStatus(
+    @Query('keyword') keyword: string,
+    @Query('status') status: number,
+  ) {
+    return this.maritalStatusService.findAllMaritalStatus(keyword, status);
   }
 
   @Post()
