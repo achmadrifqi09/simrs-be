@@ -447,9 +447,19 @@
     "parent_id": 29,
     "order": 16,
     "label": "Pangkat/Golongan",
-    "pathname": "/master/rank-or-class",
+    "pathname": "/master/employee-rank",
     "is_submenu": false,
     "status": true,
     "tag": "pangkat-golongan"
+  },
+  {
+    "id": 46,
+    "parent_id": 29,
+    "order": 16,
+    "label": "Tingkat Pendidikan",
+    "pathname": "/master/education-level",
+    "is_submenu": false,
+    "status": true,
+    "tag": "status-pendidikan"
   }
 ]

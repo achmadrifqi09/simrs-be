@@ -403,5 +403,14 @@
     "can_create": true,
     "can_update": true,
     "can_delete": true
+  },
+  {
+    "id": 46,
+    "id_menu": 46,
+    "id_level_akses": 46,
+    "can_view": true,
+    "can_create": true,
+    "can_update": true,
+    "can_delete": true
   }
 ]

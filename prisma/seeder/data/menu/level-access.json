@@ -178,5 +178,9 @@
   {
     "id": 45,
     "nama": "Pangkat Golongan (Full Akses)"
+  },
+  {
+    "id": 45,
+    "nama": "Tingkat Pendidikan (Full Akses)"
   }
 ]

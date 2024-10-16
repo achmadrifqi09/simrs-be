@@ -25,6 +25,7 @@ export class UserAccessRepository {
                 menu: {
                   select: {
                     pathname: true,
+                    tag: true,
                   },
                 },
               },
