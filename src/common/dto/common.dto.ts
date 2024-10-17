@@ -10,4 +10,10 @@ type StatusUpdateDTO = {
   modified_by?: number;
 };
 
-export type { SoftDeleteDTO, StatusUpdateDTO };
+type BedAvailabilityDTO = {
+  status_bed: number;
+  modified_at?: Date;
+  modified_by?: number;
+};
+
+export type { SoftDeleteDTO, StatusUpdateDTO, BedAvailabilityDTO };

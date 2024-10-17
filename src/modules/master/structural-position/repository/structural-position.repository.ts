@@ -1,6 +1,6 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../../prisma/prisma.service';
-import { PositionPayloadDTO } from '../dto/structural-position.dto';
+import { StructuralPositionPayloadDTO } from '../dto/structural-position.dto';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import {
   SoftDeleteDTO,
@@ -32,7 +32,7 @@ export class StructuralPositionRepository {
     });
   }
 
-  async createStructuralPosition(structuralPosition: PositionPayloadDTO) {
+  async createStructuralPosition(structuralPosition: StructuralPositionPayloadDTO) {
     try {
       return await this.prismaService.position.create({
         data: structuralPosition,
@@ -42,7 +42,7 @@ export class StructuralPositionRepository {
     }
   }
 
-  async updateStructuralPosition(id: number, payload: PositionPayloadDTO) {
+  async updateStructuralPosition(id: number, payload: StructuralPositionPayloadDTO) {
     try {
       return await this.prismaService.position.update({
         where: {

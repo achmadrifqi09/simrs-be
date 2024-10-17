@@ -15,7 +15,7 @@ import {
 import { StructuralPositionService } from '../service/structural-position.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
 import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
-import { PositionPayloadDTO } from '../dto/structural-position.dto';
+import { StructuralPositionPayloadDTO } from '../dto/structural-position.dto';
 import {
   structuralPositionUpdateStatusValidation,
   structuralPositionValidation,
@@ -45,7 +45,7 @@ export class StructuralPositionController {
   async caretStructuralPosition(
     @Req() req: any,
     @Body(new ZodPipe(structuralPositionValidation))
-    structuralPosition: PositionPayloadDTO,
+    structuralPosition: StructuralPositionPayloadDTO,
   ) {
     return this.structuralPositionService.createStructuralPosition(
       structuralPosition,
@@ -60,7 +60,7 @@ export class StructuralPositionController {
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(structuralPositionValidation))
-    structuralPosition: PositionPayloadDTO,
+    structuralPosition: StructuralPositionPayloadDTO,
   ) {
     return this.structuralPositionService.updateStructuralPosition(
       id,

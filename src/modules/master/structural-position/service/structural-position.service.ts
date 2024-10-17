@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { StructuralPositionRepository } from '../repository/structural-position.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
-import { PositionPayloadDTO } from '../dto/structural-position.dto';
+import { StructuralPositionPayloadDTO } from '../dto/structural-position.dto';
 import {
   SoftDeleteDTO,
   StatusUpdateDTO,
@@ -34,7 +34,7 @@ export class StructuralPositionService {
   }
 
   async createStructuralPosition(
-    structuralPosition: PositionPayloadDTO,
+    structuralPosition: StructuralPositionPayloadDTO,
     req: any,
   ) {
     structuralPosition = {
@@ -52,7 +52,7 @@ export class StructuralPositionService {
 
   async updateStructuralPosition(
     id: number,
-    structuralPosition: PositionPayloadDTO,
+    structuralPosition: StructuralPositionPayloadDTO,
     req: any,
   ) {
     structuralPosition = {

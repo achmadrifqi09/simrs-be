@@ -724,7 +724,7 @@ model Country {
 model FamilyStatus {
   id                   Int       @id @default(autoincrement())
   nama_status_keluarga String
-  status               Int       @default(1)
+  status               Int       @default(1) @db.TinyInt
   created_at           DateTime  @default(now())
   created_by           Int       @default(0)
   modified_at          DateTime? @db.DateTime(0)
@@ -736,6 +736,7 @@ model FamilyStatus {
   is_deleted           Boolean   @default(false)
   is_restored          Boolean   @default(false)
 
+  @@index([is_deleted, status])
   @@map("ms_status_keluarga")
 }
 
@@ -754,5 +755,125 @@ model SocialStatus {
   is_deleted         Boolean   @default(false)
   is_restored        Boolean   @default(false)
 
+  @@index([is_deleted, status])
   @@map("ms_status_sosial")
+}
+
+model Room {
+  id                Int       @id @default(autoincrement())
+  id_ms_kamar_jenis Int
+  jenis_kamar       RoomType  @relation(fields: [id_ms_kamar_jenis], references: [id])
+  id_gedung         Int
+  gedung            Building  @relation(fields: [id_gedung], references: [id])
+  lantai            Int
+  nama_kamar        String    @db.VarChar(50)
+  status            Int       @default(1) @db.TinyInt
+  created_at        DateTime  @default(now())
+  created_by        Int       @default(0)
+  modified_at       DateTime? @db.DateTime(0)
+  modified_by       Int?      @default(0)
+  deleted_at        DateTime? @db.DateTime(0)
+  deleted_by        Int?      @default(0)
+  restored_at       DateTime? @db.DateTime(0)
+  restored_by       Int?      @default(0)
+  is_deleted        Boolean   @default(false)
+  is_restored       Boolean   @default(false)
+  Bedroom           Bed[]
+
+  @@index([id_ms_kamar_jenis])
+  @@index([id_gedung])
+  @@index([lantai])
+  @@index([nama_kamar])
+  @@index([is_deleted, status])
+  @@map("ms_kamar")
+}
+
+model Bed {
+  id          Int       @id @default(autoincrement())
+  id_ms_kamar Int
+  kamar       Room      @relation(fields: [id_ms_kamar], references: [id])
+  nama_bed    String    @db.VarChar(50)
+  keterangan  String    @db.Text
+  status_bed  Int
+  status      Int       @default(1) @db.TinyInt
+  created_at  DateTime  @default(now())
+  created_by  Int       @default(0)
+  modified_at DateTime? @db.DateTime(0)
+  modified_by Int?      @default(0)
+  deleted_at  DateTime? @db.DateTime(0)
+  deleted_by  Int?      @default(0)
+  restored_at DateTime? @db.DateTime(0)
+  restored_by Int?      @default(0)
+  is_deleted  Boolean   @default(false)
+  is_restored Boolean   @default(false)
+
+  @@index([id_ms_kamar])
+  @@index([nama_bed])
+  @@index([status_bed, status])
+  @@index([is_deleted, status])
+  @@map("ms_kamar_bed")
+}
+
+model Building {
+  id          Int       @id @default(autoincrement())
+  nama_gedung String
+  status      Int       @default(1) @db.TinyInt
+  created_at  DateTime  @default(now())
+  created_by  Int       @default(0)
+  modified_at DateTime? @db.DateTime(0)
+  modified_by Int?      @default(0)
+  deleted_at  DateTime? @db.DateTime(0)
+  deleted_by  Int?      @default(0)
+  restored_at DateTime? @db.DateTime(0)
+  restored_by Int?      @default(0)
+  is_deleted  Boolean   @default(false)
+  is_restored Boolean   @default(false)
+  room        Room[]
+
+  @@index([is_deleted, status])
+  @@map("ms_gedung")
+}
+
+model RoomType {
+  id               Int       @id @default(autoincrement())
+  nama_jenis_kamar String
+  status           Int       @default(1) @db.TinyInt
+  id_kamar_kelas   Int
+  kelas_kamar      RoomClass @relation(fields: [id_kamar_kelas], references: [id])
+  created_at       DateTime  @default(now())
+  created_by       Int       @default(0)
+  modified_at      DateTime? @db.DateTime(0)
+  modified_by      Int?      @default(0)
+  deleted_at       DateTime? @db.DateTime(0)
+  deleted_by       Int?      @default(0)
+  restored_at      DateTime? @db.DateTime(0)
+  restored_by      Int?      @default(0)
+  is_deleted       Boolean   @default(false)
+  is_restored      Boolean   @default(false)
+  room             Room[]
+
+  @@index([id_kamar_kelas])
+  @@index([is_deleted, status])
+  @@map("ms_jenis_kamar")
+}
+
+model RoomClass {
+  id               Int        @id @default(autoincrement())
+  nama_kelas_kamar String     @db.VarChar(50)
+  kode_bpjs_kamar  String     @db.VarChar(10)
+  status           Int        @default(1) @db.TinyInt
+  created_at       DateTime   @default(now())
+  created_by       Int        @default(0)
+  modified_at      DateTime?  @db.DateTime(0)
+  modified_by      Int?       @default(0)
+  deleted_at       DateTime?  @db.DateTime(0)
+  deleted_by       Int?       @default(0)
+  restored_at      DateTime?  @db.DateTime(0)
+  restored_by      Int?       @default(0)
+  is_deleted       Boolean    @default(false)
+  is_restored      Boolean    @default(false)
+  RoomType         RoomType[]
+
+  @@index([is_deleted, status])
+  @@map("ms_kelas_kamar")
 }

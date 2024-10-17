@@ -14,6 +14,11 @@ import { RankOfEmployeesModule } from './employee-rank/employee-rank.module';
 import { FamilyStatusModule } from './family-status/family-status.module';
 import { SocialStatusModule } from './social-status/social-status.module';
 import { EducationLevelModule } from './education-level/education-level.module';
+import { BuildingModule } from './building/building.module';
+import { RoomClassModule } from './room-class/room-class.module';
+import { RoomTypeModule } from './room-type/room-type.module';
+import { RoomModule } from './room/room.module';
+import { BedModule } from './bed/bed.module';
 
 @Module({
   imports: [
@@ -32,6 +37,11 @@ import { EducationLevelModule } from './education-level/education-level.module';
     FamilyStatusModule,
     SocialStatusModule,
     EducationLevelModule,
+    BuildingModule,
+    RoomClassModule,
+    RoomTypeModule,
+    RoomModule,
+    BedModule,
   ],
 })
 export class MasterModule {}

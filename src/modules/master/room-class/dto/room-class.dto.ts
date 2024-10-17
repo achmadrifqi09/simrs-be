@@ -1,5 +1,6 @@
-type StructuralPositionPayloadDTO = {
-  nama_jabatan: string;
+type RoomClassPayloadDTO = {
+  nama_kelas_kamar: string;
+  kode_bpjs_kamar: string;
   status: number;
   created_by?: number;
   created_at?: Date;
@@ -8,4 +9,4 @@ type StructuralPositionPayloadDTO = {
   deleted_at?: Date;
 };
 
-export type { StructuralPositionPayloadDTO };
+export type { RoomClassPayloadDTO };

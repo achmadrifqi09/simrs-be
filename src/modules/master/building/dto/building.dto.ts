@@ -1,5 +1,5 @@
-type StructuralPositionPayloadDTO = {
-  nama_jabatan: string;
+type BuildingPayloadDTO = {
+  nama_gedung: string;
   status: number;
   created_by?: number;
   created_at?: Date;
@@ -8,4 +8,4 @@ type StructuralPositionPayloadDTO = {
   deleted_at?: Date;
 };
 
-export type { StructuralPositionPayloadDTO };
+export type { BuildingPayloadDTO };
