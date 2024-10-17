@@ -31,7 +31,7 @@ export class RoomTypeService {
   async createRoomType(roomType: RoomTypePayloadDTO, req: any) {
     roomType = {
       nama_jenis_kamar: roomType.nama_jenis_kamar,
-      id_kamar_kelas: Number(roomType.id_kamar_kelas),
+      id_kelas_kamar: Number(roomType.id_kelas_kamar),
       status: isNaN(Number(roomType.status)) ? 1 : Number(roomType.status),
       created_by: req.user?.id,
       created_at: generateCurrentDate(),
@@ -42,7 +42,7 @@ export class RoomTypeService {
   async updateRoomType(id: number, roomType: RoomTypePayloadDTO, req: any) {
     roomType = {
       nama_jenis_kamar: roomType.nama_jenis_kamar,
-      id_kamar_kelas: Number(roomType.id_kamar_kelas),
+      id_kelas_kamar: Number(roomType.id_kelas_kamar),
       status: isNaN(Number(roomType.status)) ? 1 : Number(roomType.status),
       modified_by: req.user?.id,
       modified_at: generateCurrentDate(),

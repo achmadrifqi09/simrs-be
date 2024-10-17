@@ -14,7 +14,13 @@ import { SoftDeleteDTO, StatusUpdateDTO } from '../../../../common/dto/common.dt
 export class RoomService {
   constructor(private readonly roomRepository: RoomRepository) {}
 
-  async findAllRoom(keyword?: string, status?: number) {
+  async findAllRoom(
+    keyword?: string,
+    status?: number,
+    roomId?: number,
+    cursor: number = 0,
+    take: number = 10,
+  ) {
     if (typeof status !== 'undefined' && !/^[01]$/.test(status.toString())) {
       throw new HttpException(
         'Format status tidak sesuai',
@@ -22,7 +28,13 @@ export class RoomService {
       );
     }
 
-    return this.roomRepository.findAllRoom(keyword ?? '', status);
+    return this.roomRepository.findAllRoom(
+      keyword ?? '',
+      status,
+      roomId,
+      cursor,
+      take,
+    );
   }
 
   async createRoom(room: RoomPayloadDTO, req: any) {

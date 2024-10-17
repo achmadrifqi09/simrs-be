@@ -38,8 +38,11 @@ export class BedController {
   async findAllBed(
     @Query('keyword') keyword: string,
     @Query('status') status: number,
+    @Query('bedId') bedId: number,
+    @Query('cursor') cursor: number,
+    @Query('take') take: number,
   ) {
-    return this.bedService.findAllBed(keyword, status);
+    return this.bedService.findAllBed(keyword, status, bedId, cursor, take);
   }
 
   @Post()

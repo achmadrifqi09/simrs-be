@@ -13,7 +13,13 @@ import {
 export class RoomRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findAllRoom(keyword?: string, status?: number) {
+  async findAllRoom(
+    keyword?: string,
+    status?: number,
+    roomId?: number,
+    cursor?: number,
+    take?: number,
+  ) {
     const whereClause: Prisma.RoomWhereInput = {
       is_deleted: false,
       OR: [
@@ -27,7 +33,13 @@ export class RoomRepository {
       whereClause.status = Number(status);
     }
 
+    if (roomId) {
+      whereClause.id = Number(roomId);
+    }
+
     return this.prismaService.room.findMany({
+      take: Number(take),
+      skip: Number(cursor) ?? undefined,
       where: whereClause,
       include: {
         jenis_kamar: {

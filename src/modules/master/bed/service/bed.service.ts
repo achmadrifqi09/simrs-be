@@ -18,7 +18,13 @@ import {
 export class BedService {
   constructor(private readonly bedRepository: BedRepository) {}
 
-  async findAllBed(keyword?: string, status?: number) {
+  async findAllBed(
+    keyword?: string,
+    status?: number,
+    bedId?: number,
+    cursor: number = 0,
+    take: number = 10,
+  ) {
     if (typeof status !== 'undefined' && !/^[01]$/.test(status.toString())) {
       throw new HttpException(
         'Format status tidak sesuai',
@@ -26,7 +32,13 @@ export class BedService {
       );
     }
 
-    return this.bedRepository.findAllBed(keyword ?? '', status);
+    return this.bedRepository.findAllBed(
+      keyword ?? '',
+      status,
+      bedId,
+      cursor,
+      take,
+    );
   }
 
   async createBed(bed: BedPayloadDTO, req: any) {

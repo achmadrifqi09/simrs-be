@@ -54,7 +54,7 @@ CREATE TABLE `ms_jenis_kamar` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `nama_jenis_kamar` VARCHAR(191) NOT NULL,
     `status` TINYINT NOT NULL DEFAULT 1,
-    `id_kamar_kelas` INTEGER NOT NULL,
+    `id_kelas_kamar` INTEGER NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `created_by` INTEGER NOT NULL DEFAULT 0,
     `modified_at` DATETIME(0) NULL,
@@ -66,7 +66,7 @@ CREATE TABLE `ms_jenis_kamar` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
-    INDEX `ms_jenis_kamar_id_kamar_kelas_idx`(`id_kamar_kelas`),
+    INDEX `ms_jenis_kamar_id_kelas_kamar_idx`(`id_kelas_kamar`),
     INDEX `ms_jenis_kamar_is_deleted_status_idx`(`is_deleted`, `status`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -105,4 +105,4 @@ ALTER TABLE `ms_kamar` ADD CONSTRAINT `ms_kamar_id_ms_kamar_jenis_fkey` FOREIGN 
 ALTER TABLE `ms_kamar` ADD CONSTRAINT `ms_kamar_id_gedung_fkey` FOREIGN KEY (`id_gedung`) REFERENCES `ms_gedung`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ms_jenis_kamar` ADD CONSTRAINT `ms_jenis_kamar_id_kamar_kelas_fkey` FOREIGN KEY (`id_kamar_kelas`) REFERENCES `ms_kelas_kamar`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ms_jenis_kamar` ADD CONSTRAINT `ms_jenis_kamar_id_kelas_kamar_fkey` FOREIGN KEY (`id_kelas_kamar`) REFERENCES `ms_kelas_kamar`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

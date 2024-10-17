@@ -33,8 +33,11 @@ export class RoomController {
   async findAllRoom(
     @Query('keyword') keyword: string,
     @Query('status') status: number,
+    @Query('roomId') roomId: number,
+    @Query('cursor') cursor: number,
+    @Query('take') take: number,
   ) {
-    return this.roomService.findAllRoom(keyword, status);
+    return this.roomService.findAllRoom(keyword, status, roomId, cursor, take);
   }
 
   @Post()

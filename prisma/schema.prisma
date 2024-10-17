@@ -892,8 +892,8 @@ model RoomType {
   id               Int       @id @default(autoincrement())
   nama_jenis_kamar String
   status           Int       @default(1) @db.TinyInt
-  id_kamar_kelas   Int
-  kelas_kamar      RoomClass @relation(fields: [id_kamar_kelas], references: [id])
+  id_kelas_kamar   Int
+  kelas_kamar      RoomClass @relation(fields: [id_kelas_kamar], references: [id])
   created_at       DateTime  @default(now())
   created_by       Int       @default(0)
   modified_at      DateTime? @db.DateTime(0)
@@ -906,7 +906,7 @@ model RoomType {
   is_restored      Boolean   @default(false)
   room             Room[]
 
-  @@index([id_kamar_kelas])
+  @@index([id_kelas_kamar])
   @@index([is_deleted, status])
   @@map("ms_jenis_kamar")
 }

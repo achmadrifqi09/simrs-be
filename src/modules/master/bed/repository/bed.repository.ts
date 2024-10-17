@@ -14,7 +14,13 @@ import {
 export class BedRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findAllBed(keyword?: string, status?: number) {
+  async findAllBed(
+    keyword?: string,
+    status?: number,
+    bedId?: number,
+    cursor?: number,
+    take?: number,
+  ) {
     const whereClause: Prisma.BedWhereInput = {
       is_deleted: false,
       OR: [
@@ -27,7 +33,13 @@ export class BedRepository {
       whereClause.status = Number(status);
     }
 
+    if (bedId) {
+      whereClause.id = Number(bedId);
+    }
+
     return this.prismaService.bed.findMany({
+      take: Number(take),
+      skip: Number(cursor) ?? undefined,
       where: whereClause,
       include: {
         kamar: {

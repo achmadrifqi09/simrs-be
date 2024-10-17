@@ -1,6 +1,6 @@
 type RoomTypePayloadDTO = {
   nama_jenis_kamar: string;
-  id_kamar_kelas: number;
+  id_kelas_kamar: number;
   status: number;
   created_by?: number;
   created_at?: Date;
