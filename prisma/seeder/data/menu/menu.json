@@ -460,6 +460,16 @@
     "pathname": "/master/education-level",
     "is_submenu": false,
     "status": true,
-    "tag": "status-pendidikan"
+    "tag": "tingkat-pendidikan"
+  },
+  {
+    "id": 47,
+    "parent_id": 29,
+    "order": 18,
+    "label": "Gedung",
+    "pathname": "/master/building",
+    "is_submenu": false,
+    "status": true,
+    "tag": "gedung"
   }
 ]

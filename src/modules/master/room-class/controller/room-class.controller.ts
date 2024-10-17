@@ -10,7 +10,7 @@ import {
   Patch,
   Post,
   Query,
-  Req,
+  Req, UseGuards,
 } from '@nestjs/common';
 import { RoomClassService } from '../service/room-class.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
@@ -20,6 +20,9 @@ import {
 } from '../validation/room-class.validation';
 import { RoomClassPayloadDTO } from '../dto/room-class.dto';
 import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
+import { Permission } from '../../../../decorators/permission.decorator';
+import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/api/v1/master/room-class')
 export class RoomClassController {
@@ -37,6 +40,8 @@ export class RoomClassController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('kelas-kamar', Action.CAN_CREATE)
   async createRoomClass(
     @Req() req: any,
     @Body(new ZodPipe(roomClassValidation)) roomClass: RoomClassPayloadDTO,
@@ -45,8 +50,10 @@ export class RoomClassController {
   }
 
   @Patch('/:id')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('kelas-kamar', Action.CAN_UPDATE)
   async updateRoomClass(
     @Param('id') id: number,
     @Req() req: any,
@@ -57,6 +64,9 @@ export class RoomClassController {
 
   @Patch('/:id/status')
   @Header('Content-Type', 'application/json')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('kelas-kamar', Action.CAN_UPDATE)
   async updateStatusRoomClass(
     @Param('id') id: number,
     @Req() req: any,
@@ -67,6 +77,8 @@ export class RoomClassController {
   }
 
   @Delete('/:id')
+  @UseGuards(AccessMenuGuard)
+  @Permission('kelas-kamar', Action.CAN_DELETE)
   async softDeleteRoomClass(@Param('id') id: number, @Req() req: any) {
     return this.roomClassService.softDeleteRoomClass(id, req);
   }

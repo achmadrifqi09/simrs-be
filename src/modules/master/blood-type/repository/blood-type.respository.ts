@@ -67,6 +67,9 @@ export class BloodTypeRepository {
 
     return this.prismaService.bloodType.findMany({
       where: whereClause,
+      orderBy: {
+        id_ms_golongan_darah: 'desc',
+      },
     });
   }
 

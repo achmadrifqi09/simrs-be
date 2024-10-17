@@ -10,7 +10,7 @@ import {
   Patch,
   Post,
   Query,
-  Req,
+  Req, UseGuards,
 } from '@nestjs/common';
 import { ReligionService } from '../service/religion.service';
 import {
@@ -20,6 +20,9 @@ import {
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
 import { ReligionPayloadDTO } from '../dto/religion.dto';
 import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
+import { Permission } from '../../../../decorators/permission.decorator';
+import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/api/v1/master/religion')
 export class ReligionController {
@@ -37,6 +40,8 @@ export class ReligionController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('agama', Action.CAN_CREATE)
   async createReligion(
     @Req() req: any,
     @Body(new ZodPipe(religionValidation)) religion: ReligionPayloadDTO,
@@ -45,8 +50,10 @@ export class ReligionController {
   }
 
   @Patch('/:id')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('kecamatan', Action.CAN_CREATE)
   async updateReligion(
     @Param('id') id: number,
     @Req() req: any,
@@ -62,6 +69,7 @@ export class ReligionController {
 
   @Patch('/:id/status')
   @Header('Content-Type', 'application/json')
+  @HttpCode(HttpStatus.OK)
   async updateStatusReligion(
     @Param('id') id: number,
     @Req() req: any,

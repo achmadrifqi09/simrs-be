@@ -29,6 +29,9 @@ export class RankOfEmployeesRepository {
 
     return this.prismaService.rankOfEmployees.findMany({
       where: whereClause,
+      orderBy: {
+        id_ms_pangkat: 'desc',
+      },
     });
   }
 

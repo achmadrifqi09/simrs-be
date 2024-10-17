@@ -11,6 +11,7 @@ import {
   Post,
   Query,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { FamilyStatusService } from '../service/family-status.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
@@ -20,6 +21,9 @@ import {
 } from '../validation/family-status.validation';
 import { FamilyStatusPayloadDTO } from '../dto/family-status.dto';
 import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
+import { Permission } from '../../../../decorators/permission.decorator';
+import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/api/v1/master/family-status')
 export class FamilyStatusController {
@@ -37,6 +41,8 @@ export class FamilyStatusController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('status-keluarga', Action.CAN_CREATE)
   async createFamilyStatus(
     @Req() req: any,
     @Body(new ZodPipe(familyStatusValidation))
@@ -48,6 +54,8 @@ export class FamilyStatusController {
   @Patch('/:id')
   @Header('Content-Type', 'application/json')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('status-keluarga', Action.CAN_UPDATE)
   async updateFamilyStatus(
     @Param('id') id: number,
     @Req() req: any,
@@ -60,6 +68,8 @@ export class FamilyStatusController {
   @Patch('/:id/status')
   @Header('Content-Type', 'application/json')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('status-keluarga', Action.CAN_UPDATE)
   async updateVisibilityFamilyStatus(
     @Param('id') id: number,
     @Req() req: any,
@@ -74,6 +84,8 @@ export class FamilyStatusController {
   }
 
   @Delete('/:id')
+  @UseGuards(AccessMenuGuard)
+  @Permission('status-keluarga', Action.CAN_DELETE)
   @Header('Content-Type', 'application/json')
   async softDeleteFamilyStatus(@Param('id') id: number, @Req() req: any) {
     return this.familyStatusService.familyStatusSoftDelete(id, req);

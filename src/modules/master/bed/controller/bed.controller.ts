@@ -11,6 +11,7 @@ import {
   Post,
   Query,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { BedService } from '../service/bed.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
@@ -24,11 +25,13 @@ import {
   BedAvailabilityDTO,
   StatusUpdateDTO,
 } from '../../../../common/dto/common.dto';
+import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
+import { Permission } from '../../../../decorators/permission.decorator';
+import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/api/v1/master/bed')
 export class BedController {
-  constructor(private readonly bedService: BedService) {
-  }
+  constructor(private readonly bedService: BedService) {}
 
   @Get()
   @Header('Content-Type', 'application/json')
@@ -42,6 +45,8 @@ export class BedController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('kamar-dan-bed', Action.CAN_CREATE)
   async createBed(
     @Req() req: any,
     @Body(new ZodPipe(bedValidation)) roomType: BedPayloadDTO,
@@ -50,8 +55,10 @@ export class BedController {
   }
 
   @Patch('/:id')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('kamar-dan-bed', Action.CAN_UPDATE)
   async updateNed(
     @Param('id') id: number,
     @Req() req: any,
@@ -62,6 +69,9 @@ export class BedController {
 
   @Patch('/:id/status')
   @Header('Content-Type', 'application/json')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('kamar-dan-bed', Action.CAN_UPDATE)
   async updateStatusBed(
     @Param('id') id: number,
     @Req() req: any,
@@ -73,6 +83,9 @@ export class BedController {
 
   @Patch('/:id/availability')
   @Header('Content-Type', 'application/json')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('kamar-dan-bed', Action.CAN_UPDATE)
   async updateAvailabilityBed(
     @Param('id') id: number,
     @Req() req: any,
@@ -83,6 +96,8 @@ export class BedController {
   }
 
   @Delete('/:id')
+  @UseGuards(AccessMenuGuard)
+  @Permission('kamar-dan-bed', Action.CAN_DELETE)
   async softDeleteBed(@Param('id') id: number, @Req() req: any) {
     return this.bedService.softDeleteBed(id, req);
   }

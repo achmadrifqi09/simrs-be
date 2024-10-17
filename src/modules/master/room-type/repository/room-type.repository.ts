@@ -36,6 +36,9 @@ export class RoomTypeRepository {
           },
         },
       },
+      orderBy: {
+        id: 'desc',
+      },
     });
   }
 

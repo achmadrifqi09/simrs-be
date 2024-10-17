@@ -29,6 +29,9 @@ export class BuildingRepository {
 
     return this.prismaService.building.findMany({
       where: whereClause,
+      orderBy: {
+        id: 'desc',
+      },
     });
   }
 

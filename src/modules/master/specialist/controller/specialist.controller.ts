@@ -10,7 +10,7 @@ import {
   Patch,
   Post,
   Query,
-  Req,
+  Req, UseGuards,
 } from '@nestjs/common';
 import { SpecialistService } from '../service/specialist.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
@@ -20,6 +20,9 @@ import {
   specialistValidation,
 } from '../validation/specialist.validation';
 import { SpecialistPayloadDTO } from '../dto/specialist.dto';
+import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
+import { Permission } from '../../../../decorators/permission.decorator';
+import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/api/v1/master/specialist')
 export class SpecialistController {
@@ -37,6 +40,8 @@ export class SpecialistController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('spesialis-dokter', Action.CAN_CREATE)
   async createSpecialist(
     @Req() req: any,
     @Body(new ZodPipe(specialistValidation)) specialist: SpecialistPayloadDTO,
@@ -45,8 +50,10 @@ export class SpecialistController {
   }
 
   @Patch('/:id')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('spesialis-dokter', Action.CAN_UPDATE)
   async updateSpecialist(
     @Param('id') id: number,
     @Req() req: any,
@@ -56,12 +63,17 @@ export class SpecialistController {
   }
 
   @Delete('/:id')
+  @UseGuards(AccessMenuGuard)
+  @Permission('spesialis-dokter', Action.CAN_DELETE)
   async softDeleteSpecialist(@Param('id') id: number, @Req() req: any) {
     return this.specialistService.softDeleteSpecialist(id, req);
   }
 
   @Patch('/:id/status')
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @HttpCode(HttpStatus.OK)
+  @Permission('spesialis-dokter', Action.CAN_UPDATE)
   async updateStatusReligion(
     @Param('id') id: number,
     @Req() req: any,

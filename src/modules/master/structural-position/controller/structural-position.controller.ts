@@ -10,7 +10,7 @@ import {
   Patch,
   Post,
   Query,
-  Req,
+  Req, UseGuards,
 } from '@nestjs/common';
 import { StructuralPositionService } from '../service/structural-position.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
@@ -20,6 +20,9 @@ import {
   structuralPositionUpdateStatusValidation,
   structuralPositionValidation,
 } from '../validation/structural-position.validation';
+import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
+import { Permission } from '../../../../decorators/permission.decorator';
+import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/api/v1/master/structural-position')
 export class StructuralPositionController {
@@ -42,6 +45,8 @@ export class StructuralPositionController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('jabatan-struktural', Action.CAN_CREATE)
   async caretStructuralPosition(
     @Req() req: any,
     @Body(new ZodPipe(structuralPositionValidation))
@@ -54,8 +59,10 @@ export class StructuralPositionController {
   }
 
   @Patch('/:id')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('jabatan-struktural', Action.CAN_UPDATE)
   async updateStructuralPosition(
     @Param('id') id: number,
     @Req() req: any,
@@ -70,12 +77,17 @@ export class StructuralPositionController {
   }
 
   @Delete('/:id')
+  @UseGuards(AccessMenuGuard)
+  @Permission('jabatan-struktural', Action.CAN_DELETE)
   async softDeleteReligion(@Param('id') id: number, @Req() req: any) {
     return this.structuralPositionService.softDeleteStructuralPosition(id, req);
   }
 
   @Patch('/:id/status')
+  @HttpCode(HttpStatus.OK)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('jabatan-struktural', Action.CAN_CREATE)
   async updateStatusReligion(
     @Param('id') id: number,
     @Req() req: any,

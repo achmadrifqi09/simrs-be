@@ -29,6 +29,9 @@ export class CountryRepository {
 
     return this.prismaService.country.findMany({
       where: whereClause,
+      orderBy: {
+        id: 'desc',
+      },
     });
   }
 

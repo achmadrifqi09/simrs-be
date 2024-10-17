@@ -34,6 +34,9 @@ export class RoomClassRepository {
 
     return this.prismaService.roomClass.findMany({
       where: whereClause,
+      orderBy: {
+        id: 'desc',
+      },
     });
   }
 

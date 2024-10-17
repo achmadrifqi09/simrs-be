@@ -7,6 +7,6 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async findByEmail(email: string) {
-    return this.userRepository.findByEmail(email);
+    return await this.userRepository.findByEmail(email);
   }
 }

@@ -10,7 +10,7 @@ import {
   Patch,
   Post,
   Query,
-  Req,
+  Req, UseGuards,
 } from '@nestjs/common';
 import { RoomService } from '../service/room.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
@@ -20,6 +20,9 @@ import {
   roomValidation,
 } from '../validation/room.validation';
 import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
+import { Permission } from '../../../../decorators/permission.decorator';
+import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/api/v1/master/room')
 export class RoomController {
@@ -37,6 +40,8 @@ export class RoomController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('kamar-dan-bed', Action.CAN_CREATE)
   async createRoom(
     @Req() req: any,
     @Body(new ZodPipe(roomValidation)) room: RoomPayloadDTO,
@@ -45,8 +50,10 @@ export class RoomController {
   }
 
   @Patch('/:id')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('kamar-dan-bed', Action.CAN_UPDATE)
   async updateRoom(
     @Param('id') id: number,
     @Req() req: any,
@@ -57,6 +64,9 @@ export class RoomController {
 
   @Patch('/:id/status')
   @Header('Content-Type', 'application/json')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('kamar-dan-bed', Action.CAN_UPDATE)
   async updateStatusRoom(
     @Param('id') id: number,
     @Req() req: any,
@@ -67,6 +77,8 @@ export class RoomController {
   }
 
   @Delete('/:id')
+  @UseGuards(AccessMenuGuard)
+  @Permission('kamar-dan-bed', Action.CAN_DELETE)
   async softDeleteRoom(@Param('id') id: number, @Req() req: any) {
     return this.roomService.softDeleteRoom(id, req);
   }

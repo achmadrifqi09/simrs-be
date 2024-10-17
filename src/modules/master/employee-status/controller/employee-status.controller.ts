@@ -11,7 +11,7 @@ import {
   Patch,
   Post,
   Query,
-  Req,
+  Req, UseGuards,
 } from '@nestjs/common';
 import { EmployeeStatusService } from '../service/employee-status.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
@@ -21,6 +21,9 @@ import {
 } from '../validation/employee-status.validation';
 import { EmployeeStatusDTO } from '../dto/employee-status.dto';
 import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
+import { Permission } from '../../../../decorators/permission.decorator';
+import { Action } from '../../../../common/enums/action.enum';
 
 @Dependencies([EmployeeStatusService])
 @Controller('/api/v1/master/employee-status')
@@ -39,6 +42,8 @@ export class EmployeeStatusController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('status-pegawai', Action.CAN_CREATE)
   async createReligion(
     @Req() req: any,
     @Body(new ZodPipe(employeeStatusValidation))
@@ -48,8 +53,10 @@ export class EmployeeStatusController {
   }
 
   @Patch('/:id')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('status-pegawai', Action.CAN_UPDATE)
   async updateEmployeeStatus(
     @Param('id') id: number,
     @Req() req: any,
@@ -65,6 +72,9 @@ export class EmployeeStatusController {
 
   @Patch('/:id/status')
   @Header('Content-Type', 'application/json')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('status-pegawai', Action.CAN_UPDATE)
   async updateVisibilityEmployeeStatus(
     @Param('id') id: number,
     @Req() req: any,
@@ -79,6 +89,8 @@ export class EmployeeStatusController {
   }
 
   @Delete('/:id')
+  @UseGuards(AccessMenuGuard)
+  @Permission('status-pegawai', Action.CAN_DELETE)
   async softDeleteEmployeeStatus(@Param('id') id: number, @Req() req: any) {
     return this.employeeStatusService.softDeleteEmployeeStatus(id, req);
   }

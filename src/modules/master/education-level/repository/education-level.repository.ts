@@ -26,6 +26,9 @@ export class EducationLevelRepository {
 
     return this.prismaService.educationLevel.findMany({
       where: whereClause,
+      orderBy: {
+        id_ms_tingkat_pendidikan: 'desc',
+      },
     });
   }
 

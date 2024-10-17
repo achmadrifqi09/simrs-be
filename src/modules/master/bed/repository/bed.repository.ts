@@ -37,6 +37,9 @@ export class BedRepository {
           },
         },
       },
+      orderBy: {
+        id: 'desc',
+      },
     });
   }
 

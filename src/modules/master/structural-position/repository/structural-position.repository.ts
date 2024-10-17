@@ -29,6 +29,9 @@ export class StructuralPositionRepository {
 
     return this.prismaService.position.findMany({
       where: whereClause,
+      orderBy: {
+        id_ms_jabatan: 'desc',
+      },
     });
   }
 

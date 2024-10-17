@@ -26,6 +26,9 @@ export class SocialStatusRepository {
 
     return this.prismaService.socialStatus.findMany({
       where: whereClause,
+      orderBy: {
+        id: 'desc',
+      },
     });
   }
 

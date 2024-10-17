@@ -11,6 +11,7 @@ import {
   Post,
   Query,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { BloodTypeService } from '../service/blood-type.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
@@ -20,6 +21,9 @@ import {
   bloodTypeValidation,
 } from '../validation/blood-type.validation';
 import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
+import { Permission } from '../../../../decorators/permission.decorator';
+import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/api/v1/master/blood-type')
 export class BloodTypeController {
@@ -37,6 +41,8 @@ export class BloodTypeController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('golongan-darah', Action.CAN_CREATE)
   async createBloodType(
     @Req() req: any,
     @Body(new ZodPipe(bloodTypeValidation)) bloodType: BloodTypePayloadDTO,
@@ -47,6 +53,8 @@ export class BloodTypeController {
   @Patch('/:id/status')
   @Header('Content-Type', 'application/json')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('golongan-darah', Action.CAN_UPDATE)
   async updateStatusBloodType(
     @Param('id') id: number,
     @Req() req: any,
@@ -59,6 +67,8 @@ export class BloodTypeController {
   @Patch('/:id')
   @Header('Content-Type', 'application/json')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('golongan-darah', Action.CAN_UPDATE)
   async updateBloodType(
     @Param('id') id: number,
     @Req() req: any,
@@ -70,6 +80,8 @@ export class BloodTypeController {
 
   @Delete('/:id')
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('golongan-darah', Action.CAN_DELETE)
   async softDeleteBloodType(@Param('id') id: number, @Req() req: any) {
     return this.bloodTypeService.bloodTypeSoftDelete(id, req);
   }

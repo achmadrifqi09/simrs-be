@@ -228,5 +228,10 @@
     "id_user": 1,
     "id_level_akses": 46,
     "id_pegawai": 0
+  },
+  {
+    "id_user": 1,
+    "id_level_akses": 47,
+    "id_pegawai": 0
   }
 ]

@@ -29,6 +29,9 @@ export class ReligionRepository {
 
     return this.prismaService.religion.findMany({
       where: whereClause,
+      orderBy: {
+        id_ms_agama: 'desc',
+      },
     });
   }
 

@@ -23,6 +23,8 @@ model AppClient {
   is_deleted    Boolean   @default(false)
   is_restored   Boolean   @default(false)
 
+  @@index([nama_client])
+  @@index([is_deleted, created_at])
   @@map("db_client")
 }
 
@@ -48,6 +50,9 @@ model User {
 
   @@index([email_user])
   @@index([id_pegawai])
+  @@index([nama_user])
+  @@index([hp_user])
+  @@index([status, is_deleted])
   @@map("db_user")
 }
 
@@ -79,6 +84,8 @@ model Menu {
   @@index([pathname])
   @@index([tag])
   @@index([is_deleted])
+  @@index([is_submenu, order])
+  @@index([status, is_deleted, order])
   @@map("db_menu")
 }
 
@@ -159,7 +166,6 @@ model UserAccess {
   @@map("db_akses_user")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Patient {
   id_pasien               Int       @default(autoincrement())
   kode_rm                 String    @default("") @db.VarChar(20)
@@ -211,10 +217,17 @@ model Patient {
   is_restored             Boolean   @default(false)
 
   @@id([id_pasien, kode_rm])
+  @@index([nama_pasien])
+  @@index([no_identitas])
+  @@index([no_bpjs])
+  @@index([hp])
+  @@index([id_ms_provinsi_tinggal, id_ms_kota_tinggal])
+  @@index([id_ms_kota_tinggal, id_ms_kecamatan_tinggal])
+  @@index([tgl_lahir, jenis_kelamin])
+  @@index([is_deleted, created_at])
   @@map("db_pasien")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Employee {
   id_pegawai              Int       @id @default(autoincrement())
   no_reg                  String    @db.VarChar(50)
@@ -283,10 +296,19 @@ model Employee {
   is_restored             Boolean   @default(false)
 
   @@index([id_ms_status_kawin], map: "id_status_kawin")
+  @@index([nama_pegawai])
+  @@index([nip_pegawai])
+  @@index([nip_pns])
+  @@index([no_ktp])
+  @@index([email])
+  @@index([hp])
+  @@index([id_unit_kerja])
+  @@index([id_jabatan])
+  @@index([status_aktif, is_deleted])
+  @@index([id_ms_jenis_pegawai, status_aktif])
   @@map("db_pegawai")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model WorkUnit {
   id_unit_kerja       Int       @id @default(autoincrement())
   sub_id_unit         Int
@@ -307,10 +329,13 @@ model WorkUnit {
   is_deleted          Boolean   @default(false)
   is_restored         Boolean   @default(false)
 
+  @@index([nama_unit_kerja])
+  @@index([id_unit_induk])
+  @@index([status, is_deleted])
+  @@index([jenis_pelayanan, status])
   @@map("db_unit_kerja")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Religion {
   id_ms_agama Int       @id @default(autoincrement())
   nama_agama  String    @db.VarChar(50)
@@ -326,10 +351,11 @@ model Religion {
   is_deleted  Boolean   @default(false)
   is_restored Boolean   @default(false)
 
+  @@index([nama_agama])
+  @@index([status, is_deleted])
   @@map("ms_agama")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model BloodType {
   id_ms_golongan_darah Int       @id @default(autoincrement())
   nama_golongan_darah  String    @db.VarChar(2)
@@ -345,10 +371,11 @@ model BloodType {
   is_deleted           Boolean   @default(false)
   is_restored          Boolean   @default(false)
 
+  @@index([nama_golongan_darah])
+  @@index([status, is_deleted])
   @@map("ms_golongan_darah")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Position {
   id_ms_jabatan Int       @id @default(autoincrement())
   nama_jabatan  String    @db.VarChar(200)
@@ -364,10 +391,11 @@ model Position {
   is_deleted    Boolean   @default(false)
   is_restored   Boolean   @default(false)
 
+  @@index([nama_jabatan])
+  @@index([status, is_deleted])
   @@map("ms_jabatan")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model TypeOfEmployees {
   id_ms_jenis_pegawai        Int       @id @default(autoincrement())
   id_ms_jenis_pegawai_status Int
@@ -384,10 +412,12 @@ model TypeOfEmployees {
   is_deleted                 Boolean   @default(false)
   is_restored                Boolean   @default(false)
 
+  @@index([nama_jenis_pegawai])
+  @@index([id_ms_jenis_pegawai_status])
+  @@index([status, is_deleted])
   @@map("ms_jenis_pegawai")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model TypeOfStatusOfficer {
   id_ms_jenis_pegawai_status Int       @id @default(autoincrement())
   status_jenis_pegawai       String    @db.VarChar(100)
@@ -403,10 +433,11 @@ model TypeOfStatusOfficer {
   is_deleted                 Boolean   @default(false)
   is_restored                Boolean   @default(false)
 
+  @@index([status_jenis_pegawai])
+  @@index([status, is_deleted])
   @@map("ms_jenis_pegawai_status")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model QueueCounter {
   id_ms_loket_antrian Int       @id @default(autoincrement())
   nama_loket          Int
@@ -423,6 +454,8 @@ model QueueCounter {
   is_deleted          Boolean   @default(false)
   is_restored         Boolean   @default(false)
 
+  @@index([nama_loket])
+  @@index([status, is_deleted])
   @@map("ms_loket_antrian")
 }
 
@@ -442,10 +475,11 @@ model RankOfEmployees {
   is_deleted    Boolean   @default(false)
   is_restored   Boolean   @default(false)
 
+  @@index([nama_pangkat])
+  @@index([status, is_deleted])
   @@map("ms_pangkat")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Specialist {
   id_ms_spesialis Int       @id @default(autoincrement())
   nama_spesialis  String    @db.VarChar(100)
@@ -461,10 +495,11 @@ model Specialist {
   is_deleted      Boolean   @default(false)
   is_restored     Boolean   @default(false)
 
+  @@index([nama_spesialis])
+  @@index([status, is_deleted])
   @@map("ms_spesialis")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model MaritalStatus {
   id_ms_status_kawin Int       @id @default(autoincrement())
   nama_status_kawin  String    @db.VarChar(50)
@@ -480,10 +515,11 @@ model MaritalStatus {
   is_deleted         Boolean   @default(false)
   is_restored        Boolean   @default(false)
 
+  @@index([nama_status_kawin])
+  @@index([status, is_deleted])
   @@map("ms_status_kawin")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model EmployeeStatus {
   id_ms_status_pegawai Int       @id @default(autoincrement())
   nama_status_pegawai  String    @db.VarChar(100)
@@ -499,10 +535,11 @@ model EmployeeStatus {
   is_deleted           Boolean   @default(false)
   is_restored          Boolean   @default(false)
 
+  @@index([nama_status_pegawai])
+  @@index([status, is_deleted])
   @@map("ms_status_pegawai")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model EducationLevel {
   id_ms_tingkat_pendidikan Int       @id @default(autoincrement())
   nama_tingkat_pendidikan  String    @db.VarChar(100)
@@ -518,10 +555,11 @@ model EducationLevel {
   is_deleted               Boolean   @default(false)
   is_restored              Boolean   @default(false)
 
+  @@index([nama_tingkat_pendidikan])
+  @@index([status, is_deleted])
   @@map("ms_tingkat_pendidikan")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Qeueu {
   id_antrian          Int       @id @default(autoincrement())
   jenis_pasien        Int
@@ -549,10 +587,15 @@ model Qeueu {
   is_deleted          Boolean   @default(false)
   is_restored         Boolean   @default(false)
 
+  @@index([kode_rm])
+  @@index([nama_pasien])
+  @@index([no_bpjs])
+  @@index([id_jadwal_dokter])
+  @@index([tgl_panggil, status_panggil])
+  @@index([status, is_deleted])
   @@map("db_antrian")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model DoctorSchedule {
   id_jadwal_dokter  Int       @id @default(autoincrement())
   id_hari           Int
@@ -577,6 +620,10 @@ model DoctorSchedule {
   is_deleted        Boolean   @default(false)
   is_restored       Boolean   @default(false)
 
+  @@index([id_pegawai])
+  @@index([id_unit_kerja])
+  @@index([tgl_praktek])
+  @@index([status, is_deleted])
   @@map("db_jadwal_dokter")
 }
 
@@ -606,6 +653,11 @@ model DoctorChangeSchedule {
   is_deleted             Boolean   @default(false)
   is_restored            Boolean   @default(false)
 
+  @@index([id_jadwal_dokter])
+  @@index([id_pegawai])
+  @@index([id_unit_kerja])
+  @@index([tgl_praktek])
+  @@index([status, is_deleted])
   @@map("db_jadwal_dokter_ganti")
 }
 
@@ -717,7 +769,7 @@ model Country {
   ms_provinsi Province[]
 
   @@index([nama], map: "idx_country_nama")
-  @@index([is_deleted], map: "idx_country_is_deleted")
+  @@index([status, is_deleted], map: "idx_country_status")
   @@map("ms_negara")
 }
 
@@ -736,7 +788,8 @@ model FamilyStatus {
   is_deleted           Boolean   @default(false)
   is_restored          Boolean   @default(false)
 
-  @@index([is_deleted, status])
+  @@index([nama_status_keluarga])
+  @@index([status, is_deleted])
   @@map("ms_status_keluarga")
 }
 
@@ -755,7 +808,8 @@ model SocialStatus {
   is_deleted         Boolean   @default(false)
   is_restored        Boolean   @default(false)
 
-  @@index([is_deleted, status])
+  @@index([nama_status_sosial])
+  @@index([status, is_deleted])
   @@map("ms_status_sosial")
 }
 
@@ -784,7 +838,7 @@ model Room {
   @@index([id_gedung])
   @@index([lantai])
   @@index([nama_kamar])
-  @@index([is_deleted, status])
+  @@index([status, is_deleted])
   @@map("ms_kamar")
 }
 

@@ -26,9 +26,11 @@ export class FamilyStatusRepository {
         status: Number(status),
       };
     }
-    console.log(whereClause);
     return this.prismaService.familyStatus.findMany({
       where: whereClause,
+      orderBy: {
+        id: 'desc',
+      },
     });
   }
 

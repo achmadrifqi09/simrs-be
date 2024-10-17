@@ -29,6 +29,9 @@ export class EmployeeStatusRepository {
 
     return this.prismaService.employeeStatus.findMany({
       where: whereClause,
+      orderBy: {
+        id_ms_status_pegawai: 'desc',
+      },
     });
   }
 

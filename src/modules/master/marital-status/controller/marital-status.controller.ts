@@ -10,7 +10,7 @@ import {
   Patch,
   Post,
   Query,
-  Req,
+  Req, UseGuards,
 } from '@nestjs/common';
 import { MaritalStatusService } from '../service/marital-status.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
@@ -18,6 +18,9 @@ import { maritalStatusValidation } from '../validation/marital-status.validation
 import { MaritalStatusPayloadDTO } from '../dto/marital-status.dto';
 import { religionUpdateStatusValidation } from '../../religion/validation/religion.validation';
 import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
+import { Permission } from '../../../../decorators/permission.decorator';
+import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/api/v1/master/marital-status')
 export class MaritalStatusController {
@@ -35,6 +38,8 @@ export class MaritalStatusController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('status-kawin', Action.CAN_CREATE)
   async createMaritalStatus(
     @Req() req: any,
     @Body(new ZodPipe(maritalStatusValidation))
@@ -46,6 +51,8 @@ export class MaritalStatusController {
   @Patch('/:id')
   @HttpCode(HttpStatus.OK)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('status-kawin', Action.CAN_UPDATE)
   async updateMaritalStatus(
     @Param('id') id: number,
     @Req() req: any,
@@ -62,6 +69,8 @@ export class MaritalStatusController {
   @Patch('/:id/status')
   @Header('Content-Type', 'application/json')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('status-kawin', Action.CAN_UPDATE)
   async updateMaritalStatusVisibility(
     @Param('id') id: number,
     @Req() req: any,
@@ -76,6 +85,8 @@ export class MaritalStatusController {
   }
 
   @Delete('/:id')
+  @UseGuards(AccessMenuGuard)
+  @Permission('status-kawin', Action.CAN_DELETE)
   async softDeleteMaritalStatus(@Param('id') id: number, @Req() req: any) {
     return this.maritalStatusService.softDeleteMaritalStatus(id, req);
   }

@@ -29,6 +29,9 @@ export class SpecialistRepository {
 
     return this.prismaService.specialist.findMany({
       where: whereClause,
+      orderBy: {
+        id_ms_spesialis: 'desc',
+      },
     });
   }
 

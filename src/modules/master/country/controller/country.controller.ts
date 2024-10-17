@@ -11,6 +11,7 @@ import {
   Post,
   Query,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { CountryService } from '../service/country.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
@@ -20,6 +21,9 @@ import {
   countryValidation,
 } from '../validation/country.validation';
 import { CountryPayloadDTO } from '../dto/country.dto';
+import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
+import { Permission } from '../../../../decorators/permission.decorator';
+import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/api/v1/master/country')
 export class CountryController {
@@ -37,6 +41,8 @@ export class CountryController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('negara', Action.CAN_CREATE)
   async createCountry(
     @Req() req: any,
     @Body(new ZodPipe(countryValidation)) country: CountryPayloadDTO,
@@ -45,8 +51,10 @@ export class CountryController {
   }
 
   @Patch('/:id')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('negara', Action.CAN_UPDATE)
   async updateCountry(
     @Param('id') id: number,
     @Req() req: any,
@@ -55,6 +63,8 @@ export class CountryController {
     return this.countryService.updateCountry(id, country, req);
   }
 
+  @UseGuards(AccessMenuGuard)
+  @Permission('negara', Action.CAN_DELETE)
   @Delete('/:id')
   async softDeleteCountry(@Param('id') id: number, @Req() req: any) {
     return this.countryService.softDeleteCountry(id, req);
@@ -62,6 +72,9 @@ export class CountryController {
 
   @Patch('/:id/status')
   @Header('Content-Type', 'application/json')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('negara', Action.CAN_UPDATE)
   async updateStatusReligion(
     @Param('id') id: number,
     @Req() req: any,

@@ -10,12 +10,15 @@ import {
   Patch,
   Post,
   Query,
-  Req,
+  Req, UseGuards,
 } from '@nestjs/common';
 import { VillageService } from '../service/village.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
 import { villageValidation } from '../validation/village.validation';
 import { VillagePayloadDTO } from '../dto/village.dto';
+import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
+import { Permission } from '../../../../decorators/permission.decorator';
+import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/api/v1/master/village')
 export class VillageController {
@@ -35,6 +38,8 @@ export class VillageController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('kelurahan-desa', Action.CAN_CREATE)
   async createVillage(
     @Req() req: any,
     @Body(new ZodPipe(villageValidation)) village: VillagePayloadDTO,
@@ -45,6 +50,8 @@ export class VillageController {
   @Patch('/:id')
   @Header('Content-Type', 'application/json')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('kelurahan-desa', Action.CAN_UPDATE)
   async updateVillage(
     @Param('id') id: string,
     @Req() req: any,
@@ -56,6 +63,8 @@ export class VillageController {
 
   @Delete('/:id')
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('kelurahan-desa', Action.CAN_DELETE)
   async villageSoftDelete(@Param('id') id: string, @Req() req: any) {
     return this.villageService.villageSoftDelete(id, req);
   }

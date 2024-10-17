@@ -11,6 +11,7 @@ import {
   Post,
   Query,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { BuildingService } from '../service/building.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
@@ -20,6 +21,9 @@ import {
   buildingVisibilityValidation,
 } from '../validation/building.validation';
 import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
+import { Permission } from '../../../../decorators/permission.decorator';
+import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/api/v1/master/building')
 export class BuildingController {
@@ -37,6 +41,8 @@ export class BuildingController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('gedung', Action.CAN_CREATE)
   async createBuilding(
     @Req() req: any,
     @Body(new ZodPipe(buildingValidation)) building: BuildingPayloadDTO,
@@ -45,8 +51,10 @@ export class BuildingController {
   }
 
   @Patch('/:id')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('gedung', Action.CAN_UPDATE)
   async updateBuilding(
     @Param('id') id: number,
     @Req() req: any,
@@ -57,6 +65,9 @@ export class BuildingController {
 
   @Patch('/:id/status')
   @Header('Content-Type', 'application/json')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('gedung', Action.CAN_UPDATE)
   async updateStatusBuilding(
     @Param('id') id: number,
     @Req() req: any,
@@ -67,6 +78,8 @@ export class BuildingController {
   }
 
   @Delete('/:id')
+  @UseGuards(AccessMenuGuard)
+  @Permission('gedung', Action.CAN_DELETE)
   async softDeleteBuilding(@Param('id') id: number, @Req() req: any) {
     return this.buildingService.softDeleteBuilding(id, req);
   }

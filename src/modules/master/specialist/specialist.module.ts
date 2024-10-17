@@ -3,9 +3,10 @@ import { SpecialistService } from './service/specialist.service';
 import { SpecialistController } from './controller/specialist.controller';
 import { PrismaModule } from '../../../prisma/prisma.module';
 import { SpecialistRepository } from './repository/specialist.repository';
+import { UserAccessModule } from '../../user-access/user-access.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, UserAccessModule],
   controllers: [SpecialistController],
   providers: [SpecialistService, SpecialistRepository],
 })

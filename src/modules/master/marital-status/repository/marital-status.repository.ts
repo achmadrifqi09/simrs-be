@@ -29,6 +29,9 @@ export class MaritalStatusRepository {
 
     return this.prismaService.maritalStatus.findMany({
       where: whereClause,
+      orderBy: {
+        id_ms_status_kawin: 'desc',
+      },
     });
   }
 

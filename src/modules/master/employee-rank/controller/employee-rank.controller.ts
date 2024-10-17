@@ -10,7 +10,7 @@ import {
   Patch,
   Post,
   Query,
-  Req,
+  Req, UseGuards,
 } from '@nestjs/common';
 import { RankOfEmployeesService } from '../service/employee-rank.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
@@ -20,6 +20,9 @@ import {
   rankOfEmployeesValidation,
 } from '../validation/employee-rank.validation';
 import { RankOfEmployeesPayloadDTO } from '../dto/employee-rank.dto';
+import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
+import { Permission } from '../../../../decorators/permission.decorator';
+import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/api/v1/master/employee-rank')
 export class RankOfEmployeesController {
@@ -39,6 +42,8 @@ export class RankOfEmployeesController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('pangkat-golongan', Action.CAN_CREATE)
   async createRankOfEmployees(
     @Req() req: any,
     @Body(new ZodPipe(rankOfEmployeesValidation))
@@ -51,8 +56,10 @@ export class RankOfEmployeesController {
   }
 
   @Patch('/:id')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('pangkat-golongan', Action.CAN_UPDATE)
   async updateRankOfEmployees(
     @Param('id') id: number,
     @Req() req: any,
@@ -67,12 +74,17 @@ export class RankOfEmployeesController {
   }
 
   @Delete('/:id')
+  @UseGuards(AccessMenuGuard)
+  @Permission('pangkat-golongan', Action.CAN_DELETE)
   async softDeleteRankOfEmployees(@Param('id') id: number, @Req() req: any) {
     return this.rankOfEmployeesService.softDeleteRankOfEmployees(id, req);
   }
 
   @Patch('/:id/status')
   @Header('Content-Type', 'application/json')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('pangkat-golongan', Action.CAN_UPDATE)
   async updateStatusRankOfEmployees(
     @Param('id') id: number,
     @Req() req: any,

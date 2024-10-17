@@ -11,6 +11,7 @@ import {
   Post,
   Query,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { EducationLevelPayloadDTO } from '../dto/education-level.dto';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
@@ -20,6 +21,9 @@ import {
 } from '../validation/education-level.validation';
 import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
 import { EducationLevelService } from '../service/education-level.service';
+import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
+import { Permission } from '../../../../decorators/permission.decorator';
+import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/api/v1/master/education-level')
 export class EducationLevelController {
@@ -37,6 +41,8 @@ export class EducationLevelController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('tingkat-pendidikan', Action.CAN_CREATE)
   async createEducationLevel(
     @Req() req: any,
     @Body(new ZodPipe(educationLevelValidation))
@@ -48,6 +54,8 @@ export class EducationLevelController {
   @Patch('/:id')
   @Header('Content-Type', 'application/json')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('tingkat-pendidikan', Action.CAN_UPDATE)
   async updateEducationLevel(
     @Param('id') id: number,
     @Req() req: any,
@@ -64,6 +72,8 @@ export class EducationLevelController {
   @Patch('/:id/status')
   @Header('Content-Type', 'application/json')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('tingkat-pendidikan', Action.CAN_UPDATE)
   async updateVisibilityEducationLevel(
     @Param('id') id: number,
     @Req() req: any,
@@ -79,6 +89,8 @@ export class EducationLevelController {
 
   @Delete('/:id')
   @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('tingkat-pendidikan', Action.CAN_DELETE)
   async educationLevelSoftDelete(@Param('id') id: number, @Req() req: any) {
     return this.educationLevelService.educationLevelSoftDelete(id, req);
   }
