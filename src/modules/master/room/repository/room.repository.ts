@@ -24,6 +24,7 @@ export class RoomRepository {
       is_deleted: false,
       OR: [
         { nama_kamar: { contains: keyword } },
+        { id: Number(keyword) },
         { jenis_kamar: { nama_jenis_kamar: { contains: keyword } } },
         { gedung: { nama_gedung: { contains: keyword } } },
       ],

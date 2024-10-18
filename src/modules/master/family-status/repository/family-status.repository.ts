@@ -15,9 +15,10 @@ export class FamilyStatusRepository {
 
   async findAllFamilyStatus(keyword?: string, status?: number) {
     const whereClause: Prisma.FamilyStatusWhereInput = {
-      nama_status_keluarga: {
-        contains: keyword,
-      },
+      OR: [
+        { nama_status_keluarga: { contains: keyword } },
+        { id: Number(keyword) },
+      ],
       is_deleted: false,
     };
 

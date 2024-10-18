@@ -12,9 +12,10 @@ export class SocialStatusRepository {
 
   async findAllSocialStatus(keyword?: string, status?: number) {
     const whereClause: Prisma.SocialStatusWhereInput = {
-      nama_status_sosial: {
-        contains: keyword,
-      },
+      OR: [
+        { nama_status_sosial: { contains: keyword } },
+        { id: Number(keyword) },
+      ],
       is_deleted: false,
     };
 

@@ -15,9 +15,7 @@ export class BuildingRepository {
 
   async findAllBuilding(keyword?: string, status?: number) {
     const whereClause: Prisma.BuildingWhereInput = {
-      nama_gedung: {
-        contains: keyword,
-      },
+      OR: [{ nama_gedung: { contains: keyword } }, { id: Number(keyword) }],
       is_deleted: false,
     };
 

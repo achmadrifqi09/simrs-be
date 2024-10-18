@@ -15,9 +15,10 @@ export class SpecialistRepository {
 
   async findAllSpecialist(keyword?: string, status?: number) {
     const whereClause: Prisma.SpecialistWhereInput = {
-      nama_spesialis: {
-        contains: keyword,
-      },
+      OR: [
+        { nama_spesialis: { contains: keyword } },
+        { id_ms_spesialis: Number(keyword) },
+      ],
       is_deleted: false,
     };
 

@@ -14,6 +14,8 @@ CREATE TABLE `db_client` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `db_client_nama_client_idx`(`nama_client`),
+    INDEX `db_client_is_deleted_created_at_idx`(`is_deleted`, `created_at`),
     PRIMARY KEY (`client_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -40,6 +42,9 @@ CREATE TABLE `db_user` (
     UNIQUE INDEX `db_user_email_user_key`(`email_user`),
     INDEX `db_user_email_user_idx`(`email_user`),
     INDEX `db_user_id_pegawai_idx`(`id_pegawai`),
+    INDEX `db_user_nama_user_idx`(`nama_user`),
+    INDEX `db_user_hp_user_idx`(`hp_user`),
+    INDEX `db_user_status_is_deleted_idx`(`status`, `is_deleted`),
     PRIMARY KEY (`id_user`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -70,6 +75,8 @@ CREATE TABLE `db_menu` (
     INDEX `db_menu_pathname_idx`(`pathname`),
     INDEX `db_menu_tag_idx`(`tag`),
     INDEX `db_menu_is_deleted_idx`(`is_deleted`),
+    INDEX `db_menu_is_submenu_order_idx`(`is_submenu`, `order`),
+    INDEX `db_menu_status_is_deleted_order_idx`(`status`, `is_deleted`, `order`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -195,6 +202,14 @@ CREATE TABLE `db_pasien` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `db_pasien_nama_pasien_idx`(`nama_pasien`),
+    INDEX `db_pasien_no_identitas_idx`(`no_identitas`),
+    INDEX `db_pasien_no_bpjs_idx`(`no_bpjs`),
+    INDEX `db_pasien_hp_idx`(`hp`),
+    INDEX `db_pasien_id_ms_provinsi_tinggal_id_ms_kota_tinggal_idx`(`id_ms_provinsi_tinggal`, `id_ms_kota_tinggal`),
+    INDEX `db_pasien_id_ms_kota_tinggal_id_ms_kecamatan_tinggal_idx`(`id_ms_kota_tinggal`, `id_ms_kecamatan_tinggal`),
+    INDEX `db_pasien_tgl_lahir_jenis_kelamin_idx`(`tgl_lahir`, `jenis_kelamin`),
+    INDEX `db_pasien_is_deleted_created_at_idx`(`is_deleted`, `created_at`),
     PRIMARY KEY (`id_pasien`, `kode_rm`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -267,6 +282,16 @@ CREATE TABLE `db_pegawai` (
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
     INDEX `id_status_kawin`(`id_ms_status_kawin`),
+    INDEX `db_pegawai_nama_pegawai_idx`(`nama_pegawai`),
+    INDEX `db_pegawai_nip_pegawai_idx`(`nip_pegawai`),
+    INDEX `db_pegawai_nip_pns_idx`(`nip_pns`),
+    INDEX `db_pegawai_no_ktp_idx`(`no_ktp`),
+    INDEX `db_pegawai_email_idx`(`email`),
+    INDEX `db_pegawai_hp_idx`(`hp`),
+    INDEX `db_pegawai_id_unit_kerja_idx`(`id_unit_kerja`),
+    INDEX `db_pegawai_id_jabatan_idx`(`id_jabatan`),
+    INDEX `db_pegawai_status_aktif_is_deleted_idx`(`status_aktif`, `is_deleted`),
+    INDEX `db_pegawai_id_ms_jenis_pegawai_status_aktif_idx`(`id_ms_jenis_pegawai`, `status_aktif`),
     PRIMARY KEY (`id_pegawai`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -291,6 +316,10 @@ CREATE TABLE `db_unit_kerja` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `db_unit_kerja_nama_unit_kerja_idx`(`nama_unit_kerja`),
+    INDEX `db_unit_kerja_id_unit_induk_idx`(`id_unit_induk`),
+    INDEX `db_unit_kerja_status_is_deleted_idx`(`status`, `is_deleted`),
+    INDEX `db_unit_kerja_jenis_pelayanan_status_idx`(`jenis_pelayanan`, `status`),
     PRIMARY KEY (`id_unit_kerja`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -310,6 +339,8 @@ CREATE TABLE `ms_agama` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `ms_agama_nama_agama_idx`(`nama_agama`),
+    INDEX `ms_agama_status_is_deleted_idx`(`status`, `is_deleted`),
     PRIMARY KEY (`id_ms_agama`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -329,6 +360,8 @@ CREATE TABLE `ms_golongan_darah` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `ms_golongan_darah_nama_golongan_darah_idx`(`nama_golongan_darah`),
+    INDEX `ms_golongan_darah_status_is_deleted_idx`(`status`, `is_deleted`),
     PRIMARY KEY (`id_ms_golongan_darah`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -348,6 +381,8 @@ CREATE TABLE `ms_jabatan` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `ms_jabatan_nama_jabatan_idx`(`nama_jabatan`),
+    INDEX `ms_jabatan_status_is_deleted_idx`(`status`, `is_deleted`),
     PRIMARY KEY (`id_ms_jabatan`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -368,6 +403,9 @@ CREATE TABLE `ms_jenis_pegawai` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `ms_jenis_pegawai_nama_jenis_pegawai_idx`(`nama_jenis_pegawai`),
+    INDEX `ms_jenis_pegawai_id_ms_jenis_pegawai_status_idx`(`id_ms_jenis_pegawai_status`),
+    INDEX `ms_jenis_pegawai_status_is_deleted_idx`(`status`, `is_deleted`),
     PRIMARY KEY (`id_ms_jenis_pegawai`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -387,6 +425,8 @@ CREATE TABLE `ms_jenis_pegawai_status` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `ms_jenis_pegawai_status_status_jenis_pegawai_idx`(`status_jenis_pegawai`),
+    INDEX `ms_jenis_pegawai_status_status_is_deleted_idx`(`status`, `is_deleted`),
     PRIMARY KEY (`id_ms_jenis_pegawai_status`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -395,6 +435,7 @@ CREATE TABLE `ms_loket_antrian` (
     `id_ms_loket_antrian` INTEGER NOT NULL AUTO_INCREMENT,
     `nama_loket` INTEGER NOT NULL,
     `ket_loket` TEXT NOT NULL,
+    `jenis_loket` TINYINT NOT NULL,
     `status` INTEGER NOT NULL DEFAULT 1,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `created_by` INTEGER NOT NULL DEFAULT 0,
@@ -407,6 +448,10 @@ CREATE TABLE `ms_loket_antrian` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `ms_loket_antrian_nama_loket_idx`(`nama_loket`),
+    INDEX `ms_loket_antrian_status_is_deleted_jenis_loket_idx`(`status`, `is_deleted`, `jenis_loket`),
+    INDEX `ms_loket_antrian_status_is_deleted_idx`(`status`, `is_deleted`),
+    INDEX `ms_loket_antrian_jenis_loket_idx`(`jenis_loket`),
     PRIMARY KEY (`id_ms_loket_antrian`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -426,6 +471,8 @@ CREATE TABLE `ms_pangkat` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `ms_pangkat_nama_pangkat_idx`(`nama_pangkat`),
+    INDEX `ms_pangkat_status_is_deleted_idx`(`status`, `is_deleted`),
     PRIMARY KEY (`id_ms_pangkat`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -445,6 +492,8 @@ CREATE TABLE `ms_spesialis` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `ms_spesialis_nama_spesialis_idx`(`nama_spesialis`),
+    INDEX `ms_spesialis_status_is_deleted_idx`(`status`, `is_deleted`),
     PRIMARY KEY (`id_ms_spesialis`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -464,6 +513,8 @@ CREATE TABLE `ms_status_kawin` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `ms_status_kawin_nama_status_kawin_idx`(`nama_status_kawin`),
+    INDEX `ms_status_kawin_status_is_deleted_idx`(`status`, `is_deleted`),
     PRIMARY KEY (`id_ms_status_kawin`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -483,6 +534,8 @@ CREATE TABLE `ms_status_pegawai` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `ms_status_pegawai_nama_status_pegawai_idx`(`nama_status_pegawai`),
+    INDEX `ms_status_pegawai_status_is_deleted_idx`(`status`, `is_deleted`),
     PRIMARY KEY (`id_ms_status_pegawai`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -502,6 +555,8 @@ CREATE TABLE `ms_tingkat_pendidikan` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `ms_tingkat_pendidikan_nama_tingkat_pendidikan_idx`(`nama_tingkat_pendidikan`),
+    INDEX `ms_tingkat_pendidikan_status_is_deleted_idx`(`status`, `is_deleted`),
     PRIMARY KEY (`id_ms_tingkat_pendidikan`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -533,6 +588,12 @@ CREATE TABLE `db_antrian` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `db_antrian_kode_rm_idx`(`kode_rm`),
+    INDEX `db_antrian_nama_pasien_idx`(`nama_pasien`),
+    INDEX `db_antrian_no_bpjs_idx`(`no_bpjs`),
+    INDEX `db_antrian_id_jadwal_dokter_idx`(`id_jadwal_dokter`),
+    INDEX `db_antrian_tgl_panggil_status_panggil_idx`(`tgl_panggil`, `status_panggil`),
+    INDEX `db_antrian_status_is_deleted_idx`(`status`, `is_deleted`),
     PRIMARY KEY (`id_antrian`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -561,6 +622,10 @@ CREATE TABLE `db_jadwal_dokter` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `db_jadwal_dokter_id_pegawai_idx`(`id_pegawai`),
+    INDEX `db_jadwal_dokter_id_unit_kerja_idx`(`id_unit_kerja`),
+    INDEX `db_jadwal_dokter_tgl_praktek_idx`(`tgl_praktek`),
+    INDEX `db_jadwal_dokter_status_is_deleted_idx`(`status`, `is_deleted`),
     PRIMARY KEY (`id_jadwal_dokter`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -590,6 +655,11 @@ CREATE TABLE `db_jadwal_dokter_ganti` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `db_jadwal_dokter_ganti_id_jadwal_dokter_idx`(`id_jadwal_dokter`),
+    INDEX `db_jadwal_dokter_ganti_id_pegawai_idx`(`id_pegawai`),
+    INDEX `db_jadwal_dokter_ganti_id_unit_kerja_idx`(`id_unit_kerja`),
+    INDEX `db_jadwal_dokter_ganti_tgl_praktek_idx`(`tgl_praktek`),
+    INDEX `db_jadwal_dokter_ganti_status_is_deleted_idx`(`status`, `is_deleted`),
     PRIMARY KEY (`id_jadwal_dokter_ganti`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -698,7 +768,165 @@ CREATE TABLE `ms_negara` (
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
     INDEX `idx_country_nama`(`nama`),
-    INDEX `idx_country_is_deleted`(`is_deleted`),
+    INDEX `idx_country_status`(`status`, `is_deleted`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ms_status_keluarga` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nama_status_keluarga` VARCHAR(191) NOT NULL,
+    `status` TINYINT NOT NULL DEFAULT 1,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `created_by` INTEGER NOT NULL DEFAULT 0,
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` INTEGER NULL DEFAULT 0,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` INTEGER NULL DEFAULT 0,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` INTEGER NULL DEFAULT 0,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    INDEX `ms_status_keluarga_nama_status_keluarga_idx`(`nama_status_keluarga`),
+    INDEX `ms_status_keluarga_status_is_deleted_idx`(`status`, `is_deleted`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ms_status_sosial` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nama_status_sosial` VARCHAR(191) NOT NULL,
+    `status` INTEGER NOT NULL DEFAULT 1,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `created_by` INTEGER NOT NULL DEFAULT 0,
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` INTEGER NULL DEFAULT 0,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` INTEGER NULL DEFAULT 0,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` INTEGER NULL DEFAULT 0,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    INDEX `ms_status_sosial_nama_status_sosial_idx`(`nama_status_sosial`),
+    INDEX `ms_status_sosial_status_is_deleted_idx`(`status`, `is_deleted`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ms_kamar` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_ms_kamar_jenis` INTEGER NOT NULL,
+    `id_gedung` INTEGER NOT NULL,
+    `lantai` INTEGER NOT NULL,
+    `nama_kamar` VARCHAR(50) NOT NULL,
+    `status` TINYINT NOT NULL DEFAULT 1,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `created_by` INTEGER NOT NULL DEFAULT 0,
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` INTEGER NULL DEFAULT 0,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` INTEGER NULL DEFAULT 0,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` INTEGER NULL DEFAULT 0,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    INDEX `ms_kamar_id_ms_kamar_jenis_idx`(`id_ms_kamar_jenis`),
+    INDEX `ms_kamar_id_gedung_idx`(`id_gedung`),
+    INDEX `ms_kamar_lantai_idx`(`lantai`),
+    INDEX `ms_kamar_nama_kamar_idx`(`nama_kamar`),
+    INDEX `ms_kamar_status_is_deleted_idx`(`status`, `is_deleted`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ms_kamar_bed` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_ms_kamar` INTEGER NOT NULL,
+    `nama_bed` VARCHAR(50) NOT NULL,
+    `keterangan` TEXT NOT NULL,
+    `status_bed` INTEGER NOT NULL,
+    `status` TINYINT NOT NULL DEFAULT 1,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `created_by` INTEGER NOT NULL DEFAULT 0,
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` INTEGER NULL DEFAULT 0,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` INTEGER NULL DEFAULT 0,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` INTEGER NULL DEFAULT 0,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    INDEX `ms_kamar_bed_id_ms_kamar_idx`(`id_ms_kamar`),
+    INDEX `ms_kamar_bed_nama_bed_idx`(`nama_bed`),
+    INDEX `ms_kamar_bed_status_bed_status_idx`(`status_bed`, `status`),
+    INDEX `ms_kamar_bed_is_deleted_status_idx`(`is_deleted`, `status`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ms_gedung` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nama_gedung` VARCHAR(191) NOT NULL,
+    `status` TINYINT NOT NULL DEFAULT 1,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `created_by` INTEGER NOT NULL DEFAULT 0,
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` INTEGER NULL DEFAULT 0,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` INTEGER NULL DEFAULT 0,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` INTEGER NULL DEFAULT 0,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    INDEX `ms_gedung_is_deleted_status_idx`(`is_deleted`, `status`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ms_jenis_kamar` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nama_jenis_kamar` VARCHAR(191) NOT NULL,
+    `status` TINYINT NOT NULL DEFAULT 1,
+    `id_kelas_kamar` INTEGER NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `created_by` INTEGER NOT NULL DEFAULT 0,
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` INTEGER NULL DEFAULT 0,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` INTEGER NULL DEFAULT 0,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` INTEGER NULL DEFAULT 0,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    INDEX `ms_jenis_kamar_id_kelas_kamar_idx`(`id_kelas_kamar`),
+    INDEX `ms_jenis_kamar_is_deleted_status_idx`(`is_deleted`, `status`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ms_kelas_kamar` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nama_kelas_kamar` VARCHAR(50) NOT NULL,
+    `kode_bpjs_kamar` VARCHAR(10) NOT NULL,
+    `status` TINYINT NOT NULL DEFAULT 1,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `created_by` INTEGER NOT NULL DEFAULT 0,
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` INTEGER NULL DEFAULT 0,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` INTEGER NULL DEFAULT 0,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` INTEGER NULL DEFAULT 0,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    INDEX `ms_kelas_kamar_is_deleted_status_idx`(`is_deleted`, `status`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -728,3 +956,15 @@ ALTER TABLE `ms_kecamatan` ADD CONSTRAINT `fk_kabkot` FOREIGN KEY (`id_kabkot`) 
 
 -- AddForeignKey
 ALTER TABLE `ms_provinsi` ADD CONSTRAINT `fk_negara` FOREIGN KEY (`id_negara`) REFERENCES `ms_negara`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE `ms_kamar` ADD CONSTRAINT `ms_kamar_id_ms_kamar_jenis_fkey` FOREIGN KEY (`id_ms_kamar_jenis`) REFERENCES `ms_jenis_kamar`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ms_kamar` ADD CONSTRAINT `ms_kamar_id_gedung_fkey` FOREIGN KEY (`id_gedung`) REFERENCES `ms_gedung`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ms_kamar_bed` ADD CONSTRAINT `ms_kamar_bed_id_ms_kamar_fkey` FOREIGN KEY (`id_ms_kamar`) REFERENCES `ms_kamar`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ms_jenis_kamar` ADD CONSTRAINT `ms_jenis_kamar_id_kelas_kamar_fkey` FOREIGN KEY (`id_kelas_kamar`) REFERENCES `ms_kelas_kamar`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

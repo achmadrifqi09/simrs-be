@@ -53,9 +53,10 @@ export class BloodTypeRepository {
 
   async findAllBloodType(keyword?: string, status?: number) {
     const whereClause: Prisma.BloodTypeWhereInput = {
-      nama_golongan_darah: {
-        contains: keyword,
-      },
+      OR: [
+        { nama_golongan_darah: { contains: keyword } },
+        { id_ms_golongan_darah: Number(keyword) },
+      ],
       is_deleted: false,
     };
 

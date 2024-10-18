@@ -25,6 +25,7 @@ export class BedRepository {
       is_deleted: false,
       OR: [
         { nama_bed: { contains: keyword } },
+        { id: Number(keyword) },
         { kamar: { nama_kamar: { contains: keyword } } },
       ],
     };

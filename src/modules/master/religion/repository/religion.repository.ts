@@ -15,9 +15,10 @@ export class ReligionRepository {
 
   async findAllReligion(keyword?: string, status?: number) {
     const whereClause: Prisma.ReligionWhereInput = {
-      nama_agama: {
-        contains: keyword,
-      },
+      OR: [
+        { nama_agama: { contains: keyword } },
+        { id_ms_agama: Number(keyword) },
+      ],
       is_deleted: false,
     };
 

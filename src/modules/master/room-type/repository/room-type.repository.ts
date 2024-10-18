@@ -17,7 +17,7 @@ export class RoomTypeRepository {
     const whereClause: Prisma.RoomTypeWhereInput = {
       is_deleted: false,
       OR: [
-        { nama_jenis_kamar: { contains: keyword } },
+        { nama_jenis_kamar: { contains: keyword }, id: Number(keyword) },
         { kelas_kamar: { nama_kelas_kamar: { contains: keyword } } },
       ],
     };

@@ -17,6 +17,7 @@ export class RoomClassRepository {
     const whereClause: Prisma.RoomClassWhereInput = {
       OR: [
         { kode_bpjs_kamar: { contains: keyword } },
+        { id: Number(keyword) },
         {
           nama_kelas_kamar: {
             contains: keyword,

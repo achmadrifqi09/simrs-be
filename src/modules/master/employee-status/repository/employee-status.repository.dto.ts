@@ -15,9 +15,10 @@ export class EmployeeStatusRepository {
 
   async findAllEmployeeStatus(keyword: string, status?: number) {
     const whereClause: Prisma.EmployeeStatusWhereInput = {
-      nama_status_pegawai: {
-        contains: keyword,
-      },
+      OR: [
+        { nama_status_pegawai: { contains: keyword } },
+        { id_ms_status_pegawai: Number(keyword) },
+      ],
       is_deleted: false,
     };
 

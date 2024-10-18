@@ -15,9 +15,7 @@ export class CountryRepository {
 
   async findAllCountry(keyword?: string, status?: number) {
     const whereClause: Prisma.CountryWhereInput = {
-      nama: {
-        contains: keyword,
-      },
+      OR: [{ nama: { contains: keyword } }, { id: Number(keyword) }],
       is_deleted: false,
     };
 

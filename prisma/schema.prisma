@@ -438,10 +438,11 @@ model TypeOfStatusOfficer {
   @@map("ms_jenis_pegawai_status")
 }
 
-model QueueCounter {
+model Counter {
   id_ms_loket_antrian Int       @id @default(autoincrement())
   nama_loket          Int
   ket_loket           String    @db.Text
+  jenis_loket         Int       @db.TinyInt
   status              Int       @default(1)
   created_at          DateTime  @default(now())
   created_by          Int       @default(0)
@@ -455,7 +456,9 @@ model QueueCounter {
   is_restored         Boolean   @default(false)
 
   @@index([nama_loket])
+  @@index([status, is_deleted, jenis_loket])
   @@index([status, is_deleted])
+  @@index([jenis_loket])
   @@map("ms_loket_antrian")
 }
 

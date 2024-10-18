@@ -15,9 +15,10 @@ export class StructuralPositionRepository {
 
   async findAllStructuralPosition(keyword: string, status?: number) {
     const whereClause: Prisma.PositionWhereInput = {
-      nama_jabatan: {
-        contains: keyword,
-      },
+      OR: [
+        { nama_jabatan: { contains: keyword } },
+        { id_ms_jabatan: Number(keyword) },
+      ],
       is_deleted: false,
     };
 
