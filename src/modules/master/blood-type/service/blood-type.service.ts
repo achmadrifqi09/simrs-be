@@ -11,7 +11,6 @@ import {
   SoftDeleteDTO,
   StatusUpdateDTO,
 } from '../../../../common/dto/common.dto';
-import { number } from 'zod';
 
 @Dependencies([BloodTypeRepository])
 @Injectable()

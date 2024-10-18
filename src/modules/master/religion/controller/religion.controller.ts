@@ -10,7 +10,8 @@ import {
   Patch,
   Post,
   Query,
-  Req, UseGuards,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { ReligionService } from '../service/religion.service';
 import {

@@ -15,10 +15,11 @@ export class BuildingRepository {
 
   async findAllBuilding(keyword?: string, status?: number) {
     const whereClause: Prisma.BuildingWhereInput = {
-      OR: [{ nama_gedung: { contains: keyword } }, { id: Number(keyword) }],
+      OR: [{ nama_gedung: { contains: keyword } }],
       is_deleted: false,
     };
 
+    if (Number(keyword)) whereClause.OR.push({ id: Number(keyword) });
     if (status) {
       whereClause['AND'] = {
         status: Number(status),

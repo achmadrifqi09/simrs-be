@@ -15,13 +15,11 @@ export class StructuralPositionRepository {
 
   async findAllStructuralPosition(keyword: string, status?: number) {
     const whereClause: Prisma.PositionWhereInput = {
-      OR: [
-        { nama_jabatan: { contains: keyword } },
-        { id_ms_jabatan: Number(keyword) },
-      ],
+      OR: [{ nama_jabatan: { contains: keyword } }],
       is_deleted: false,
     };
-
+    if (Number(keyword))
+      whereClause.OR.push({ id_ms_jabatan: Number(keyword) });
     if (status) {
       whereClause['AND'] = {
         status: Number(status),
@@ -36,7 +34,9 @@ export class StructuralPositionRepository {
     });
   }
 
-  async createStructuralPosition(structuralPosition: StructuralPositionPayloadDTO) {
+  async createStructuralPosition(
+    structuralPosition: StructuralPositionPayloadDTO,
+  ) {
     try {
       return await this.prismaService.position.create({
         data: structuralPosition,
@@ -46,7 +46,10 @@ export class StructuralPositionRepository {
     }
   }
 
-  async updateStructuralPosition(id: number, payload: StructuralPositionPayloadDTO) {
+  async updateStructuralPosition(
+    id: number,
+    payload: StructuralPositionPayloadDTO,
+  ) {
     try {
       return await this.prismaService.position.update({
         where: {

@@ -15,13 +15,10 @@ export class FamilyStatusRepository {
 
   async findAllFamilyStatus(keyword?: string, status?: number) {
     const whereClause: Prisma.FamilyStatusWhereInput = {
-      OR: [
-        { nama_status_keluarga: { contains: keyword } },
-        { id: Number(keyword) },
-      ],
+      OR: [{ nama_status_keluarga: { contains: keyword } }],
       is_deleted: false,
     };
-
+    if (Number(keyword)) whereClause.OR.push({ id: Number(keyword) });
     if (status) {
       whereClause['AND'] = {
         status: Number(status),

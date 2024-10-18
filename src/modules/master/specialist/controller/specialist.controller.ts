@@ -10,7 +10,8 @@ import {
   Patch,
   Post,
   Query,
-  Req, UseGuards,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { SpecialistService } from '../service/specialist.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';

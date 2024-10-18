@@ -10,7 +10,8 @@ import {
   Patch,
   Post,
   Query,
-  Req, UseGuards,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { MaritalStatusService } from '../service/marital-status.service';
 import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';

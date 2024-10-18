@@ -10,7 +10,8 @@ import {
   Body,
   Patch,
   Param,
-  Delete, UseGuards,
+  Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ZodPipe } from 'src/zod-pipe/zod-pipe.pipe';
 import { SocialStatusService } from '../service/social-status.service';

@@ -15,13 +15,11 @@ export class RankOfEmployeesRepository {
 
   async findAllRankOfEmployees(keyword?: string, status?: number) {
     const whereClause: Prisma.RankOfEmployeesWhereInput = {
-      OR: [
-        { nama_pangkat: { contains: keyword } },
-        { id_ms_pangkat: Number(keyword) },
-      ],
+      OR: [{ nama_pangkat: { contains: keyword } }],
       is_deleted: false,
     };
-
+    if (Number(keyword))
+      whereClause.OR.push({ id_ms_pangkat: Number(keyword) });
     if (status) {
       whereClause['AND'] = {
         status: Number(status),

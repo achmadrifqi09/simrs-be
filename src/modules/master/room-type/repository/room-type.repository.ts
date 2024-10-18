@@ -17,11 +17,11 @@ export class RoomTypeRepository {
     const whereClause: Prisma.RoomTypeWhereInput = {
       is_deleted: false,
       OR: [
-        { nama_jenis_kamar: { contains: keyword }, id: Number(keyword) },
+        { nama_jenis_kamar: { contains: keyword } },
         { kelas_kamar: { nama_kelas_kamar: { contains: keyword } } },
       ],
     };
-
+    if (Number(keyword)) whereClause.OR.push({ id: Number(keyword) });
     if (status) {
       whereClause.status = Number(status);
     }

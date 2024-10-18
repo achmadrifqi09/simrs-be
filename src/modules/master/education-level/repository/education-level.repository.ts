@@ -12,13 +12,11 @@ export class EducationLevelRepository {
 
   async findAllEducationLevel(keyword?: string, status?: number) {
     const whereClause: Prisma.EducationLevelWhereInput = {
-      OR: [
-        { nama_tingkat_pendidikan: { contains: keyword } },
-        { id_ms_tingkat_pendidikan: Number(keyword) },
-      ],
+      OR: [{ nama_tingkat_pendidikan: { contains: keyword } }],
       is_deleted: false,
     };
-
+    if (Number(keyword))
+      whereClause.OR.push({ id_ms_tingkat_pendidikan: Number(keyword) });
     if (status) {
       whereClause['AND'] = {
         status: Number(status),

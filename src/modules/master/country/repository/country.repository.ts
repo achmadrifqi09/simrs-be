@@ -15,10 +15,10 @@ export class CountryRepository {
 
   async findAllCountry(keyword?: string, status?: number) {
     const whereClause: Prisma.CountryWhereInput = {
-      OR: [{ nama: { contains: keyword } }, { id: Number(keyword) }],
+      OR: [{ nama: { contains: keyword } }],
       is_deleted: false,
     };
-
+    if (Number(keyword)) whereClause.OR.push({ id: Number(keyword) });
     if (status) {
       whereClause['AND'] = {
         status: Number(status),

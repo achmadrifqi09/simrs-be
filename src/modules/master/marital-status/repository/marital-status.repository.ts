@@ -15,13 +15,11 @@ export class MaritalStatusRepository {
 
   async findAllMaritalStatus(keyword?: string, status?: number) {
     const whereClause: Prisma.MaritalStatusWhereInput = {
-      OR: [
-        { nama_status_kawin: { contains: keyword } },
-        { id_ms_status_kawin: Number(keyword) },
-      ],
+      OR: [{ nama_status_kawin: { contains: keyword } }],
       is_deleted: false,
     };
-
+    if (Number(keyword))
+      whereClause.OR.push({ id_ms_status_kawin: Number(keyword) });
     if (status) {
       whereClause['AND'] = {
         status: Number(status),

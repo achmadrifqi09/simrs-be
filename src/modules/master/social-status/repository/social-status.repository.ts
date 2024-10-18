@@ -12,13 +12,10 @@ export class SocialStatusRepository {
 
   async findAllSocialStatus(keyword?: string, status?: number) {
     const whereClause: Prisma.SocialStatusWhereInput = {
-      OR: [
-        { nama_status_sosial: { contains: keyword } },
-        { id: Number(keyword) },
-      ],
+      OR: [{ nama_status_sosial: { contains: keyword } }],
       is_deleted: false,
     };
-
+    if (Number(keyword)) whereClause.OR.push({ id: Number(keyword) });
     if (status) {
       whereClause['AND'] = {
         status: Number(status),

@@ -15,13 +15,11 @@ export class SpecialistRepository {
 
   async findAllSpecialist(keyword?: string, status?: number) {
     const whereClause: Prisma.SpecialistWhereInput = {
-      OR: [
-        { nama_spesialis: { contains: keyword } },
-        { id_ms_spesialis: Number(keyword) },
-      ],
+      OR: [{ nama_spesialis: { contains: keyword } }],
       is_deleted: false,
     };
-
+    if (Number(keyword))
+      whereClause.OR.push({ id_ms_spesialis: Number(keyword) });
     if (status) {
       whereClause['AND'] = {
         status: Number(status),

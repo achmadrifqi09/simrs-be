@@ -25,10 +25,11 @@ export class BedRepository {
       is_deleted: false,
       OR: [
         { nama_bed: { contains: keyword } },
-        { id: Number(keyword) },
         { kamar: { nama_kamar: { contains: keyword } } },
       ],
     };
+
+    if (Number(keyword)) whereClause.OR.push({ id: Number(keyword) });
 
     if (status) {
       whereClause.status = Number(status);

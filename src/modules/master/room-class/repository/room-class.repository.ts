@@ -17,7 +17,6 @@ export class RoomClassRepository {
     const whereClause: Prisma.RoomClassWhereInput = {
       OR: [
         { kode_bpjs_kamar: { contains: keyword } },
-        { id: Number(keyword) },
         {
           nama_kelas_kamar: {
             contains: keyword,
@@ -26,7 +25,7 @@ export class RoomClassRepository {
       ],
       is_deleted: false,
     };
-
+    if (Number(keyword)) whereClause.OR.push({ id: Number(keyword) });
     if (status) {
       whereClause['AND'] = {
         status: Number(status),

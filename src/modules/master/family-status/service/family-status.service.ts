@@ -11,7 +11,6 @@ import {
   SoftDeleteDTO,
   StatusUpdateDTO,
 } from '../../../../common/dto/common.dto';
-import { stat } from 'fs';
 
 @Dependencies([FamilyStatusRepository])
 @Injectable()

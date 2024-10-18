@@ -15,13 +15,11 @@ export class EmployeeStatusRepository {
 
   async findAllEmployeeStatus(keyword: string, status?: number) {
     const whereClause: Prisma.EmployeeStatusWhereInput = {
-      OR: [
-        { nama_status_pegawai: { contains: keyword } },
-        { id_ms_status_pegawai: Number(keyword) },
-      ],
+      OR: [{ nama_status_pegawai: { contains: keyword } }],
       is_deleted: false,
     };
-
+    if (Number(keyword))
+      whereClause.OR.push({ id_ms_status_pegawai: Number(keyword) });
     if (status) {
       whereClause['AND'] = {
         status: Number(status),

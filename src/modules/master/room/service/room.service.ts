@@ -7,7 +7,10 @@ import {
 import { RoomRepository } from '../repository/room.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { RoomPayloadDTO } from '../dto/room.dto';
-import { SoftDeleteDTO, StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import {
+  SoftDeleteDTO,
+  StatusUpdateDTO,
+} from '../../../../common/dto/common.dto';
 
 @Dependencies([RoomRepository])
 @Injectable()
