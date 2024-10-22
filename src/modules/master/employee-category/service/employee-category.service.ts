@@ -6,10 +6,7 @@ import {
 } from '@nestjs/common';
 import { TypeOfStatusOfficerRepository } from '../repository/employee-category.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
-import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 import { TypeOfStatusOfficerPayloadDTO } from '../dto/employee-category.dto';
 
 @Dependencies([TypeOfStatusOfficerRepository])
@@ -51,7 +48,7 @@ export class TypeOfStatusOfficerService {
   }
 
   async softDeleteTypeOfStatusOfficer(id: number, req: any) {
-    const deletePayload: SoftDeleteDTO = {
+    const deletePayload: SoftDelete = {
       is_deleted: true,
       deleted_by: req.user?.id,
       deleted_at: generateCurrentDate(),
@@ -83,10 +80,10 @@ export class TypeOfStatusOfficerService {
 
   async updateStatusTypeOfStatusOfficer(
     id: number,
-    typeOfStatusOfficer: StatusUpdateDTO,
+    typeOfStatusOfficer: UpdateStatus,
     req: any,
   ) {
-    const payload: StatusUpdateDTO = {
+    const payload: UpdateStatus = {
       status: Number(typeOfStatusOfficer.status),
       modified_by: req?.user?.id,
       modified_at: generateCurrentDate(),

@@ -14,8 +14,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { TypeOfStatusOfficerService } from '../service/employee-category.service';
-import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
-import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
+import { UpdateStatus } from '../../../../common/types/common.type';
 import {
   typeOfStatusOfficerStatusValidation,
   typeOfStatusOfficerValidation,
@@ -99,7 +99,7 @@ export class TypeOfStatusOfficerController {
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(typeOfStatusOfficerStatusValidation))
-    typeOfStatusOfficer: StatusUpdateDTO,
+    typeOfStatusOfficer: UpdateStatus,
   ) {
     return this.typeOfStatusOfficerService.updateStatusTypeOfStatusOfficer(
       id,

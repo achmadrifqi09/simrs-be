@@ -1,9 +1,6 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../../prisma/prisma.service';
-import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import { TypeOfStatusOfficerPayloadDTO } from '../dto/employee-category.dto';
 import { Prisma } from '@prisma/client';
@@ -36,7 +33,7 @@ export class TypeOfStatusOfficerRepository {
 
   async updateStatusTypeOfStatusOfficer(
     id: number,
-    typeOfStatusOfficer: StatusUpdateDTO,
+    typeOfStatusOfficer: UpdateStatus,
   ) {
     try {
       return await this.prismaService.typeOfStatusOfficer.update({
@@ -63,7 +60,7 @@ export class TypeOfStatusOfficerRepository {
     }
   }
 
-  async softDeleteTypeOfStatusOfficer(id: number, payload: SoftDeleteDTO) {
+  async softDeleteTypeOfStatusOfficer(id: number, payload: SoftDelete) {
     try {
       return await this.prismaService.typeOfStatusOfficer.update({
         where: {
