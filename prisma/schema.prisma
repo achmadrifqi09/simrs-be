@@ -315,7 +315,7 @@ model WorkUnit {
   jenis_pelayanan     Int              @default(0)
   kode_instalasi_bpjs String?          @db.VarChar(10)
   status_antrian      Int              @default(0)
-  is_parent_unit      Boolean          @default(false)
+  is_parent_unit      Int              @default(0)
   id_unit_induk       Int?
   unit_induk          WorkUnit?        @relation("WorkUnitToWorkUnit", fields: [id_unit_induk], references: [id])
   id_bidang           Int?

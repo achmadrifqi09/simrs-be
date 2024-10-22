@@ -19,6 +19,11 @@ const workUnitValidation = z.object({
     .min(0, { message: 'Status unit kerja isi' })
     .max(1, { message: 'Status unit kerja tidak valid' }),
   id_unit_induk: z.number().nullish(),
+  id_bidang: z.number().nullish(),
+  is_parent_unit: z
+    .number()
+    .min(0, { message: 'Unit kerja induk tidak valid' })
+    .max(1, { message: 'Unit kerja induk tidak valid' }),
 });
 
 const workUnitStatusValidation = z.object({

@@ -21,7 +21,8 @@ export class BedService {
   async findAllBed(
     keyword?: string,
     status?: number,
-    bedId?: number,
+    room_id?:number,
+    bed_id?: number,
     cursor: number = 0,
     take: number = 10,
   ) {
@@ -35,7 +36,8 @@ export class BedService {
     return this.bedRepository.findAllBed(
       keyword ?? '',
       status,
-      bedId,
+      room_id,
+      bed_id,
       cursor,
       take,
     );

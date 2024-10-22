@@ -26,7 +26,8 @@ export class WorkUnitService {
   }
 
   async findAllWorkUnit(
-    isParentUnit: number = 1,
+    is_parent_unit: number = 1,
+    parent_id?: number,
     field_id?: number,
     keyword?: string,
     serviceType?: number,
@@ -35,7 +36,8 @@ export class WorkUnitService {
     take: number = 10,
   ) {
     return this.workUnitRepository.findAllWorkUnit(
-      isParentUnit === 1,
+      is_parent_unit,
+      parent_id,
       field_id,
       keyword || '',
       serviceType,
@@ -57,14 +59,14 @@ export class WorkUnitService {
     }
     workUnit = {
       nama_unit_kerja: workUnit.nama_unit_kerja,
-      id_unit_induk: Number(workUnit.id_unit_induk) ?? null,
-      is_parent_unit: Number(workUnit.is_parent_unit) ?? 0,
-      id_bidang: Number(workUnit.id_bidang) ?? null,
+      id_unit_induk: Number(workUnit.id_unit_induk) || null,
+      is_parent_unit: Number(workUnit.is_parent_unit) || 0,
+      id_bidang: Number(workUnit.id_bidang) || null,
       status: isNaN(Number(workUnit.status)) ? 1 : Number(workUnit.status),
       status_antrian: isNaN(Number(workUnit.status_antrian))
         ? 0
         : Number(workUnit.status_antrian),
-      kode_instalasi_bpjs: workUnit.kode_instalasi_bpjs ?? null,
+      kode_instalasi_bpjs: workUnit.kode_instalasi_bpjs || null,
       jenis_pelayanan: workUnit.jenis_pelayanan,
       created_by: req.user?.id,
       created_at: generateCurrentDate(),
@@ -84,14 +86,14 @@ export class WorkUnitService {
     }
     workUnit = {
       nama_unit_kerja: workUnit.nama_unit_kerja,
-      id_unit_induk: Number(workUnit.id_unit_induk) ?? null,
-      is_parent_unit: Number(workUnit.is_parent_unit) ?? 0,
-      id_bidang: Number(workUnit.id_bidang) ?? null,
+      id_unit_induk: Number(workUnit.id_unit_induk) || null,
+      is_parent_unit: Number(workUnit.is_parent_unit) || 0,
+      id_bidang: Number(workUnit.id_bidang) || null,
       status: isNaN(Number(workUnit.status)) ? 1 : Number(workUnit.status),
       status_antrian: isNaN(Number(workUnit.status_antrian))
         ? 0
         : Number(workUnit.status_antrian),
-      kode_instalasi_bpjs: workUnit.kode_instalasi_bpjs ?? null,
+      kode_instalasi_bpjs: workUnit.kode_instalasi_bpjs || null,
       jenis_pelayanan: workUnit.jenis_pelayanan,
       modified_by: req.user?.id,
       modified_at: generateCurrentDate(),

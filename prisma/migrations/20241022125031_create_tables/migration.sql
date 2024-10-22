@@ -302,7 +302,7 @@ CREATE TABLE `db_unit_kerja` (
     `jenis_pelayanan` INTEGER NOT NULL DEFAULT 0,
     `kode_instalasi_bpjs` VARCHAR(10) NULL,
     `status_antrian` INTEGER NOT NULL DEFAULT 0,
-    `is_parent_unit` BOOLEAN NOT NULL DEFAULT false,
+    `is_parent_unit` INTEGER NOT NULL DEFAULT 0,
     `id_unit_induk` INTEGER NULL,
     `id_bidang` INTEGER NULL,
     `status` INTEGER NOT NULL DEFAULT 1,
@@ -981,6 +981,9 @@ ALTER TABLE `db_unit_kerja` ADD CONSTRAINT `db_unit_kerja_id_unit_induk_fkey` FO
 
 -- AddForeignKey
 ALTER TABLE `db_unit_kerja` ADD CONSTRAINT `db_unit_kerja_id_bidang_fkey` FOREIGN KEY (`id_bidang`) REFERENCES `db_bidang_unit_kerja`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ms_jenis_pegawai` ADD CONSTRAINT `ms_jenis_pegawai_id_ms_jenis_pegawai_status_fkey` FOREIGN KEY (`id_ms_jenis_pegawai_status`) REFERENCES `ms_jenis_pegawai_status`(`id_ms_jenis_pegawai_status`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ms_desa` ADD CONSTRAINT `fk_kecamatan` FOREIGN KEY (`id_kecamatan`) REFERENCES `ms_kecamatan`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;

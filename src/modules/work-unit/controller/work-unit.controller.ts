@@ -41,10 +41,12 @@ export class WorkUnitController {
     @Query('cursor') cursor: number,
     @Query('take') take: number,
     @Query('is_parent_unit') is_parent_unit: number,
+    @Query('parent_id') parent_id: number,
     @Query('field_id') field_id: number,
   ) {
     return this.workUnitService.findAllWorkUnit(
       is_parent_unit,
+      parent_id,
       field_id,
       keyword,
       service_type,

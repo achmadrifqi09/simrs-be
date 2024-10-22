@@ -7,7 +7,9 @@ import { SoftDelete, UpdateStatus } from '../../../common/types/common.type';
 
 @Dependencies([PrismaService])
 export class WorkUnitRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {
+  }
+
   async findActiveSubOrParentUnit(keyword?: string) {
     const whereClause: Prisma.WorkUnitWhereInput = {
       OR: [{ nama_unit_kerja: { contains: keyword } }],
@@ -23,7 +25,7 @@ export class WorkUnitRepository {
     });
   }
 
-  async findParentWorkUnit(keyword: string){
+  async findParentWorkUnit(keyword: string) {
     const whereClause: Prisma.WorkUnitWhereInput = {
       OR: [{ nama_unit_kerja: { contains: keyword } }],
       id_unit_induk: null,
@@ -37,32 +39,36 @@ export class WorkUnitRepository {
       },
     });
   }
+
   async findAllWorkUnit(
-    isParentUnit: boolean,
-    field_id?: number,
+    is_parent_unit: number,
+    parent_id?: number,
+    filed_id?: number,
     keyword?: string,
-    serviceType?: number,
-    workUnitId?: number,
+    service_type?: number,
+    work_unit_id?: number,
     cursor?: number,
     take?: number,
   ) {
     const whereClause: Prisma.WorkUnitWhereInput = {
       is_deleted: false,
+      is_parent_unit: Number(is_parent_unit) || 0,
       OR: [{ nama_unit_kerja: { contains: keyword } }],
-      is_parent_unit: isParentUnit,
     };
 
     if (Number(keyword)) whereClause.OR.push({ id: Number(keyword) });
 
-    if (serviceType) {
-      whereClause.jenis_pelayanan = Number(serviceType);
+    if (service_type) {
+      whereClause.jenis_pelayanan = Number(service_type);
     }
 
-    if (workUnitId) {
-      whereClause.id_unit_induk = Number(workUnitId);
+    if (work_unit_id) {
+      whereClause.id_unit_induk = Number(work_unit_id);
     }
 
-    if (Number(field_id)) whereClause.id_unit_induk = Number(field_id);
+    if (Number(parent_id)) whereClause.id_unit_induk = Number(parent_id);
+
+    if (Number(filed_id)) whereClause.id_bidang = Number(filed_id);
 
     return this.prismaService.workUnit.findMany({
       take: Number(take) || 10,
@@ -103,7 +109,6 @@ export class WorkUnitRepository {
       return await this.prismaService.workUnit.create({
         data: {
           ...workUnit,
-          is_parent_unit: workUnit.is_parent_unit == 1,
         },
       });
     } catch (error) {
@@ -120,7 +125,6 @@ export class WorkUnitRepository {
         },
         data: {
           ...workUnit,
-          is_parent_unit: workUnit.is_parent_unit == 1,
         },
       });
     } catch (error) {

@@ -17,7 +17,8 @@ export class BedRepository {
   async findAllBed(
     keyword?: string,
     status?: number,
-    bedId?: number,
+    room_id?: number,
+    bed_id?: number,
     cursor?: number,
     take?: number,
   ) {
@@ -30,13 +31,14 @@ export class BedRepository {
     };
 
     if (Number(keyword)) whereClause.OR.push({ id: Number(keyword) });
+    if (Number(room_id)) whereClause.id_ms_kamar = Number(room_id);
 
     if (status) {
       whereClause.status = Number(status);
     }
 
-    if (bedId) {
-      whereClause.id = Number(bedId);
+    if (bed_id) {
+      whereClause.id = Number(bed_id);
     }
 
     return this.prismaService.bed.findMany({
