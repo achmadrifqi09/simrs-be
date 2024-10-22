@@ -14,16 +14,16 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { MaritalStatusService } from '../service/marital-status.service';
-import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
+import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
 import { maritalStatusValidation } from '../validation/marital-status.validation';
 import { MaritalStatusPayloadDTO } from '../dto/marital-status.dto';
 import { religionUpdateStatusValidation } from '../../religion/validation/religion.validation';
-import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { UpdateStatus } from '../../../../common/types/common.type';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
 import { Permission } from '../../../../decorators/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/api/v1/master/marital-status')
+@Controller('/master/marital-status')
 export class MaritalStatusController {
   constructor(private readonly maritalStatusService: MaritalStatusService) {}
 
@@ -76,7 +76,7 @@ export class MaritalStatusController {
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(religionUpdateStatusValidation))
-    maritalStatus: StatusUpdateDTO,
+    maritalStatus: UpdateStatus,
   ) {
     return this.maritalStatusService.updateVisibilityMaritalStatus(
       id,

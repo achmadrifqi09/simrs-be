@@ -14,8 +14,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { StructuralPositionService } from '../service/structural-position.service';
-import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
-import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
+import { UpdateStatus } from '../../../../common/types/common.type';
 import { StructuralPositionPayloadDTO } from '../dto/structural-position.dto';
 import {
   structuralPositionUpdateStatusValidation,
@@ -25,7 +25,7 @@ import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guar
 import { Permission } from '../../../../decorators/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/api/v1/master/structural-position')
+@Controller('/master/structural-position')
 export class StructuralPositionController {
   constructor(
     private readonly structuralPositionService: StructuralPositionService,
@@ -93,7 +93,7 @@ export class StructuralPositionController {
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(structuralPositionUpdateStatusValidation))
-    religion: StatusUpdateDTO,
+    religion: UpdateStatus,
   ) {
     return this.structuralPositionService.updateStatusStructuralPosition(
       id,

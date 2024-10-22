@@ -3,9 +3,9 @@ import { PrismaService } from '../../../../prisma/prisma.service';
 import { FamilyStatusPayloadDTO } from '../dto/family-status.dto';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 import { Prisma } from '@prisma/client';
 
 @Dependencies([PrismaService])
@@ -58,7 +58,7 @@ export class FamilyStatusRepository {
 
   async updateVisibilityFamilyStatus(
     id: number,
-    familyStatus: StatusUpdateDTO,
+    familyStatus: UpdateStatus,
   ) {
     try {
       return await this.prismaService.familyStatus.update({
@@ -73,7 +73,7 @@ export class FamilyStatusRepository {
     }
   }
 
-  async softDeleteFamilyStatus(id: number, payload: SoftDeleteDTO) {
+  async softDeleteFamilyStatus(id: number, payload: SoftDelete) {
     try {
       return await this.prismaService.familyStatus.update({
         where: {

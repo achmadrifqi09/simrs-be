@@ -7,9 +7,9 @@ import {
 import { SpecialistRepository } from '../repository/specialist.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 import { SpecialistPayloadDTO } from '../dto/specialist.dto';
 
 @Dependencies([SpecialistRepository])
@@ -39,7 +39,7 @@ export class SpecialistService {
   }
 
   async softDeleteSpecialist(id: number, req: any) {
-    const deletePayload: SoftDeleteDTO = {
+    const deletePayload: SoftDelete = {
       is_deleted: true,
       deleted_by: req.user?.id,
       deleted_at: generateCurrentDate(),
@@ -63,10 +63,10 @@ export class SpecialistService {
 
   async updateStatusSpecialist(
     id: number,
-    specialist: StatusUpdateDTO,
+    specialist: UpdateStatus,
     req: any,
   ) {
-    const payload: StatusUpdateDTO = {
+    const payload: UpdateStatus = {
       status: Number(specialist.status),
       modified_by: req?.user?.id,
       modified_at: generateCurrentDate(),

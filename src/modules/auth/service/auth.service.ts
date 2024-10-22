@@ -6,7 +6,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { UserService } from '../../user/service/user.service';
-import { LoginDTO } from '../dto/auth.dto';
+import { Login } from '../type/auth.type';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { AuthRepository } from '../repository/auth.repository';
@@ -24,7 +24,7 @@ export class AuthService {
   ) {}
 
   @Post()
-  async login(credentials: LoginDTO) {
+  async login(credentials: Login) {
     if (!credentials?.password || !credentials.email) {
       throw new HttpException(
         'username atau password tidak valid',

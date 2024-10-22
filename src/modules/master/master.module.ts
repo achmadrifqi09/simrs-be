@@ -20,6 +20,7 @@ import { RoomTypeModule } from './room-type/room-type.module';
 import { RoomModule } from './room/room.module';
 import { BedModule } from './bed/bed.module';
 import { TypeOfStatusOfficerModule } from './employee-category/employee-category.module';
+import { CounterModule } from './counter/counter.module';
 @Module({
   imports: [
     ReligionModule,
@@ -43,6 +44,8 @@ import { TypeOfStatusOfficerModule } from './employee-category/employee-category
     RoomModule,
     BedModule,
     TypeOfStatusOfficerModule,
+    CounterModule,
   ],
+  exports: [CounterModule],
 })
 export class MasterModule {}

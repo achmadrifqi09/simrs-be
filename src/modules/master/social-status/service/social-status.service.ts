@@ -7,7 +7,7 @@ import {
 import { SocialStatusRepository } from '../repository/social-status.repository';
 import { SocialStatusPayloadDTO } from '../dto/social-status.dto';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
-import { SoftDeleteDTO, StatusUpdateDTO } from 'src/common/dto/common.dto';
+import { SoftDelete, UpdateStatus } from 'src/common/types/common.type';
 
 @Dependencies([SocialStatusRepository])
 @Injectable()
@@ -55,10 +55,10 @@ export class SocialStatusService {
 
   async updateVisibilitySocialStatus(
     id: number,
-    socialStatus: StatusUpdateDTO,
+    socialStatus: UpdateStatus,
     req: any,
   ) {
-    const payload: StatusUpdateDTO = {
+    const payload: UpdateStatus = {
       status: Number(socialStatus.status),
       modified_by: req?.user?.id,
       modified_at: generateCurrentDate(),
@@ -70,7 +70,7 @@ export class SocialStatusService {
   }
 
   async socialStatusSoftDelete(id: number, req: any) {
-    const deletePayload: SoftDeleteDTO = {
+    const deletePayload: SoftDelete = {
       is_deleted: true,
       deleted_by: req.user?.id,
       deleted_at: generateCurrentDate(),

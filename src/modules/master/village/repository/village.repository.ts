@@ -3,7 +3,7 @@ import { PrismaService } from '../../../../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import { VillagePayloadDTO } from '../dto/village.dto';
-import { SoftDeleteDTO } from '../../../../common/dto/common.dto';
+import { SoftDelete } from '../../../../common/types/common.type';
 
 @Dependencies([PrismaService])
 @Injectable()
@@ -26,8 +26,8 @@ export class VillageRepository {
     }
 
     const result = await this.prismaService.village.findMany({
-      take: Number(take),
-      skip: Number(cursor) ?? undefined,
+      take: Number(take) || 10,
+      skip: Number(cursor) || 0,
       where: whereClause,
       select: {
         id: true,
@@ -48,7 +48,7 @@ export class VillageRepository {
       results: result,
       pagination: {
         current_cursor: Number(cursor),
-        take: Number(take),
+        take: Number(take) || 10,
       },
     };
   }
@@ -77,7 +77,7 @@ export class VillageRepository {
     }
   }
 
-  async villageSoftDelete(id: string, payload: SoftDeleteDTO) {
+  async villageSoftDelete(id: string, payload: SoftDelete) {
     try {
       return await this.prismaService.village.update({
         where: {

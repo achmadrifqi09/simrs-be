@@ -2,7 +2,7 @@ import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { EducationLevelPayloadDTO } from '../dto/education-level.dto';
 import { PrismaErrorHandler } from 'src/common/handler/prisma-error.handler';
-import { StatusUpdateDTO, SoftDeleteDTO } from 'src/common/dto/common.dto';
+import { UpdateStatus, SoftDelete } from 'src/common/types/common.type';
 import { Prisma } from '@prisma/client';
 
 @Dependencies([PrismaService])
@@ -58,7 +58,7 @@ export class EducationLevelRepository {
     }
   }
 
-  async updateVisibilityEducationLevel(id: number, payload: StatusUpdateDTO) {
+  async updateVisibilityEducationLevel(id: number, payload: UpdateStatus) {
     try {
       return await this.prismaService.educationLevel.update({
         where: {
@@ -72,7 +72,7 @@ export class EducationLevelRepository {
     }
   }
 
-  async softDeleteEducationLevel(id: number, payload: SoftDeleteDTO) {
+  async softDeleteEducationLevel(id: number, payload: SoftDelete) {
     try {
       return await this.prismaService.educationLevel.update({
         where: {

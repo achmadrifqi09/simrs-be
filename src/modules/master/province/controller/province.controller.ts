@@ -15,7 +15,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ProvinceService } from '../service/province.service';
-import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
+import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
 import { provinceValidation } from '../validation/province.validation';
 import { ProvincePayloadDTO } from '../dto/province.dto';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
@@ -23,7 +23,7 @@ import { Action } from '../../../../common/enums/action.enum';
 import { Permission } from '../../../../decorators/permission.decorator';
 
 @Dependencies([ProvinceService])
-@Controller('/api/v1/master/province')
+@Controller('/master/province')
 export class ProvinceController {
   constructor(private readonly provinceService: ProvinceService) {}
 

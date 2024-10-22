@@ -7,9 +7,9 @@ import {
 import { RankOfEmployeesRepository } from '../repository/employee-rank.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 import { RankOfEmployeesPayloadDTO } from '../dto/employee-rank.dto';
 
 @Dependencies([RankOfEmployeesRepository])
@@ -51,7 +51,7 @@ export class RankOfEmployeesService {
   }
 
   async softDeleteRankOfEmployees(id: number, req: any) {
-    const deletePayload: SoftDeleteDTO = {
+    const deletePayload: SoftDelete = {
       is_deleted: true,
       deleted_by: req.user?.id,
       deleted_at: generateCurrentDate(),
@@ -83,10 +83,10 @@ export class RankOfEmployeesService {
 
   async updateStatusRankOfEmployees(
     id: number,
-    rankOfEmployees: StatusUpdateDTO,
+    rankOfEmployees: UpdateStatus,
     req: any,
   ) {
-    const payload: StatusUpdateDTO = {
+    const payload: UpdateStatus = {
       status: Number(rankOfEmployees.status),
       modified_by: req?.user?.id,
       modified_at: generateCurrentDate(),

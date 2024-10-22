@@ -14,18 +14,18 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { EducationLevelPayloadDTO } from '../dto/education-level.dto';
-import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
+import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
 import {
   educationLevelValidation,
   educationLevelVisibilityValidation,
 } from '../validation/education-level.validation';
-import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { UpdateStatus } from '../../../../common/types/common.type';
 import { EducationLevelService } from '../service/education-level.service';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
 import { Permission } from '../../../../decorators/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/api/v1/master/education-level')
+@Controller('/master/education-level')
 export class EducationLevelController {
   constructor(private readonly educationLevelService: EducationLevelService) {}
 
@@ -78,7 +78,7 @@ export class EducationLevelController {
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(educationLevelVisibilityValidation))
-    educationLevel: StatusUpdateDTO,
+    educationLevel: UpdateStatus,
   ) {
     return this.educationLevelService.updateVisibilityEducationLevel(
       id,

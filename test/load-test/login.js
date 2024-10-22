@@ -25,7 +25,7 @@ export default function () {
   };
   group('Login', () => {
     let login_response = http.post(
-      'http://localhost:3001/api/v1/auth/login',
+      'http://localhost:3001/auth/login',
       body,
       params,
     );

@@ -7,9 +7,9 @@ import {
 import { CountryRepository } from '../repository/country.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 import { CountryPayloadDTO } from '../dto/country.dto';
 
 @Dependencies([CountryRepository])
@@ -39,7 +39,7 @@ export class CountryService {
   }
 
   async softDeleteCountry(id: number, req: any) {
-    const deletePayload: SoftDeleteDTO = {
+    const deletePayload: SoftDelete = {
       is_deleted: true,
       deleted_by: req.user?.id,
       deleted_at: generateCurrentDate(),
@@ -57,8 +57,8 @@ export class CountryService {
     return this.countryRepository.updateCountry(id, country);
   }
 
-  async updateStatusCountry(id: number, country: StatusUpdateDTO, req: any) {
-    const payload: StatusUpdateDTO = {
+  async updateStatusCountry(id: number, country: UpdateStatus, req: any) {
+    const payload: UpdateStatus = {
       status: Number(country.status),
       modified_by: req?.user?.id,
       modified_at: generateCurrentDate(),

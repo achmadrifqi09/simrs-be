@@ -3,9 +3,9 @@ import { PrismaService } from '../../../../prisma/prisma.service';
 import { ReligionPayloadDTO } from '../dto/religion.dto';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 import { Prisma } from '@prisma/client';
 
 @Dependencies([PrismaService])
@@ -33,7 +33,7 @@ export class ReligionRepository {
     });
   }
 
-  async updateStatusReligion(id: number, religion: StatusUpdateDTO) {
+  async updateStatusReligion(id: number, religion: UpdateStatus) {
     try {
       return await this.prismaService.religion.update({
         where: {
@@ -57,7 +57,7 @@ export class ReligionRepository {
     }
   }
 
-  async softDeleteReligion(id: number, payload: SoftDeleteDTO) {
+  async softDeleteReligion(id: number, payload: SoftDelete) {
     try {
       return await this.prismaService.religion.update({
         where: {

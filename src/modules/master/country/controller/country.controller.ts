@@ -14,8 +14,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CountryService } from '../service/country.service';
-import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
-import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
+import { UpdateStatus } from '../../../../common/types/common.type';
 import {
   countryStatusValidation,
   countryValidation,
@@ -25,7 +25,7 @@ import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guar
 import { Permission } from '../../../../decorators/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/api/v1/master/country')
+@Controller('/master/country')
 export class CountryController {
   constructor(private readonly countryService: CountryService) {}
 
@@ -79,7 +79,7 @@ export class CountryController {
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(countryStatusValidation))
-    country: StatusUpdateDTO,
+    country: UpdateStatus,
   ) {
     return this.countryService.updateStatusCountry(id, country, req);
   }

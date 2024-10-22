@@ -3,7 +3,7 @@ import { PrismaService } from '../../../../prisma/prisma.service';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import { RegencyPayloadDTO } from '../dto/regency.dto';
 import { Prisma } from '@prisma/client';
-import { SoftDeleteDTO } from '../../../../common/dto/common.dto';
+import { SoftDelete } from '../../../../common/types/common.type';
 
 @Dependencies([PrismaService])
 @Injectable()
@@ -26,8 +26,8 @@ export class RegencyRepository {
     }
 
     const result = await this.prismaService.regency.findMany({
-      take: Number(take),
-      skip: Number(cursor) ?? undefined,
+      take: Number(take) || 10,
+      skip: Number(cursor) || 0,
       where: whereClause,
       select: {
         id: true,
@@ -48,7 +48,7 @@ export class RegencyRepository {
       results: result,
       pagination: {
         current_cursor: Number(cursor),
-        take: Number(take),
+        take: Number(take) || 10,
       },
     };
   }
@@ -77,7 +77,7 @@ export class RegencyRepository {
     }
   }
 
-  async regencySoftDelete(id: string, payload: SoftDeleteDTO) {
+  async regencySoftDelete(id: string, payload: SoftDelete) {
     try {
       return await this.prismaService.regency.update({
         where: {

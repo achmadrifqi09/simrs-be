@@ -8,9 +8,9 @@ import { BloodTypeRepository } from '../repository/blood-type.respository';
 import { BloodTypePayloadDTO } from '../dto/blood-type.dto';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 
 @Dependencies([BloodTypeRepository])
 @Injectable()
@@ -28,10 +28,10 @@ export class BloodTypeService {
 
   async updateStatusBloodType(
     id: number,
-    bloodType: StatusUpdateDTO,
+    bloodType: UpdateStatus,
     req: any,
   ) {
-    const payload: StatusUpdateDTO = {
+    const payload: UpdateStatus = {
       status: Number(bloodType.status),
       modified_by: req?.user?.id,
       modified_at: generateCurrentDate(),
@@ -60,7 +60,7 @@ export class BloodTypeService {
   }
 
   async bloodTypeSoftDelete(id: number, req: any) {
-    const deletePayload: SoftDeleteDTO = {
+    const deletePayload: SoftDelete = {
       is_deleted: true,
       deleted_by: req.user?.id,
       deleted_at: generateCurrentDate(),

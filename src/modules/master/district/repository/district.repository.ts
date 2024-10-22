@@ -3,7 +3,7 @@ import { PrismaService } from '../../../../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import { DistrictPayloadDTO } from '../dto/district.dto';
-import { SoftDeleteDTO } from '../../../../common/dto/common.dto';
+import { SoftDelete } from '../../../../common/types/common.type';
 
 @Dependencies([PrismaService])
 @Injectable()
@@ -26,8 +26,8 @@ export class DistrictRepository {
     }
 
     const result = await this.prismaService.district.findMany({
-      take: Number(take),
-      skip: Number(cursor) ?? undefined,
+      take: Number(take) || 10,
+      skip: Number(cursor) || 0,
       where: whereClause,
       select: {
         id: true,
@@ -47,7 +47,7 @@ export class DistrictRepository {
       results: result,
       pagination: {
         current_cursor: Number(cursor),
-        take: Number(take),
+        take: Number(take) || 10,
       },
     };
   }
@@ -76,7 +76,7 @@ export class DistrictRepository {
     }
   }
 
-  async districtSoftDelete(id: string, payload: SoftDeleteDTO) {
+  async districtSoftDelete(id: string, payload: SoftDelete) {
     try {
       return await this.prismaService.district.update({
         where: {

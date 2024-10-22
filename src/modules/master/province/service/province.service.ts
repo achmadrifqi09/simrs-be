@@ -2,7 +2,7 @@ import { Dependencies, Injectable } from '@nestjs/common';
 import { ProvinceRepository } from '../repository/province.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { ProvincePayloadDTO } from '../dto/province.dto';
-import { SoftDeleteDTO } from '../../../../common/dto/common.dto';
+import { SoftDelete } from '../../../../common/types/common.type';
 
 @Dependencies([ProvinceRepository])
 @Injectable()
@@ -46,7 +46,7 @@ export class ProvinceService {
   }
 
   async provinceSoftDelete(id: string | number, req: any) {
-    const deletePayload: SoftDeleteDTO = {
+    const deletePayload: SoftDelete = {
       is_deleted: true,
       deleted_by: req.user?.id,
       deleted_at: generateCurrentDate(),

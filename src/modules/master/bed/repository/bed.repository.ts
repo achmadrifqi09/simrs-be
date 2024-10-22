@@ -4,10 +4,10 @@ import { Prisma } from '@prisma/client';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import { BedPayloadDTO } from '../dto/bed.dto';
 import {
-  BedAvailabilityDTO,
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  BedAvailability,
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 
 @Dependencies([PrismaService])
 @Injectable()
@@ -40,8 +40,8 @@ export class BedRepository {
     }
 
     return this.prismaService.bed.findMany({
-      take: Number(take),
-      skip: Number(cursor) ?? undefined,
+      take: Number(take) || 10,
+      skip: Number(cursor) || 0,
       where: whereClause,
       include: {
         kamar: {
@@ -81,21 +81,7 @@ export class BedRepository {
     }
   }
 
-  async updateStatusBed(id: number, roomType: StatusUpdateDTO) {
-    try {
-      return await this.prismaService.bed.update({
-        where: {
-          id: Number(id),
-          is_deleted: false,
-        },
-        data: roomType,
-      });
-    } catch (error) {
-      PrismaErrorHandler.handle(error);
-    }
-  }
-
-  async updateBedAvailability(id: number, bed: BedAvailabilityDTO) {
+  async updateStatusBed(id: number, bed: UpdateStatus) {
     try {
       return await this.prismaService.bed.update({
         where: {
@@ -109,7 +95,21 @@ export class BedRepository {
     }
   }
 
-  async softDeleteBed(id: number, payload: SoftDeleteDTO) {
+  async updateBedAvailability(id: number, bed: BedAvailability) {
+    try {
+      return await this.prismaService.bed.update({
+        where: {
+          id: Number(id),
+          is_deleted: false,
+        },
+        data: bed,
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
+  }
+
+  async softDeleteBed(id: number, payload: SoftDelete) {
     try {
       return await this.prismaService.bed.update({
         where: {

@@ -4,9 +4,9 @@ import { Prisma } from '@prisma/client';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import { RoomTypePayloadDTO } from '../dto/room-type.dto';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 
 @Dependencies([PrismaService])
 @Injectable()
@@ -66,7 +66,7 @@ export class RoomTypeRepository {
     }
   }
 
-  async updateStatusRoomType(id: number, roomType: StatusUpdateDTO) {
+  async updateStatusRoomType(id: number, roomType: UpdateStatus) {
     try {
       return await this.prismaService.roomType.update({
         where: {
@@ -80,7 +80,7 @@ export class RoomTypeRepository {
     }
   }
 
-  async softDeleteRoomType(id: number, payload: SoftDeleteDTO) {
+  async softDeleteRoomType(id: number, payload: SoftDelete) {
     try {
       return await this.prismaService.roomType.update({
         where: {

@@ -1,7 +1,7 @@
 import { Controller, Get, Header, HttpCode, Req } from '@nestjs/common';
 import { UserAccessService } from '../service/user-access.service';
 
-@Controller('/api/v1/user-access')
+@Controller('/user-access')
 export class UserAccessController {
   constructor(private readonly userAccessService: UserAccessService) {}
 

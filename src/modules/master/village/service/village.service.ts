@@ -2,7 +2,7 @@ import { Dependencies, Injectable } from '@nestjs/common';
 import { VillageRepository } from '../repository/village.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { VillagePayloadDTO } from '../dto/village.dto';
-import { SoftDeleteDTO } from '../../../../common/dto/common.dto';
+import { SoftDelete } from '../../../../common/types/common.type';
 
 @Dependencies([VillageRepository])
 @Injectable()
@@ -46,7 +46,7 @@ export class VillageService {
   }
 
   async villageSoftDelete(id: string | number, req: any) {
-    const deletePayload: SoftDeleteDTO = {
+    const deletePayload: SoftDelete = {
       is_deleted: true,
       deleted_by: req.user?.id,
       deleted_at: generateCurrentDate(),

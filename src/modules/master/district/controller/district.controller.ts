@@ -14,14 +14,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { DistrictService } from '../service/district.service';
-import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
+import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
 import { districtValidation } from '../validation/district.validation';
 import { DistrictPayloadDTO } from '../dto/district.dto';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
 import { Permission } from '../../../../decorators/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/api/v1/master/district')
+@Controller('/master/district')
 export class DistrictController {
   constructor(private readonly districtService: DistrictService) {}
 

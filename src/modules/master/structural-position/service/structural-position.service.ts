@@ -8,9 +8,9 @@ import { StructuralPositionRepository } from '../repository/structural-position.
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { StructuralPositionPayloadDTO } from '../dto/structural-position.dto';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 
 @Dependencies([StructuralPositionRepository])
 @Injectable()
@@ -71,10 +71,10 @@ export class StructuralPositionService {
 
   async updateStatusStructuralPosition(
     id: number,
-    bloodType: StatusUpdateDTO,
+    bloodType: UpdateStatus,
     req: any,
   ) {
-    const payload: StatusUpdateDTO = {
+    const payload: UpdateStatus = {
       status: Number(bloodType.status),
       modified_by: req?.user?.id,
       modified_at: generateCurrentDate(),
@@ -86,7 +86,7 @@ export class StructuralPositionService {
   }
 
   async softDeleteStructuralPosition(id: number, req: any) {
-    const deletePayload: SoftDeleteDTO = {
+    const deletePayload: SoftDelete = {
       is_deleted: true,
       deleted_by: req.user?.id,
       deleted_at: generateCurrentDate(),

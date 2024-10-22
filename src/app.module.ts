@@ -17,6 +17,8 @@ import { ReligionModule } from './modules/master/religion/religion.module';
 import { MasterModule } from './modules/master/master.module';
 import { MenuModule } from './modules/menu/menu.module';
 import { UserAccessModule } from './modules/user-access/user-access.module';
+import { CounterGateway } from './gateways/counter/gateway/counter.gateway';
+import { FieldOfWorkUnitModule } from './modules/field-of-work-unit/field-of-work-unit.module';
 
 @Module({
   imports: [
@@ -30,6 +32,7 @@ import { UserAccessModule } from './modules/user-access/user-access.module';
     MasterModule,
     MenuModule,
     UserAccessModule,
+    FieldOfWorkUnitModule,
   ],
   controllers: [AppController],
   providers: [
@@ -46,6 +49,7 @@ import { UserAccessModule } from './modules/user-access/user-access.module';
       useClass: ResponseInterceptor,
     },
     AppService,
+    CounterGateway,
   ],
 })
 export class AppModule {
@@ -56,10 +60,10 @@ export class AppModule {
       .forRoutes('*')
       .apply(AuthMiddleware)
       .exclude(
-        '/api/v1/auth/login',
-        '/api/v1/work-unit/polyclinic',
-        '/api/v1/auth/verify-token',
-        '/api/v1/user',
+        '/auth/login',
+        '/work-unit/polyclinic',
+        '/auth/verify-token',
+        '/user',
       )
       .forRoutes('*');
   }

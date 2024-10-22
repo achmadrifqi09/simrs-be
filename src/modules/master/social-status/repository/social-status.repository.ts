@@ -2,7 +2,7 @@ import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SocialStatusPayloadDTO } from '../dto/social-status.dto';
 import { PrismaErrorHandler } from 'src/common/handler/prisma-error.handler';
-import { SoftDeleteDTO, StatusUpdateDTO } from 'src/common/dto/common.dto';
+import { SoftDelete, UpdateStatus } from 'src/common/types/common.type';
 import { Prisma } from '@prisma/client';
 
 @Dependencies([PrismaService])
@@ -54,7 +54,7 @@ export class SocialStatusRepository {
     }
   }
 
-  async updateVisibilitySocialStatus(id: number, payload: StatusUpdateDTO) {
+  async updateVisibilitySocialStatus(id: number, payload: UpdateStatus) {
     try {
       return await this.prismaService.socialStatus.update({
         where: {
@@ -68,7 +68,7 @@ export class SocialStatusRepository {
     }
   }
 
-  async softDeleteSocialStatus(id: number, payload: SoftDeleteDTO) {
+  async softDeleteSocialStatus(id: number, payload: SoftDelete) {
     try {
       return await this.prismaService.socialStatus.update({
         where: {

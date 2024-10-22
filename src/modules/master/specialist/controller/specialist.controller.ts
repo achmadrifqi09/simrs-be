@@ -14,8 +14,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { SpecialistService } from '../service/specialist.service';
-import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
-import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
+import { UpdateStatus } from '../../../../common/types/common.type';
 import {
   specialistStatusValidation,
   specialistValidation,
@@ -25,7 +25,7 @@ import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guar
 import { Permission } from '../../../../decorators/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/api/v1/master/specialist')
+@Controller('/master/specialist')
 export class SpecialistController {
   constructor(private readonly specialistService: SpecialistService) {}
 
@@ -79,7 +79,7 @@ export class SpecialistController {
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(specialistStatusValidation))
-    specialist: StatusUpdateDTO,
+    specialist: UpdateStatus,
   ) {
     return this.specialistService.updateStatusSpecialist(id, specialist, req);
   }

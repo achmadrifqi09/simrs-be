@@ -8,10 +8,10 @@ import { BedRepository } from '../repository/bed.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { BedPayloadDTO } from '../dto/bed.dto';
 import {
-  BedAvailabilityDTO,
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  BedAvailability,
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 
 @Dependencies([BedRepository])
 @Injectable()
@@ -67,8 +67,8 @@ export class BedService {
     return this.bedRepository.updateBed(id, bed);
   }
 
-  async updateStatusBed(id: number, roomType: StatusUpdateDTO, req: any) {
-    const payload: StatusUpdateDTO = {
+  async updateStatusBed(id: number, roomType: UpdateStatus, req: any) {
+    const payload: UpdateStatus = {
       status: Number(roomType.status),
       modified_by: req?.user?.id,
       modified_at: generateCurrentDate(),
@@ -76,8 +76,8 @@ export class BedService {
     return this.bedRepository.updateStatusBed(id, payload);
   }
 
-  async updateAvailabilityBed(id: number, bed: BedAvailabilityDTO, req: any) {
-    const payload: BedAvailabilityDTO = {
+  async updateAvailabilityBed(id: number, bed: BedAvailability, req: any) {
+    const payload: BedAvailability = {
       status_bed: Number(bed.status_bed),
       modified_by: req?.user?.id,
       modified_at: generateCurrentDate(),
@@ -86,7 +86,7 @@ export class BedService {
   }
 
   async softDeleteBed(id: number, req: any) {
-    const deletePayload: SoftDeleteDTO = {
+    const deletePayload: SoftDelete = {
       is_deleted: true,
       deleted_by: req.user?.id,
       deleted_at: generateCurrentDate(),

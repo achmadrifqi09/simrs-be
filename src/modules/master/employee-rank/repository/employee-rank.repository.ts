@@ -1,9 +1,9 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../../prisma/prisma.service';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import { RankOfEmployeesPayloadDTO } from '../dto/employee-rank.dto';
 import { Prisma } from '@prisma/client';
@@ -36,7 +36,7 @@ export class RankOfEmployeesRepository {
 
   async updateStatusRankOfEmployees(
     id: number,
-    rankOfEmployees: StatusUpdateDTO,
+    rankOfEmployees: UpdateStatus,
   ) {
     try {
       return await this.prismaService.rankOfEmployees.update({
@@ -61,7 +61,7 @@ export class RankOfEmployeesRepository {
     }
   }
 
-  async softDeleteRankOfEmployees(id: number, payload: SoftDeleteDTO) {
+  async softDeleteRankOfEmployees(id: number, payload: SoftDelete) {
     try {
       return await this.prismaService.rankOfEmployees.update({
         where: {
