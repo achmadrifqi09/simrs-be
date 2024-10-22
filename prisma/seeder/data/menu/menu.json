@@ -205,8 +205,8 @@
     "id": 21,
     "parent_id": 18,
     "order": 3,
-    "label": "Kamar dan Bed",
-    "pathname": "/room/bed",
+    "label": "Kamar Rawat Jalan",
+    "pathname": "/room/inpatient",
     "is_submenu": false,
     "status": true,
     "tag": "kamar-dan-bed"
