@@ -8,9 +8,9 @@ import { MaritalStatusRepository } from '../repository/marital-status.repository
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { MaritalStatusPayloadDTO } from '../dto/marital-status.dto';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 
 @Dependencies([MaritalStatusRepository])
 @Injectable()
@@ -63,10 +63,10 @@ export class MaritalStatusService {
 
   async updateVisibilityMaritalStatus(
     id: number,
-    maritalStatus: StatusUpdateDTO,
+    maritalStatus: UpdateStatus,
     req: any,
   ) {
-    const payload: StatusUpdateDTO = {
+    const payload: UpdateStatus = {
       status: Number(maritalStatus.status),
       modified_by: req?.user?.id,
       modified_at: generateCurrentDate(),
@@ -78,7 +78,7 @@ export class MaritalStatusService {
   }
 
   async softDeleteMaritalStatus(id: number, req: any) {
-    const deletePayload: SoftDeleteDTO = {
+    const deletePayload: SoftDelete = {
       is_deleted: true,
       deleted_by: req.user?.id,
       deleted_at: generateCurrentDate(),

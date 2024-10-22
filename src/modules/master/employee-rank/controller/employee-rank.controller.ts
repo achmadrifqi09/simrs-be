@@ -14,8 +14,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { RankOfEmployeesService } from '../service/employee-rank.service';
-import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
-import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
+import { UpdateStatus } from '../../../../common/types/common.type';
 import {
   rankOfEmployeesStatusValidation,
   rankOfEmployeesValidation,
@@ -25,7 +25,7 @@ import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guar
 import { Permission } from '../../../../decorators/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/api/v1/master/employee-rank')
+@Controller('/master/employee-rank')
 export class RankOfEmployeesController {
   constructor(
     private readonly rankOfEmployeesService: RankOfEmployeesService,
@@ -90,7 +90,7 @@ export class RankOfEmployeesController {
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(rankOfEmployeesStatusValidation))
-    rankOfEmployees: StatusUpdateDTO,
+    rankOfEmployees: UpdateStatus,
   ) {
     return this.rankOfEmployeesService.updateStatusRankOfEmployees(
       id,

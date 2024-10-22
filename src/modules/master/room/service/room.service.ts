@@ -8,9 +8,9 @@ import { RoomRepository } from '../repository/room.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { RoomPayloadDTO } from '../dto/room.dto';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 
 @Dependencies([RoomRepository])
 @Injectable()
@@ -66,8 +66,8 @@ export class RoomService {
     return this.roomRepository.updateRoom(id, room);
   }
 
-  async updateStatusRoom(id: number, roomType: StatusUpdateDTO, req: any) {
-    const payload: StatusUpdateDTO = {
+  async updateStatusRoom(id: number, roomType: UpdateStatus, req: any) {
+    const payload: UpdateStatus = {
       status: Number(roomType.status),
       modified_by: req?.user?.id,
       modified_at: generateCurrentDate(),
@@ -76,7 +76,7 @@ export class RoomService {
   }
 
   async softDeleteRoom(id: number, req: any) {
-    const deletePayload: SoftDeleteDTO = {
+    const deletePayload: SoftDelete = {
       is_deleted: true,
       deleted_by: req.user?.id,
       deleted_at: generateCurrentDate(),

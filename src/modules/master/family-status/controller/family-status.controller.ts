@@ -14,18 +14,18 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { FamilyStatusService } from '../service/family-status.service';
-import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
+import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
 import {
   familyStatusValidation,
   familyStatusVisibilityValidation,
 } from '../validation/family-status.validation';
 import { FamilyStatusPayloadDTO } from '../dto/family-status.dto';
-import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { UpdateStatus } from '../../../../common/types/common.type';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
 import { Permission } from '../../../../decorators/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/api/v1/master/family-status')
+@Controller('/master/family-status')
 export class FamilyStatusController {
   constructor(private readonly familyStatusService: FamilyStatusService) {}
 
@@ -74,7 +74,7 @@ export class FamilyStatusController {
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(familyStatusVisibilityValidation))
-    familyStatus: StatusUpdateDTO,
+    familyStatus: UpdateStatus,
   ) {
     return this.familyStatusService.updateVisibilityFamilyStatus(
       id,

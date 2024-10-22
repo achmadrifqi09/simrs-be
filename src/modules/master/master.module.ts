@@ -19,6 +19,7 @@ import { RoomClassModule } from './room-class/room-class.module';
 import { RoomTypeModule } from './room-type/room-type.module';
 import { RoomModule } from './room/room.module';
 import { BedModule } from './bed/bed.module';
+import { CounterModule } from './counter/counter.module';
 
 @Module({
   imports: [
@@ -42,6 +43,8 @@ import { BedModule } from './bed/bed.module';
     RoomTypeModule,
     RoomModule,
     BedModule,
+    CounterModule,
   ],
+  exports: [CounterModule],
 })
 export class MasterModule {}

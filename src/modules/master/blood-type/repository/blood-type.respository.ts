@@ -3,9 +3,9 @@ import { PrismaService } from '../../../../prisma/prisma.service';
 import { BloodTypePayloadDTO } from '../dto/blood-type.dto';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 import { Prisma } from '@prisma/client';
 
 @Dependencies([PrismaService])
@@ -37,7 +37,7 @@ export class BloodTypeRepository {
     }
   }
 
-  async updateStatusBloodType(id: number, bloodType: StatusUpdateDTO) {
+  async updateStatusBloodType(id: number, bloodType: UpdateStatus) {
     try {
       return await this.prismaService.bloodType.update({
         where: {
@@ -73,7 +73,7 @@ export class BloodTypeRepository {
     });
   }
 
-  async bloodTypeSoftDelete(id: number, payload: SoftDeleteDTO) {
+  async bloodTypeSoftDelete(id: number, payload: SoftDelete) {
     try {
       return await this.prismaService.bloodType.update({
         where: {

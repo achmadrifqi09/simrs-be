@@ -14,7 +14,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BedService } from '../service/bed.service';
-import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
+import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
 import {
   bedValidation,
   updateBedAvailabilityValidation,
@@ -22,14 +22,14 @@ import {
 } from '../validation/bed.validation';
 import { BedPayloadDTO } from '../dto/bed.dto';
 import {
-  BedAvailabilityDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  BedAvailability,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
 import { Permission } from '../../../../decorators/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/api/v1/master/bed')
+@Controller('/master/bed')
 export class BedController {
   constructor(private readonly bedService: BedService) {}
 
@@ -52,9 +52,9 @@ export class BedController {
   @Permission('kamar-dan-bed', Action.CAN_CREATE)
   async createBed(
     @Req() req: any,
-    @Body(new ZodPipe(bedValidation)) roomType: BedPayloadDTO,
+    @Body(new ZodPipe(bedValidation)) bed: BedPayloadDTO,
   ) {
-    return this.bedService.createBed(roomType, req);
+    return this.bedService.createBed(bed, req);
   }
 
   @Patch('/:id')
@@ -62,7 +62,7 @@ export class BedController {
   @Header('Content-Type', 'application/json')
   @UseGuards(AccessMenuGuard)
   @Permission('kamar-dan-bed', Action.CAN_UPDATE)
-  async updateNed(
+  async updateBed(
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(bedValidation)) bed: BedPayloadDTO,
@@ -79,7 +79,7 @@ export class BedController {
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(updateVisibilityBed))
-    bed: StatusUpdateDTO,
+    bed: UpdateStatus,
   ) {
     return this.bedService.updateStatusBed(id, bed, req);
   }
@@ -93,7 +93,7 @@ export class BedController {
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(updateBedAvailabilityValidation))
-    bed: BedAvailabilityDTO,
+    bed: BedAvailability,
   ) {
     return this.bedService.updateAvailabilityBed(id, bed, req);
   }

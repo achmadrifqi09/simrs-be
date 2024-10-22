@@ -14,18 +14,18 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BuildingService } from '../service/building.service';
-import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
+import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
 import { BuildingPayloadDTO } from '../dto/building.dto';
 import {
   buildingValidation,
   buildingVisibilityValidation,
 } from '../validation/building.validation';
-import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { UpdateStatus } from '../../../../common/types/common.type';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
 import { Permission } from '../../../../decorators/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/api/v1/master/building')
+@Controller('/master/building')
 export class BuildingController {
   constructor(private readonly buildingService: BuildingService) {}
 
@@ -72,7 +72,7 @@ export class BuildingController {
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(buildingVisibilityValidation))
-    building: StatusUpdateDTO,
+    building: UpdateStatus,
   ) {
     return this.buildingService.updateStatusBuilding(id, building, req);
   }

@@ -45,8 +45,8 @@
     "id": 5,
     "parent_id": 3,
     "order": 2,
-    "label": "Panggil Antrean",
-    "pathname": "/queue/call",
+    "label": "Panggil Antrean Admisi",
+    "pathname": "/queue/admission-counter",
     "is_submenu": false,
     "status": true,
     "tag": "panggil-antrean"

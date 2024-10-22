@@ -3,9 +3,9 @@ import { PrismaService } from '../../../../prisma/prisma.service';
 import { StructuralPositionPayloadDTO } from '../dto/structural-position.dto';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 import { Prisma } from '@prisma/client';
 
 @Dependencies([PrismaService])
@@ -65,7 +65,7 @@ export class StructuralPositionRepository {
 
   async updateStatusStructuralPosition(
     id: number,
-    structuralPosition: StatusUpdateDTO,
+    structuralPosition: UpdateStatus,
   ) {
     try {
       return await this.prismaService.position.update({
@@ -80,7 +80,7 @@ export class StructuralPositionRepository {
     }
   }
 
-  async softDeleteStructuralPosition(id: number, payload: SoftDeleteDTO) {
+  async softDeleteStructuralPosition(id: number, payload: SoftDelete) {
     try {
       return await this.prismaService.position.update({
         where: {

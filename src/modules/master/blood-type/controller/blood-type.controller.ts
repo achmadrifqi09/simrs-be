@@ -14,18 +14,18 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BloodTypeService } from '../service/blood-type.service';
-import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
+import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
 import { BloodTypePayloadDTO } from '../dto/blood-type.dto';
 import {
   bloodTypeUpdateStatusValidation,
   bloodTypeValidation,
 } from '../validation/blood-type.validation';
-import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { UpdateStatus } from '../../../../common/types/common.type';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
 import { Permission } from '../../../../decorators/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/api/v1/master/blood-type')
+@Controller('/master/blood-type')
 export class BloodTypeController {
   constructor(private readonly bloodTypeService: BloodTypeService) {}
 
@@ -59,7 +59,7 @@ export class BloodTypeController {
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(bloodTypeUpdateStatusValidation))
-    bloodType: StatusUpdateDTO,
+    bloodType: UpdateStatus,
   ) {
     return this.bloodTypeService.updateStatusBloodType(id, bloodType, req);
   }

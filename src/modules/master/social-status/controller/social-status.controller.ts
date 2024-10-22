@@ -13,19 +13,19 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { ZodPipe } from 'src/zod-pipe/zod-pipe.pipe';
+import { ZodPipe } from 'src/pipes/zod-pipe/zod-pipe.pipe';
 import { SocialStatusService } from '../service/social-status.service';
 import {
   socialStatusValidation,
   socialStatusVisibilityValidation,
 } from '../validation/social-status.validation';
 import { SocialStatusPayloadDTO } from '../dto/social-status.dto';
-import { StatusUpdateDTO } from 'src/common/dto/common.dto';
+import { UpdateStatus } from 'src/common/types/common.type';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
 import { Permission } from '../../../../decorators/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/api/v1/master/social-status')
+@Controller('/master/social-status')
 export class SocialStatusController {
   constructor(private readonly socialStatusService: SocialStatusService) {}
 
@@ -74,7 +74,7 @@ export class SocialStatusController {
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(socialStatusVisibilityValidation))
-    socialStatus: StatusUpdateDTO,
+    socialStatus: UpdateStatus,
   ) {
     return this.socialStatusService.updateVisibilitySocialStatus(
       id,

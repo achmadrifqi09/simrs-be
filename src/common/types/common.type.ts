@@ -1,19 +1,19 @@
-type SoftDeleteDTO = {
+type SoftDelete = {
   is_deleted: boolean;
   deleted_by: number;
   deleted_at: Date;
 };
 
-type StatusUpdateDTO = {
+type UpdateStatus = {
   status: number;
   modified_at?: Date;
   modified_by?: number;
 };
 
-type BedAvailabilityDTO = {
+type BedAvailability = {
   status_bed: number;
   modified_at?: Date;
   modified_by?: number;
 };
 
-export type { SoftDeleteDTO, StatusUpdateDTO, BedAvailabilityDTO };
+export type { SoftDelete, UpdateStatus, BedAvailability };

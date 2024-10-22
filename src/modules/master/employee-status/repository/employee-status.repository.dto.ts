@@ -3,9 +3,9 @@ import { PrismaService } from '../../../../prisma/prisma.service';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import { EmployeeStatusDTO } from '../dto/employee-status.dto';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 import { Prisma } from '@prisma/client';
 
 @Dependencies([PrismaService])
@@ -44,7 +44,7 @@ export class EmployeeStatusRepository {
     }
   }
 
-  async updateEmployeeStatus(id: number, payload: StatusUpdateDTO) {
+  async updateEmployeeStatus(id: number, payload: UpdateStatus) {
     try {
       return await this.prismaService.employeeStatus.update({
         where: {
@@ -60,7 +60,7 @@ export class EmployeeStatusRepository {
 
   async updateVisibilityEmployeeStatus(
     id: number,
-    employeeStatus: StatusUpdateDTO,
+    employeeStatus: UpdateStatus,
   ) {
     try {
       return await this.prismaService.employeeStatus.update({
@@ -75,7 +75,7 @@ export class EmployeeStatusRepository {
     }
   }
 
-  async softDeleteEmployeeStatus(id: number, payload: SoftDeleteDTO) {
+  async softDeleteEmployeeStatus(id: number, payload: SoftDelete) {
     try {
       return await this.prismaService.employeeStatus.update({
         where: {

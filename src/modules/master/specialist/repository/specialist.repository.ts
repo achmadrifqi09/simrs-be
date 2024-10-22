@@ -1,9 +1,9 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../../prisma/prisma.service';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import { SpecialistPayloadDTO } from '../dto/specialist.dto';
 import { Prisma } from '@prisma/client';
@@ -34,7 +34,7 @@ export class SpecialistRepository {
     });
   }
 
-  async updateStatusSpecialist(id: number, specialist: StatusUpdateDTO) {
+  async updateStatusSpecialist(id: number, specialist: UpdateStatus) {
     try {
       return await this.prismaService.specialist.update({
         where: {
@@ -58,7 +58,7 @@ export class SpecialistRepository {
     }
   }
 
-  async softDeleteSpecialist(id: number, payload: SoftDeleteDTO) {
+  async softDeleteSpecialist(id: number, payload: SoftDelete) {
     try {
       return await this.prismaService.specialist.update({
         where: {

@@ -10,6 +10,7 @@ async function bootstrap() {
     credentials: true,
   });
   const configService = app.get(ConfigService);
+  app.setGlobalPrefix('/api/v1');
   await app.listen(
     configService.get('APP_PORT'),
     configService.get('APP_HOSTNAME'),

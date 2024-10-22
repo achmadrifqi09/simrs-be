@@ -7,7 +7,7 @@ import {
 import { EducationLevelRepository } from '../repository/education-level.repository';
 import { EducationLevelPayloadDTO } from '../dto/education-level.dto';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
-import { SoftDeleteDTO, StatusUpdateDTO } from 'src/common/dto/common.dto';
+import { SoftDelete, UpdateStatus } from 'src/common/types/common.type';
 
 @Dependencies([EducationLevelRepository])
 @Injectable()
@@ -58,10 +58,10 @@ export class EducationLevelService {
 
   async updateVisibilityEducationLevel(
     id: number,
-    educationLevel: StatusUpdateDTO,
+    educationLevel: UpdateStatus,
     req: any,
   ) {
-    const payload: StatusUpdateDTO = {
+    const payload: UpdateStatus = {
       status: Number(educationLevel.status),
       modified_by: req?.user?.id,
       modified_at: generateCurrentDate(),
@@ -73,7 +73,7 @@ export class EducationLevelService {
   }
 
   async educationLevelSoftDelete(id: number, req: any) {
-    const deletePayload: SoftDeleteDTO = {
+    const deletePayload: SoftDelete = {
       is_deleted: true,
       deleted_by: req.user?.id,
       deleted_at: generateCurrentDate(),

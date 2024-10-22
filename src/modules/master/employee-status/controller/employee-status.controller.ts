@@ -15,19 +15,19 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { EmployeeStatusService } from '../service/employee-status.service';
-import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
+import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
 import {
   employeeStatusValidation,
   employeeVisibilityValidation,
 } from '../validation/employee-status.validation';
 import { EmployeeStatusDTO } from '../dto/employee-status.dto';
-import { StatusUpdateDTO } from '../../../../common/dto/common.dto';
+import { UpdateStatus } from '../../../../common/types/common.type';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
 import { Permission } from '../../../../decorators/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
 @Dependencies([EmployeeStatusService])
-@Controller('/api/v1/master/employee-status')
+@Controller('/master/employee-status')
 export class EmployeeStatusController {
   constructor(private readonly employeeStatusService: EmployeeStatusService) {}
 
@@ -80,7 +80,7 @@ export class EmployeeStatusController {
     @Param('id') id: number,
     @Req() req: any,
     @Body(new ZodPipe(employeeVisibilityValidation))
-    employeeStatus: StatusUpdateDTO,
+    employeeStatus: UpdateStatus,
   ) {
     return this.employeeStatusService.updateVisibilityEmployeeStatus(
       id,

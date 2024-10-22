@@ -251,7 +251,7 @@ CREATE TABLE `db_pegawai` (
     `id_ms_status_pegawai` INTEGER NOT NULL,
     `id_ms_spesialis` INTEGER NOT NULL,
     `id_unit_induk` INTEGER NOT NULL,
-    `id_unit_kerja` INTEGER NOT NULL,
+    `id` INTEGER NOT NULL,
     `id_pangkat` INTEGER NOT NULL,
     `id_jabatan` INTEGER NOT NULL,
     `id_unit_jabatan` INTEGER NOT NULL,
@@ -288,7 +288,7 @@ CREATE TABLE `db_pegawai` (
     INDEX `db_pegawai_no_ktp_idx`(`no_ktp`),
     INDEX `db_pegawai_email_idx`(`email`),
     INDEX `db_pegawai_hp_idx`(`hp`),
-    INDEX `db_pegawai_id_unit_kerja_idx`(`id_unit_kerja`),
+    INDEX `db_pegawai_id_idx`(`id`),
     INDEX `db_pegawai_id_jabatan_idx`(`id_jabatan`),
     INDEX `db_pegawai_status_aktif_is_deleted_idx`(`status_aktif`, `is_deleted`),
     INDEX `db_pegawai_id_ms_jenis_pegawai_status_aktif_idx`(`id_ms_jenis_pegawai`, `status_aktif`),
@@ -297,13 +297,14 @@ CREATE TABLE `db_pegawai` (
 
 -- CreateTable
 CREATE TABLE `db_unit_kerja` (
-    `id_unit_kerja` INTEGER NOT NULL AUTO_INCREMENT,
-    `sub_id_unit` INTEGER NOT NULL,
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
     `nama_unit_kerja` VARCHAR(100) NOT NULL,
     `jenis_pelayanan` INTEGER NOT NULL DEFAULT 0,
-    `kode_instalasi_bpjs` VARCHAR(10) NOT NULL,
+    `kode_instalasi_bpjs` VARCHAR(10) NULL,
     `status_antrian` INTEGER NOT NULL DEFAULT 0,
-    `id_unit_induk` INTEGER NOT NULL,
+    `is_parent_unit` BOOLEAN NOT NULL DEFAULT false,
+    `id_unit_induk` INTEGER NULL,
+    `id_bidang` INTEGER NULL,
     `status` INTEGER NOT NULL DEFAULT 1,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `created_by` INTEGER NOT NULL DEFAULT 0,
@@ -318,9 +319,39 @@ CREATE TABLE `db_unit_kerja` (
 
     INDEX `db_unit_kerja_nama_unit_kerja_idx`(`nama_unit_kerja`),
     INDEX `db_unit_kerja_id_unit_induk_idx`(`id_unit_induk`),
+    INDEX `db_unit_kerja_id_bidang_idx`(`id_bidang`),
     INDEX `db_unit_kerja_status_is_deleted_idx`(`status`, `is_deleted`),
     INDEX `db_unit_kerja_jenis_pelayanan_status_idx`(`jenis_pelayanan`, `status`),
-    PRIMARY KEY (`id_unit_kerja`)
+    INDEX `idx_parent_child_relation`(`id`, `id_unit_induk`),
+    INDEX `idx_active_children`(`id_unit_induk`, `is_deleted`),
+    INDEX `db_unit_kerja_created_at_idx`(`created_at`),
+    INDEX `db_unit_kerja_modified_at_idx`(`modified_at`),
+    INDEX `db_unit_kerja_deleted_at_idx`(`deleted_at`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `db_bidang_unit_kerja` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nama_bidang` VARCHAR(191) NOT NULL,
+    `status` INTEGER NOT NULL DEFAULT 1,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `created_by` INTEGER NOT NULL DEFAULT 0,
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` INTEGER NULL DEFAULT 0,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` INTEGER NULL DEFAULT 0,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` INTEGER NULL DEFAULT 0,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    INDEX `db_bidang_unit_kerja_nama_bidang_idx`(`nama_bidang`),
+    INDEX `db_bidang_unit_kerja_status_is_deleted_idx`(`status`, `is_deleted`),
+    INDEX `db_bidang_unit_kerja_created_at_idx`(`created_at`),
+    INDEX `db_bidang_unit_kerja_modified_at_idx`(`modified_at`),
+    INDEX `db_bidang_unit_kerja_deleted_at_idx`(`deleted_at`),
+    PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -433,8 +464,8 @@ CREATE TABLE `ms_jenis_pegawai_status` (
 -- CreateTable
 CREATE TABLE `ms_loket_antrian` (
     `id_ms_loket_antrian` INTEGER NOT NULL AUTO_INCREMENT,
-    `nama_loket` INTEGER NOT NULL,
-    `ket_loket` TEXT NOT NULL,
+    `nama_loket` VARCHAR(191) NOT NULL,
+    `keterangan` TEXT NULL,
     `jenis_loket` TINYINT NOT NULL,
     `status` INTEGER NOT NULL DEFAULT 1,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -603,7 +634,7 @@ CREATE TABLE `db_jadwal_dokter` (
     `id_hari` INTEGER NOT NULL,
     `tgl_praktek` DATE NOT NULL,
     `id_pegawai` INTEGER NOT NULL,
-    `id_unit_kerja` INTEGER NOT NULL,
+    `id` INTEGER NOT NULL,
     `jam_awal_prakter` TIME(0) NOT NULL,
     `jam_akhir_praktek` TIME(0) NOT NULL,
     `online_bpjs_mjkn` INTEGER NOT NULL,
@@ -623,7 +654,7 @@ CREATE TABLE `db_jadwal_dokter` (
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
     INDEX `db_jadwal_dokter_id_pegawai_idx`(`id_pegawai`),
-    INDEX `db_jadwal_dokter_id_unit_kerja_idx`(`id_unit_kerja`),
+    INDEX `db_jadwal_dokter_id_idx`(`id`),
     INDEX `db_jadwal_dokter_tgl_praktek_idx`(`tgl_praktek`),
     INDEX `db_jadwal_dokter_status_is_deleted_idx`(`status`, `is_deleted`),
     PRIMARY KEY (`id_jadwal_dokter`)
@@ -635,7 +666,7 @@ CREATE TABLE `db_jadwal_dokter_ganti` (
     `id_jadwal_dokter` INTEGER NOT NULL,
     `tgl_praktek` DATE NOT NULL,
     `id_pegawai` INTEGER NOT NULL,
-    `id_unit_kerja` INTEGER NOT NULL,
+    `id` INTEGER NOT NULL,
     `jam_awal_prakter` TIME(0) NOT NULL,
     `jam_akhir_praktek` TIME(0) NOT NULL,
     `online_bpjs_mjkn` INTEGER NOT NULL,
@@ -657,7 +688,7 @@ CREATE TABLE `db_jadwal_dokter_ganti` (
 
     INDEX `db_jadwal_dokter_ganti_id_jadwal_dokter_idx`(`id_jadwal_dokter`),
     INDEX `db_jadwal_dokter_ganti_id_pegawai_idx`(`id_pegawai`),
-    INDEX `db_jadwal_dokter_ganti_id_unit_kerja_idx`(`id_unit_kerja`),
+    INDEX `db_jadwal_dokter_ganti_id_idx`(`id`),
     INDEX `db_jadwal_dokter_ganti_tgl_praktek_idx`(`tgl_praktek`),
     INDEX `db_jadwal_dokter_ganti_status_is_deleted_idx`(`status`, `is_deleted`),
     PRIMARY KEY (`id_jadwal_dokter_ganti`)
@@ -944,6 +975,12 @@ ALTER TABLE `db_akses_user` ADD CONSTRAINT `db_akses_user_id_user_fkey` FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE `db_akses_user` ADD CONSTRAINT `db_akses_user_id_level_akses_fkey` FOREIGN KEY (`id_level_akses`) REFERENCES `db_level_akses`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_unit_kerja` ADD CONSTRAINT `db_unit_kerja_id_unit_induk_fkey` FOREIGN KEY (`id_unit_induk`) REFERENCES `db_unit_kerja`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_unit_kerja` ADD CONSTRAINT `db_unit_kerja_id_bidang_fkey` FOREIGN KEY (`id_bidang`) REFERENCES `db_bidang_unit_kerja`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ms_desa` ADD CONSTRAINT `fk_kecamatan` FOREIGN KEY (`id_kecamatan`) REFERENCES `ms_kecamatan`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;

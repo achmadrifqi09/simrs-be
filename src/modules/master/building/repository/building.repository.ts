@@ -2,9 +2,9 @@ import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import { BuildingPayloadDTO } from '../dto/building.dto';
 
@@ -58,7 +58,7 @@ export class BuildingRepository {
     }
   }
 
-  async updateStatusBuilding(id: number, building: StatusUpdateDTO) {
+  async updateStatusBuilding(id: number, building: UpdateStatus) {
     try {
       return await this.prismaService.building.update({
         where: {
@@ -72,7 +72,7 @@ export class BuildingRepository {
     }
   }
 
-  async softDeleteBuilding(id: number, payload: SoftDeleteDTO) {
+  async softDeleteBuilding(id: number, payload: SoftDelete) {
     try {
       return await this.prismaService.building.update({
         where: {

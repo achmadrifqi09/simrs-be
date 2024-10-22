@@ -1,7 +1,7 @@
 import { Controller, Get, Header, Req } from '@nestjs/common';
 import { MenuService } from '../service/menu.service';
 
-@Controller('/api/v1/menu')
+@Controller('/menu')
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 

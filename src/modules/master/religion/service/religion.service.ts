@@ -8,9 +8,9 @@ import { ReligionRepository } from '../repository/religion.repository';
 import { ReligionPayloadDTO } from '../dto/religion.dto';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 
 @Dependencies([ReligionRepository])
 @Injectable()
@@ -39,7 +39,7 @@ export class ReligionService {
   }
 
   async softDeleteReligion(id: number, req: any) {
-    const deletePayload: SoftDeleteDTO = {
+    const deletePayload: SoftDelete = {
       is_deleted: true,
       deleted_by: req.user?.id,
       deleted_at: generateCurrentDate(),
@@ -57,8 +57,8 @@ export class ReligionService {
     return this.religionRepository.updateReligion(id, religion);
   }
 
-  async updateStatusReligion(id: number, religion: StatusUpdateDTO, req: any) {
-    const payload: StatusUpdateDTO = {
+  async updateStatusReligion(id: number, religion: UpdateStatus, req: any) {
+    const payload: UpdateStatus = {
       status: Number(religion.status),
       modified_by: req?.user?.id,
       modified_at: generateCurrentDate(),

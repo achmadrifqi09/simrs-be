@@ -8,9 +8,9 @@ import { FamilyStatusRepository } from '../repository/family-status.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { FamilyStatusPayloadDTO } from '../dto/family-status.dto';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 
 @Dependencies([FamilyStatusRepository])
 @Injectable()
@@ -58,10 +58,10 @@ export class FamilyStatusService {
 
   async updateVisibilityFamilyStatus(
     id: number,
-    familyStatus: StatusUpdateDTO,
+    familyStatus: UpdateStatus,
     req: any,
   ) {
-    const payload: StatusUpdateDTO = {
+    const payload: UpdateStatus = {
       status: Number(familyStatus.status),
       modified_by: req?.user?.id,
       modified_at: generateCurrentDate(),
@@ -73,7 +73,7 @@ export class FamilyStatusService {
   }
 
   async familyStatusSoftDelete(id: number, req: any) {
-    const deletePayload: SoftDeleteDTO = {
+    const deletePayload: SoftDelete = {
       is_deleted: true,
       deleted_by: req.user?.id,
       deleted_at: generateCurrentDate(),

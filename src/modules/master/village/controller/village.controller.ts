@@ -14,14 +14,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { VillageService } from '../service/village.service';
-import { ZodPipe } from '../../../../zod-pipe/zod-pipe.pipe';
+import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
 import { villageValidation } from '../validation/village.validation';
 import { VillagePayloadDTO } from '../dto/village.dto';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
 import { Permission } from '../../../../decorators/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/api/v1/master/village')
+@Controller('/master/village')
 export class VillageController {
   constructor(private readonly villageService: VillageService) {}
 

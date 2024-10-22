@@ -8,9 +8,9 @@ import { BuildingRepository } from '../repository/building.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { BuildingPayloadDTO } from '../dto/building.dto';
 import {
-  SoftDeleteDTO,
-  StatusUpdateDTO,
-} from '../../../../common/dto/common.dto';
+  SoftDelete,
+  UpdateStatus,
+} from '../../../../common/types/common.type';
 
 @Dependencies([BuildingRepository])
 @Injectable()
@@ -48,8 +48,8 @@ export class BuildingService {
     return this.buildingRepository.updateBuilding(id, building);
   }
 
-  async updateStatusBuilding(id: number, building: StatusUpdateDTO, req: any) {
-    const payload: StatusUpdateDTO = {
+  async updateStatusBuilding(id: number, building: UpdateStatus, req: any) {
+    const payload: UpdateStatus = {
       status: Number(building.status),
       modified_by: req?.user?.id,
       modified_at: generateCurrentDate(),
@@ -58,7 +58,7 @@ export class BuildingService {
   }
 
   async softDeleteBuilding(id: number, req: any) {
-    const deletePayload: SoftDeleteDTO = {
+    const deletePayload: SoftDelete = {
       is_deleted: true,
       deleted_by: req.user?.id,
       deleted_at: generateCurrentDate(),
