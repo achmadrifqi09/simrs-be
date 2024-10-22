@@ -3,15 +3,13 @@ import { PrismaService } from '../../../../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import { RoomPayloadDTO } from '../dto/room.dto';
-import {
-  SoftDelete,
-  UpdateStatus,
-} from '../../../../common/types/common.type';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 
 @Dependencies([PrismaService])
 @Injectable()
 export class RoomRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {
+  }
 
   async findAllRoom(
     keyword?: string,
@@ -42,6 +40,11 @@ export class RoomRepository {
       skip: Number(cursor) || 0,
       where: whereClause,
       include: {
+        _count: {
+          select: {
+            Bedroom: true,
+          },
+        },
         jenis_kamar: {
           select: {
             id: true,
