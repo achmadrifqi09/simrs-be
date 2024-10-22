@@ -7,10 +7,7 @@ import {
 import { RoomRepository } from '../repository/room.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { RoomPayloadDTO } from '../dto/room.dto';
-import {
-  SoftDelete,
-  UpdateStatus,
-} from '../../../../common/types/common.type';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 
 @Dependencies([RoomRepository])
 @Injectable()
@@ -31,13 +28,20 @@ export class RoomService {
       );
     }
 
-    return this.roomRepository.findAllRoom(
+    const result = await this.roomRepository.findAllRoom(
       keyword ?? '',
       status,
       roomId,
       cursor,
       take,
     );
+    return result.map((item) => {
+      const { _count, ...rest } = item; // Mengambil sisa properti tanpa _count
+      return {
+        ...rest,
+        total_bed: _count.Bedroom,
+      };
+    });
   }
 
   async createRoom(room: RoomPayloadDTO, req: any) {
