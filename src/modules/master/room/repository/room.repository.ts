@@ -42,7 +42,11 @@ export class RoomRepository {
       include: {
         _count: {
           select: {
-            Bedroom: true,
+            Bedroom: {
+              where: {
+                is_deleted: false,
+              },
+            },
           },
         },
         jenis_kamar: {

@@ -53,7 +53,7 @@ export class TypeOfEmployeesController {
   @HttpCode(HttpStatus.CREATED)
   @Header('Content-Type', 'application/json')
   @UseGuards(AccessMenuGuard)
-  @Permission('master-employee-type', Action.CAN_CREATE)
+  @Permission('jenis-pegawai', Action.CAN_CREATE)
   async createTypeOfEmployees(
     @Req() req: any,
     @Body(new ZodPipe(typeOfEmployeesValidation))
@@ -69,7 +69,7 @@ export class TypeOfEmployeesController {
   @HttpCode(HttpStatus.OK)
   @Header('Content-Type', 'application/json')
   @UseGuards(AccessMenuGuard)
-  @Permission('master-employee-type', Action.CAN_UPDATE)
+  @Permission('jenis-pegawai', Action.CAN_UPDATE)
   async updateTypeOfEmployees(
     @Param('id') id: number,
     @Req() req: any,
@@ -87,7 +87,7 @@ export class TypeOfEmployeesController {
   @Header('Content-Type', 'application/json')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AccessMenuGuard)
-  @Permission('master-employee-type', Action.CAN_UPDATE)
+  @Permission('jenis-pegawai', Action.CAN_UPDATE)
   async updateStatusTypeOfEmployees(
     @Param('id') id: number,
     @Req() req: any,
@@ -105,7 +105,7 @@ export class TypeOfEmployeesController {
   @Header('Content-Type', 'application/json')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AccessMenuGuard)
-  @Permission('master-employee-type', Action.CAN_UPDATE)
+  @Permission('jenis-pegawai', Action.CAN_UPDATE)
   async updateAvailabilityTypeOfEmployees(
     @Param('id') id: number,
     @Req() req: any,
@@ -121,7 +121,7 @@ export class TypeOfEmployeesController {
 
   @Delete('/:id')
   @UseGuards(AccessMenuGuard)
-  @Permission('master-employee-type', Action.CAN_DELETE)
+  @Permission('jenis-pegawai', Action.CAN_DELETE)
   async softDeleteTypeOfEmployees(@Param('id') id: number, @Req() req: any) {
     return this.typeOfEmployeesService.softDeleteTypeOfEmployees(id, req);
   }

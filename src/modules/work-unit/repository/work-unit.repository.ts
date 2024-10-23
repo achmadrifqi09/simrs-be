@@ -55,14 +55,13 @@ export class WorkUnitRepository {
       is_parent_unit: Number(is_parent_unit) || 0,
       OR: [{ nama_unit_kerja: { contains: keyword } }],
     };
-
     if (Number(keyword)) whereClause.OR.push({ id: Number(keyword) });
 
-    if (service_type) {
+    if (!isNaN(Number(service_type))) {
       whereClause.jenis_pelayanan = Number(service_type);
     }
 
-    if (work_unit_id) {
+    if (Number(work_unit_id)) {
       whereClause.id_unit_induk = Number(work_unit_id);
     }
 
@@ -70,7 +69,7 @@ export class WorkUnitRepository {
 
     if (Number(filed_id)) whereClause.id_bidang = Number(filed_id);
 
-    return this.prismaService.workUnit.findMany({
+    const result = await this.prismaService.workUnit.findMany({
       take: Number(take) || 10,
       skip: Number(cursor) || 0,
       where: whereClause,
@@ -78,6 +77,14 @@ export class WorkUnitRepository {
         id: 'desc',
       },
     });
+
+    return {
+      results: result,
+      pagination: {
+        current_cursor: Number(cursor),
+        take: Number(take) || 10,
+      },
+    };
   }
 
   async findActivePolyclinic(keyword?: string) {

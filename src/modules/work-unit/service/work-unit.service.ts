@@ -30,8 +30,8 @@ export class WorkUnitService {
     parent_id?: number,
     field_id?: number,
     keyword?: string,
-    serviceType?: number,
-    workUnitId?: number,
+    service_type?: number,
+    work_unit_id?: number,
     cursor: number = 0,
     take: number = 10,
   ) {
@@ -40,8 +40,8 @@ export class WorkUnitService {
       parent_id,
       field_id,
       keyword || '',
-      serviceType,
-      workUnitId,
+      service_type,
+      work_unit_id,
       cursor,
       take,
     );
