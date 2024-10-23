@@ -7,10 +7,7 @@ import {
 import { StructuralPositionRepository } from '../repository/structural-position.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { StructuralPositionPayloadDTO } from '../dto/structural-position.dto';
-import {
-  SoftDelete,
-  UpdateStatus,
-} from '../../../../common/types/common.type';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 
 @Dependencies([StructuralPositionRepository])
 @Injectable()

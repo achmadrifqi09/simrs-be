@@ -7,10 +7,7 @@ import {
 import { CounterRepository } from '../repository/counter.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { Counter, CounterPayloadDTO } from '../dto/counter.dto';
-import {
-  SoftDelete,
-  UpdateStatus,
-} from '../../../../common/types/common.type';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 
 @Dependencies([CounterRepository])
 @Injectable()

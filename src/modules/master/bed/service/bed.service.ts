@@ -21,7 +21,7 @@ export class BedService {
   async findAllBed(
     keyword?: string,
     status?: number,
-    room_id?:number,
+    room_id?: number,
     bed_id?: number,
     cursor: number = 0,
     take: number = 10,

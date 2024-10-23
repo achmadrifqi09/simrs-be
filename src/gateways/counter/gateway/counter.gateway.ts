@@ -2,13 +2,12 @@ import {
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
-  WebSocketServer, WsException,
+  WebSocketServer,
+  WsException,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { ConnectedCounter, Counter, User } from '../types/counter.dto';
+import { ConnectedCounter, Counter } from '../types/counter.dto';
 import { CounterService } from '../../../modules/master/counter/service/counter.service';
-import { UseFilters } from '@nestjs/common';
-import { WsExceptionFilter } from '../../../filters/ws-exception/ws-exception.filter';
 
 @WebSocketGateway(3002, {
   cors: {
@@ -17,7 +16,6 @@ import { WsExceptionFilter } from '../../../filters/ws-exception/ws-exception.fi
     credentials: true,
   },
 })
-@UseFilters(new WsExceptionFilter())
 export class CounterGateway {
   @WebSocketServer() server: Server;
   private counterUsed: ConnectedCounter[] = [];
@@ -88,7 +86,7 @@ export class CounterGateway {
     return this.counterUsed.find((counter) => counter?.user_id === userId);
   }
 
-  private mappingCounter(counters: Counter[], user?: User) {
+  private mappingCounter(counters: Counter[]) {
     return counters.map((counter: Counter) => {
       return {
         is_used: !!this.findCounter(counter.id_ms_loket_antrian),

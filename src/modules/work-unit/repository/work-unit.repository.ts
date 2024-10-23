@@ -114,7 +114,6 @@ export class WorkUnitRepository {
     });
   }
   async findPolyclinicCounter(currentDate: string, keyword: string) {
-    console.log(currentDate);
     const results = await this.prismaService.$queryRaw<PolyclinicCounter[]>(
       Prisma.sql`
     SELECT 

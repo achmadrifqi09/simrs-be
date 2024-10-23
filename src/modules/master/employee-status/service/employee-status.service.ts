@@ -7,10 +7,7 @@ import {
 import { EmployeeStatusRepository } from '../repository/employee-status.repository.dto';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { EmployeeStatusDTO } from '../dto/employee-status.dto';
-import {
-  SoftDelete,
-  UpdateStatus,
-} from '../../../../common/types/common.type';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 
 @Dependencies([EmployeeStatusRepository])
 @Injectable()

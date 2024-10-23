@@ -7,10 +7,7 @@ import {
 import { BloodTypeRepository } from '../repository/blood-type.respository';
 import { BloodTypePayloadDTO } from '../dto/blood-type.dto';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
-import {
-  SoftDelete,
-  UpdateStatus,
-} from '../../../../common/types/common.type';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 
 @Dependencies([BloodTypeRepository])
 @Injectable()
@@ -26,11 +23,7 @@ export class BloodTypeService {
     return this.bloodTypeRepository.createBloodType(bloodType);
   }
 
-  async updateStatusBloodType(
-    id: number,
-    bloodType: UpdateStatus,
-    req: any,
-  ) {
+  async updateStatusBloodType(id: number, bloodType: UpdateStatus, req: any) {
     const payload: UpdateStatus = {
       status: Number(bloodType.status),
       modified_by: req?.user?.id,

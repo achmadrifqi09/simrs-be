@@ -6,10 +6,7 @@ import {
 } from '@nestjs/common';
 import { RankOfEmployeesRepository } from '../repository/employee-rank.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
-import {
-  SoftDelete,
-  UpdateStatus,
-} from '../../../../common/types/common.type';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 import { RankOfEmployeesPayloadDTO } from '../dto/employee-rank.dto';
 
 @Dependencies([RankOfEmployeesRepository])

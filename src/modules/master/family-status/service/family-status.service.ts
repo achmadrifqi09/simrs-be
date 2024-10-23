@@ -7,10 +7,7 @@ import {
 import { FamilyStatusRepository } from '../repository/family-status.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { FamilyStatusPayloadDTO } from '../dto/family-status.dto';
-import {
-  SoftDelete,
-  UpdateStatus,
-} from '../../../../common/types/common.type';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 
 @Dependencies([FamilyStatusRepository])
 @Injectable()

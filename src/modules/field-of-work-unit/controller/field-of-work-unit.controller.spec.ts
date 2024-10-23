@@ -11,7 +11,9 @@ describe('FieldOfWorkUnitController', () => {
       providers: [FieldOfWorkUnitService],
     }).compile();
 
-    controller = module.get<FieldOfWorkUnitController>(FieldOfWorkUnitController);
+    controller = module.get<FieldOfWorkUnitController>(
+      FieldOfWorkUnitController,
+    );
   });
 
   it('should be defined', () => {

@@ -1,9 +1,6 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../../prisma/prisma.service';
-import {
-  SoftDelete,
-  UpdateStatus,
-} from '../../../../common/types/common.type';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import { CountryPayloadDTO } from '../dto/country.dto';
 import { Prisma } from '@prisma/client';

@@ -101,10 +101,4 @@ export class TypeOfEmployeesService {
       deletePayload,
     );
   }
-
-  async updateAvailabilityTypeOfEmployees(
-    id: number,
-    typeOfEmployees: UpdateStatus,
-    req: any,
-  ) {}
 }

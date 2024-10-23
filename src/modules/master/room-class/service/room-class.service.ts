@@ -7,10 +7,7 @@ import {
 import { RoomClassRepository } from '../repository/room-class.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { RoomClassPayloadDTO } from '../dto/room-class.dto';
-import {
-  SoftDelete,
-  UpdateStatus,
-} from '../../../../common/types/common.type';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 
 @Dependencies([RoomClassRepository])
 @Injectable()
@@ -50,11 +47,7 @@ export class RoomClassService {
     return this.roomClassRepository.updateRoomClass(id, roomClass);
   }
 
-  async updateStatusRoomClass(
-    id: number,
-    roomClass: UpdateStatus,
-    req: any,
-  ) {
+  async updateStatusRoomClass(id: number, roomClass: UpdateStatus, req: any) {
     const payload: UpdateStatus = {
       status: Number(roomClass.status),
       modified_by: req?.user?.id,

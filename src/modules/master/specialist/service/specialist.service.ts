@@ -6,10 +6,7 @@ import {
 } from '@nestjs/common';
 import { SpecialistRepository } from '../repository/specialist.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
-import {
-  SoftDelete,
-  UpdateStatus,
-} from '../../../../common/types/common.type';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 import { SpecialistPayloadDTO } from '../dto/specialist.dto';
 
 @Dependencies([SpecialistRepository])
@@ -61,11 +58,7 @@ export class SpecialistService {
     return this.specialistRepository.updateSpecialist(id, specialist);
   }
 
-  async updateStatusSpecialist(
-    id: number,
-    specialist: UpdateStatus,
-    req: any,
-  ) {
+  async updateStatusSpecialist(id: number, specialist: UpdateStatus, req: any) {
     const payload: UpdateStatus = {
       status: Number(specialist.status),
       modified_by: req?.user?.id,

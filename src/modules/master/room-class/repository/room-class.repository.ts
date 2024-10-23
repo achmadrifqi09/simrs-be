@@ -3,10 +3,7 @@ import { PrismaService } from '../../../../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
 import { RoomClassPayloadDTO } from '../dto/room-class.dto';
-import {
-  SoftDelete,
-  UpdateStatus,
-} from '../../../../common/types/common.type';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 
 @Dependencies([PrismaService])
 @Injectable()

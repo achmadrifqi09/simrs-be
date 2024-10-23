@@ -8,8 +8,7 @@ import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 @Dependencies([PrismaService])
 @Injectable()
 export class RoomRepository {
-  constructor(private readonly prismaService: PrismaService) {
-  }
+  constructor(private readonly prismaService: PrismaService) {}
 
   async findAllRoom(
     keyword?: string,

@@ -101,24 +101,6 @@ export class TypeOfEmployeesController {
     );
   }
 
-  @Patch('/:id/availability')
-  @Header('Content-Type', 'application/json')
-  @HttpCode(HttpStatus.OK)
-  @UseGuards(AccessMenuGuard)
-  @Permission('jenis-pegawai', Action.CAN_UPDATE)
-  async updateAvailabilityTypeOfEmployees(
-    @Param('id') id: number,
-    @Req() req: any,
-    @Body(new ZodPipe(updateTypeOfEmployeesStatusValidation))
-    typeOfEmployees: UpdateStatus,
-  ) {
-    return this.typeOfEmployeesService.updateAvailabilityTypeOfEmployees(
-      id,
-      typeOfEmployees,
-      req,
-    );
-  }
-
   @Delete('/:id')
   @UseGuards(AccessMenuGuard)
   @Permission('jenis-pegawai', Action.CAN_DELETE)

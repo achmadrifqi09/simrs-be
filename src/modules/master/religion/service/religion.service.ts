@@ -7,10 +7,7 @@ import {
 import { ReligionRepository } from '../repository/religion.repository';
 import { ReligionPayloadDTO } from '../dto/religion.dto';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
-import {
-  SoftDelete,
-  UpdateStatus,
-} from '../../../../common/types/common.type';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 
 @Dependencies([ReligionRepository])
 @Injectable()

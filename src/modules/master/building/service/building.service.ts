@@ -7,10 +7,7 @@ import {
 import { BuildingRepository } from '../repository/building.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
 import { BuildingPayloadDTO } from '../dto/building.dto';
-import {
-  SoftDelete,
-  UpdateStatus,
-} from '../../../../common/types/common.type';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 
 @Dependencies([BuildingRepository])
 @Injectable()

@@ -6,10 +6,7 @@ import {
 } from '@nestjs/common';
 import { CountryRepository } from '../repository/country.repository';
 import { generateCurrentDate } from '../../../../utils/date-formatter';
-import {
-  SoftDelete,
-  UpdateStatus,
-} from '../../../../common/types/common.type';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 import { CountryPayloadDTO } from '../dto/country.dto';
 
 @Dependencies([CountryRepository])

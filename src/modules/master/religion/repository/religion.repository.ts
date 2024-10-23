@@ -2,10 +2,7 @@ import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../../prisma/prisma.service';
 import { ReligionPayloadDTO } from '../dto/religion.dto';
 import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.handler';
-import {
-  SoftDelete,
-  UpdateStatus,
-} from '../../../../common/types/common.type';
+import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 import { Prisma } from '@prisma/client';
 
 @Dependencies([PrismaService])
