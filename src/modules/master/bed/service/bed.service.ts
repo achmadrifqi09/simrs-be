@@ -79,6 +79,10 @@ export class BedService {
   }
 
   async updateAvailabilityBed(id: number, bed: BedAvailability, req: any) {
+    if (!(bed.status_bed in [0, 1, 2, 3])) {
+      throw new HttpException('Status bed tidak valid', HttpStatus.BAD_REQUEST);
+    }
+
     const payload: BedAvailability = {
       status_bed: Number(bed.status_bed),
       modified_by: req?.user?.id,

@@ -1,14 +1,17 @@
 import { PrismaService } from '../../../prisma/prisma.service';
 import { Dependencies } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { WorkUnit, WorkUnitUpdateQueueStatus } from '../type/work-unit.type';
+import {
+  PolyclinicCounter,
+  WorkUnit,
+  WorkUnitUpdateQueueStatus,
+} from '../type/work-unit.type';
 import { PrismaErrorHandler } from '../../../common/handler/prisma-error.handler';
 import { SoftDelete, UpdateStatus } from '../../../common/types/common.type';
 
 @Dependencies([PrismaService])
 export class WorkUnitRepository {
-  constructor(private readonly prismaService: PrismaService) {
-  }
+  constructor(private readonly prismaService: PrismaService) {}
 
   async findActiveSubOrParentUnit(keyword?: string) {
     const whereClause: Prisma.WorkUnitWhereInput = {
@@ -109,6 +112,41 @@ export class WorkUnitRepository {
         status: true,
       },
     });
+  }
+  async findPolyclinicCounter(currentDate: string, keyword: string) {
+    console.log(currentDate);
+    const results = await this.prismaService.$queryRaw<PolyclinicCounter[]>(
+      Prisma.sql`
+    SELECT 
+        unit.id, 
+        unit.nama_unit_kerja, 
+        unit.kode_instalasi_bpjs, 
+        COUNT(a.kode_poliklinik) AS total_antrean,
+        COUNT(b.kode_poliklinik) AS total_antrean_selesai
+    FROM 
+        db_unit_kerja AS unit
+    LEFT JOIN 
+        db_antrian AS a ON a.kode_poliklinik = unit.kode_instalasi_bpjs 
+        AND a.created_at LIKE CONCAT(${currentDate}, '%')
+    LEFT JOIN
+        db_antrian as b ON b.kode_poliklinik = unit.kode_instalasi_bpjs
+        AND b.created_at LIKE CONCAT(${currentDate}, '%')
+        AND b.status = 1
+    WHERE 
+        unit.jenis_pelayanan = 1
+        AND unit.nama_unit_kerja LIKE CONCAT('%', ${keyword}, '%')
+    GROUP BY 
+        unit.id, 
+        unit.nama_unit_kerja, 
+        unit.kode_instalasi_bpjs`,
+    );
+
+    return results.map((item) => ({
+      ...item,
+      id: Number(item.id),
+      total_antrean: Number(item.total_antrean),
+      total_antrean_selesai: Number(item.total_antrean_selesai),
+    }));
   }
 
   async createWorkUnit(workUnit: WorkUnit) {

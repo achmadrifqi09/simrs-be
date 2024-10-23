@@ -62,6 +62,12 @@ export class WorkUnitController {
     return this.workUnitService.findActivePolyclinic(keyword);
   }
 
+  @Get('/polyclinic/counter')
+  @Header('Content-Type', 'application/json')
+  async findPolyclinicCounter(@Query('keyword') keyword: string) {
+    return this.workUnitService.findPolyclinicCounter(keyword);
+  }
+
   @Get('/parent')
   @Header('Content-Type', 'application/json')
   async findParentWorkUnit(@Query('keyword') keyword: string) {

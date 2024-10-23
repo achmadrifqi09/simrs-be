@@ -41,7 +41,7 @@ export class BedRepository {
       whereClause.id = Number(bed_id);
     }
 
-    return this.prismaService.bed.findMany({
+    const results = await this.prismaService.bed.findMany({
       take: Number(take) || 10,
       skip: Number(cursor) || 0,
       where: whereClause,
@@ -57,6 +57,13 @@ export class BedRepository {
         id: 'desc',
       },
     });
+    return {
+      results: results,
+      pagination: {
+        current_cursor: Number(cursor),
+        take: Number(take) || 10,
+      },
+    };
   }
 
   async createBed(bed: BedPayloadDTO) {

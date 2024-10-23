@@ -13,6 +13,7 @@ import { SoftDelete, UpdateStatus } from '../../../common/types/common.type';
 @Injectable()
 export class WorkUnitService {
   constructor(private readonly workUnitRepository: WorkUnitRepository) {}
+
   async findActivePolyclinic(keyword?: string) {
     return this.workUnitRepository.findActivePolyclinic(keyword || '');
   }
@@ -23,6 +24,15 @@ export class WorkUnitService {
 
   async findParentWorkUnit(keyword?: string) {
     return this.workUnitRepository.findParentWorkUnit(keyword || '');
+  }
+
+  async findPolyclinicCounter(keyword?: string) {
+    const date = new Date();
+    const currentDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    return this.workUnitRepository.findPolyclinicCounter(
+      currentDate,
+      keyword || '',
+    );
   }
 
   async findAllWorkUnit(
