@@ -18,7 +18,7 @@ import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
 import { districtValidation } from '../validation/district.validation';
 import { DistrictPayloadDTO } from '../dto/district.dto';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
-import { Permission } from '../../../../decorators/permission.decorator';
+import { Permission } from '../../../../decorators/permission/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/master/district')

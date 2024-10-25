@@ -18,7 +18,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
       status_code: status,
       errors: message,
     };
-
+    if (status === 429) {
+      responseBody.errors = 'Terlalu banyak permintaan, coba lagi 1 menit';
+    }
     response.status(status).json(responseBody);
   }
 }

@@ -16,7 +16,7 @@ import {
 } from '@nestjs/common';
 import { WorkUnitService } from '../service/work-unit.service';
 import { AccessMenuGuard } from '../../../guards/access-menu/access-menu.guard';
-import { Permission } from '../../../decorators/permission.decorator';
+import { Permission } from '../../../decorators/permission/permission.decorator';
 import { Action } from '../../../common/enums/action.enum';
 import { ZodPipe } from '../../../pipes/zod-pipe/zod-pipe.pipe';
 import {

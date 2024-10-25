@@ -75,7 +75,7 @@ export class AuthService {
 
   async verifyToken(token: string) {
     try {
-      return await this.jwtService.verifyAsync(token);
+      await this.jwtService.verifyAsync(token);
     } catch {
       throw new HttpException('Token tidak valid', HttpStatus.UNAUTHORIZED);
     }

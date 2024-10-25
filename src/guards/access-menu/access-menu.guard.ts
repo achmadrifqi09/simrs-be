@@ -9,7 +9,7 @@ import { Reflector } from '@nestjs/core';
 import {
   PERMISSION_KEY,
   PermissionMetadata,
-} from '../../decorators/permission.decorator';
+} from '../../decorators/permission/permission.decorator';
 import { UserAccessService } from '../../modules/user-access/service/user-access.service';
 
 @Injectable()

@@ -20,7 +20,7 @@ import { provinceValidation } from '../validation/province.validation';
 import { ProvincePayloadDTO } from '../dto/province.dto';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
 import { Action } from '../../../../common/enums/action.enum';
-import { Permission } from '../../../../decorators/permission.decorator';
+import { Permission } from '../../../../decorators/permission/permission.decorator';
 
 @Dependencies([ProvinceService])
 @Controller('/master/province')

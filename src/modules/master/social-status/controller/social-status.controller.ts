@@ -22,7 +22,7 @@ import {
 import { SocialStatusPayloadDTO } from '../dto/social-status.dto';
 import { UpdateStatus } from 'src/common/types/common.type';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
-import { Permission } from '../../../../decorators/permission.decorator';
+import { Permission } from '../../../../decorators/permission/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/master/social-status')

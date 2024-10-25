@@ -20,7 +20,7 @@ import { MaritalStatusPayloadDTO } from '../dto/marital-status.dto';
 import { religionUpdateStatusValidation } from '../../religion/validation/religion.validation';
 import { UpdateStatus } from '../../../../common/types/common.type';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
-import { Permission } from '../../../../decorators/permission.decorator';
+import { Permission } from '../../../../decorators/permission/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/master/marital-status')

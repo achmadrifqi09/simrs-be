@@ -9,12 +9,12 @@ import { Server, Socket } from 'socket.io';
 import { ConnectedCounter, Counter } from '../type/counter.dto';
 import { CounterService } from '../../../modules/master/counter/service/counter.service';
 import { UseFilters, UseGuards } from '@nestjs/common';
-import { WsGuard } from '../../../guards/ws-guard/ws-guard.guard';
+import { WsGuard } from '../../../guards/ws-guard/ws.guard';
 import { WsExceptionFilter } from '../../../filters/ws-exception/ws-exception.filter';
 
 @UseGuards(WsGuard)
 @UseFilters(WsExceptionFilter)
-@WebSocketGateway(3002, {
+@WebSocketGateway(Number(process.env.APP_WS_PORT) || 3002, {
   namespace: 'counter',
   cors: {
     origin: '*',
@@ -32,7 +32,6 @@ export class CounterGateway {
     client.on('disconnecting', async () => {
       const counterIndex = this.findIndex(client.id);
       const counter: ConnectedCounter = this.counterUsed[counterIndex];
-
       if (!counter) {
         return;
       }
@@ -68,7 +67,6 @@ export class CounterGateway {
     if (this.findUser(payload.user_id)) {
       throw new WsException('Anda telah terhubung di loket lain');
     }
-
     this.counterUsed.push({
       client_id: client.id,
       ...payload,

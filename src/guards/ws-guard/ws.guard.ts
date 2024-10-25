@@ -1,24 +1,31 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
 import { WsException } from '@nestjs/websockets';
+import { Socket } from 'socket.io';
 
 @Injectable()
 export class WsGuard implements CanActivate {
   constructor(private readonly jwtService: JwtService) {}
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const client = context.switchToWs().getClient();
-    const token = client.handshake.headers?.authorization;
+    const token = this.extractTokenFromHeader(client);
+
     if (!token) {
       throw new WsException('Aksi tidak tidak valid (invalid token access)');
     }
+
     try {
-      this.jwtService.verify(token?.split(' ')[1]);
+      await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET_KEY,
+      });
       return true;
     } catch {
       throw new WsException('Aksi tidak tidak valid (invalid token access)');
     }
+  }
+  private extractTokenFromHeader(client: Socket) {
+    const [type, token] =
+      client.handshake.headers?.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 }

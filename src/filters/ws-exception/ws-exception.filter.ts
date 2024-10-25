@@ -7,6 +7,9 @@ export class WsExceptionFilter implements ExceptionFilter {
     const client = host.switchToWs().getClient();
     const message = exception.getError();
 
-    client.emit('error', { error: message });
+    client.emit(`error-${client.id}`, {
+      error: message,
+      clientId: client.id,
+    });
   }
 }

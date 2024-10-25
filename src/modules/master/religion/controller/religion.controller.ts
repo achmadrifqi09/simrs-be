@@ -22,7 +22,7 @@ import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
 import { ReligionPayloadDTO } from '../dto/religion.dto';
 import { UpdateStatus } from '../../../../common/types/common.type';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
-import { Permission } from '../../../../decorators/permission.decorator';
+import { Permission } from '../../../../decorators/permission/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/master/religion')

@@ -22,7 +22,7 @@ import {
 } from '../validation/employee-rank.validation';
 import { RankOfEmployeesPayloadDTO } from '../dto/employee-rank.dto';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
-import { Permission } from '../../../../decorators/permission.decorator';
+import { Permission } from '../../../../decorators/permission/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/master/employee-rank')

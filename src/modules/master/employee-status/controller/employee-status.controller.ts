@@ -23,7 +23,7 @@ import {
 import { EmployeeStatusDTO } from '../dto/employee-status.dto';
 import { UpdateStatus } from '../../../../common/types/common.type';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
-import { Permission } from '../../../../decorators/permission.decorator';
+import { Permission } from '../../../../decorators/permission/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
 @Dependencies([EmployeeStatusService])

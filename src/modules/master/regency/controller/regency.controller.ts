@@ -18,7 +18,7 @@ import { ZodPipe } from '../../../../pipes/zod-pipe/zod-pipe.pipe';
 import { regencyValidation } from '../validation/regency.validation';
 import { RegencyPayloadDTO } from '../dto/regency.dto';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
-import { Permission } from '../../../../decorators/permission.decorator';
+import { Permission } from '../../../../decorators/permission/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
 @Controller('/master/regency')

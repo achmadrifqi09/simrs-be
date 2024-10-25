@@ -1,4 +1,4 @@
-import { WsGuardGuard } from './ws-guard.guard';
+import { WsGuardGuard } from './ws.guard';
 
 describe('WsGuardGuard', () => {
   it('should be defined', () => {
