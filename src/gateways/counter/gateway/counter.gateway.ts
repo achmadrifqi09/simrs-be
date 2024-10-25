@@ -6,10 +6,16 @@ import {
   WsException,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { ConnectedCounter, Counter } from '../types/counter.dto';
+import { ConnectedCounter, Counter } from '../type/counter.dto';
 import { CounterService } from '../../../modules/master/counter/service/counter.service';
+import { UseFilters, UseGuards } from '@nestjs/common';
+import { WsGuard } from '../../../guards/ws-guard/ws-guard.guard';
+import { WsExceptionFilter } from '../../../filters/ws-exception/ws-exception.filter';
 
+@UseGuards(WsGuard)
+@UseFilters(WsExceptionFilter)
 @WebSocketGateway(3002, {
+  namespace: 'counter',
   cors: {
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
