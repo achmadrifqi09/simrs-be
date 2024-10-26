@@ -1,4 +1,4 @@
-type ProvincePayloadDTO = {
+export interface ProvincePayloadDTO {
   id: string;
   nama: string;
   id_negara: number;
@@ -7,6 +7,4 @@ type ProvincePayloadDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-export type { ProvincePayloadDTO };
+}

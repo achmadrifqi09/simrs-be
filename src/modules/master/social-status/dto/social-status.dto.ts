@@ -1,4 +1,4 @@
-type SocialStatusPayloadDTO = {
+export interface SocialStatusPayloadDTO {
   nama_status_sosial: string;
   status: number;
   created_by?: number;
@@ -6,6 +6,4 @@ type SocialStatusPayloadDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-export type { SocialStatusPayloadDTO };
+}

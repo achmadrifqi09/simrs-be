@@ -1,4 +1,4 @@
-type Employee = {
+export interface Employee {
   id_pegawai: number;
   no_reg: string;
   nip_pegawai?: string | null;
@@ -63,5 +63,4 @@ type Employee = {
   restored_by?: number | null;
   is_deleted: boolean;
   is_restored: boolean;
-};
-export type { Employee };
+}

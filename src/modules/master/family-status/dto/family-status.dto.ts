@@ -1,4 +1,4 @@
-type FamilyStatusPayloadDTO = {
+export interface FamilyStatusPayloadDTO {
   nama_status_keluarga: string;
   status: number;
   created_by?: number;
@@ -6,6 +6,4 @@ type FamilyStatusPayloadDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-export type { FamilyStatusPayloadDTO };
+}

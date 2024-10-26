@@ -1,4 +1,4 @@
-type TypeOfStatusOfficerPayloadDTO = {
+export interface TypeOfStatusOfficerPayloadDTO {
   status_jenis_pegawai: string;
   status: number;
   created_by?: number;
@@ -6,6 +6,4 @@ type TypeOfStatusOfficerPayloadDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-export type { TypeOfStatusOfficerPayloadDTO };
+}

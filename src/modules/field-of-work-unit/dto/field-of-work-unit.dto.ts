@@ -1,4 +1,4 @@
-type FieldOfWorkUnit = {
+export interface FieldOfWorkUnit {
   nama_bidang: string;
   status: number;
   created_by?: number;
@@ -6,6 +6,4 @@ type FieldOfWorkUnit = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-export type { FieldOfWorkUnit };
+}

@@ -1,4 +1,4 @@
-type CountryPayloadDTO = {
+export interface CountryPayloadDTO {
   nama: string;
   status: number;
   created_by?: number;
@@ -6,6 +6,4 @@ type CountryPayloadDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-export type { CountryPayloadDTO };
+}

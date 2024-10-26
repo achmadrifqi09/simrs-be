@@ -1,4 +1,4 @@
-type WorkUnit = {
+export interface WorkUnit {
   nama_unit_kerja: string;
   jenis_pelayanan: number;
   kode_instalasi_bpjs?: string;
@@ -12,20 +12,18 @@ type WorkUnit = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
+}
 
-type WorkUnitUpdateQueueStatus = {
+export interface WorkUnitUpdateQueueStatus {
   status_antrian: number;
   modified_at?: Date;
   modified_by?: number;
-};
+}
 
-type PolyclinicCounter = {
+export interface PolyclinicCounter {
   id: number;
   nama_unit_kerja: string;
   kode_instalasi_bpjs: string;
   total_antrean: number;
   total_antrean_selesai: number;
-};
-
-export type { WorkUnit, WorkUnitUpdateQueueStatus, PolyclinicCounter };
+}

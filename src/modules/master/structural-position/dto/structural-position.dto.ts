@@ -1,4 +1,4 @@
-type StructuralPositionPayloadDTO = {
+export interface StructuralPositionPayloadDTO {
   nama_jabatan: string;
   status: number;
   created_by?: number;
@@ -6,6 +6,4 @@ type StructuralPositionPayloadDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-export type { StructuralPositionPayloadDTO };
+}

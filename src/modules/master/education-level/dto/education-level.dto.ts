@@ -1,4 +1,4 @@
-type EducationLevelPayloadDTO = {
+export interface EducationLevelPayloadDTO {
   nama_tingkat_pendidikan: string;
   status: number;
   created_by?: number;
@@ -6,6 +6,4 @@ type EducationLevelPayloadDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-export type { EducationLevelPayloadDTO };
+}

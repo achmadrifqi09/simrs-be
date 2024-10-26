@@ -5,7 +5,7 @@ import {
   PolyclinicCounter,
   WorkUnit,
   WorkUnitUpdateQueueStatus,
-} from '../type/work-unit.type';
+} from '../dto/work-unit.dto';
 import { PrismaErrorHandler } from '../../../common/handler/prisma-error.handler';
 import { SoftDelete, UpdateStatus } from '../../../common/types/common.type';
 
