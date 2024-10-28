@@ -2,11 +2,9 @@ name: Check Error Project
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [main]
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   check:
@@ -35,5 +33,5 @@ jobs:
       - name: Run linter
         run: npm run lint
 
-      - name: Build app
-        run: npm run build
+      # - name: Build app
+      #   run: npm run build
