@@ -311,7 +311,7 @@ model WorkUnit {
   id                  Int              @id @default(autoincrement())
   nama_unit_kerja     String           @db.VarChar(100)
   jenis_pelayanan     Int              @default(0)
-  kode_instalasi_bpjs String?          @db.VarChar(10) @unique
+  kode_instalasi_bpjs String?          @unique @db.VarChar(10)
   status_antrian      Int              @default(0)
   is_parent_unit      Int              @default(0)
   id_unit_induk       Int?
@@ -457,6 +457,7 @@ model TypeOfEmployees {
 model TypeOfStatusOfficer {
   id_ms_jenis_pegawai_status Int               @id @default(autoincrement())
   status_jenis_pegawai       String            @db.VarChar(100)
+  kode_nip                   String            @db.VarChar(2)
   status                     Int               @default(1)
   created_at                 DateTime          @default(now())
   created_by                 Int               @default(0)
@@ -471,6 +472,7 @@ model TypeOfStatusOfficer {
   TypeOfEmployees            TypeOfEmployees[]
 
   @@index([status_jenis_pegawai])
+  @@index([kode_nip])
   @@index([status, is_deleted])
   @@map("ms_jenis_pegawai_status")
 }
