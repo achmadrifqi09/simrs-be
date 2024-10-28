@@ -6,7 +6,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { UserService } from '../../user/service/user.service';
-import { Login } from '.././dto/auth.dto';
+import { Login } from '../dto/auth.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { AuthRepository } from '../repository/auth.repository';
