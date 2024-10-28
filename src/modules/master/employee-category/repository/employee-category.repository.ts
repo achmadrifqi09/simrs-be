@@ -10,16 +10,30 @@ import { Prisma } from '@prisma/client';
 export class TypeOfStatusOfficerRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findAllTypeOfStatusOfficer(keyword?: string, status?: number) {
+  async findAllTypeOfStatusOfficer(
+    keyword?: string,
+    status?: number,
+    kode_nip?: number,
+  ) {
     const whereClause: Prisma.TypeOfStatusOfficerWhereInput = {
       OR: [{ status_jenis_pegawai: { contains: keyword } }],
       is_deleted: false,
     };
-    if (Number(keyword))
+
+    if (Number(keyword)) {
       whereClause.OR.push({ id_ms_jenis_pegawai_status: Number(keyword) });
+    }
+
     if (status) {
       whereClause['AND'] = {
         status: Number(status),
+      };
+    }
+
+    if (kode_nip) {
+      whereClause['AND'] = {
+        ...whereClause['AND'],
+        kode_nip: String(kode_nip), // Convert to string instead of number
       };
     }
 
@@ -34,12 +48,14 @@ export class TypeOfStatusOfficerRepository {
   async updateStatusTypeOfStatusOfficer(
     id: number,
     typeOfStatusOfficer: UpdateStatus,
+    kode_nip?: number,
   ) {
     try {
       return await this.prismaService.typeOfStatusOfficer.update({
         where: {
           id_ms_jenis_pegawai_status: Number(id),
           is_deleted: false,
+          ...(kode_nip ? { kode_nip: String(kode_nip) } : {}),
         },
         data: typeOfStatusOfficer,
       });
@@ -53,19 +69,27 @@ export class TypeOfStatusOfficerRepository {
   ) {
     try {
       return await this.prismaService.typeOfStatusOfficer.create({
-        data: typeOfStatusOfficer,
+        data: {
+          ...typeOfStatusOfficer,
+          kode_nip: String(typeOfStatusOfficer.kode_nip), // Convert number to string
+        },
       });
     } catch (error) {
       PrismaErrorHandler.handle(error);
     }
   }
 
-  async softDeleteTypeOfStatusOfficer(id: number, payload: SoftDelete) {
+  async softDeleteTypeOfStatusOfficer(
+    id: number,
+    payload: SoftDelete,
+    kode_nip?: number,
+  ) {
     try {
       return await this.prismaService.typeOfStatusOfficer.update({
         where: {
           id_ms_jenis_pegawai_status: Number(id),
           is_deleted: false,
+          ...(kode_nip ? { kode_nip: String(kode_nip) } : {}),
         },
         data: payload,
       });
@@ -77,14 +101,19 @@ export class TypeOfStatusOfficerRepository {
   async updateTypeOfStatusOfficer(
     id: number,
     typeOfStatusOfficer: TypeOfStatusOfficerPayloadDTO,
+    kode_nip?: number,
   ) {
     try {
       return await this.prismaService.typeOfStatusOfficer.update({
         where: {
           id_ms_jenis_pegawai_status: Number(id),
           is_deleted: false,
+          ...(kode_nip ? { kode_nip: String(kode_nip) } : {}),
         },
-        data: typeOfStatusOfficer,
+        data: {
+          ...typeOfStatusOfficer,
+          kode_nip: String(typeOfStatusOfficer.kode_nip), // Convert number to string
+        },
       });
     } catch (error) {
       PrismaErrorHandler.handle(error);
