@@ -36,6 +36,7 @@ export class TypeOfStatusOfficerService {
   ) {
     typeOfStatusOfficer = {
       status_jenis_pegawai: typeOfStatusOfficer.status_jenis_pegawai,
+      kode_nip: typeOfStatusOfficer.kode_nip,
       status: isNaN(Number(typeOfStatusOfficer.status))
         ? 1
         : Number(typeOfStatusOfficer.status),
@@ -66,6 +67,7 @@ export class TypeOfStatusOfficerService {
   ) {
     typeOfStatusOfficer = {
       status_jenis_pegawai: typeOfStatusOfficer.status_jenis_pegawai,
+      kode_nip: typeOfStatusOfficer.kode_nip,
       status: isNaN(Number(typeOfStatusOfficer.status))
         ? 1
         : Number(typeOfStatusOfficer.status),
