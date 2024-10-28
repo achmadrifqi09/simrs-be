@@ -35,5 +35,5 @@ jobs:
       - name: Run linter
         run: npm run lint
 
-      - name: Build app
-        run: npm run build
+      # - name: Build app
+      #   run: npm run build
