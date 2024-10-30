@@ -6,7 +6,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { UserService } from '../../user/service/user.service';
-import { Login } from '.././dto/auth.dto';
+import { Login } from '../dto/auth.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { AuthRepository } from '../repository/auth.repository';
@@ -52,10 +52,10 @@ export class AuthService {
       );
     }
 
-    const userAccess = await this.userAccessService.findManyUserAccess(
+    const userAccess = await this.userAccessService.findLevelUserByUserId(
       user.id_user,
     );
-    const levelAccessIds = userAccess.map((access) => access.id_level_akses);
+    const levelAccessIds = userAccess.map((access) => access.level_akses.id);
 
     const payload = {
       id: user.id_user,

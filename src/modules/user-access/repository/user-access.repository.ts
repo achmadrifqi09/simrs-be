@@ -6,6 +6,21 @@ import { PrismaService } from '../../../prisma/prisma.service';
 export class UserAccessRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async findLevelUserByUserId(userId: number) {
+    return this.prismaService.userAccess.findMany({
+      where: {
+        id_user: Number(userId),
+      },
+      select: {
+        level_akses: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+  }
+
   async findManyUserAccessByUserId(userId: number) {
     return this.prismaService.userAccess.findMany({
       where: {

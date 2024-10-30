@@ -6,6 +6,10 @@ import { UserAccessRepository } from '../repository/user-access.repository';
 export class UserAccessService {
   constructor(private readonly userAccessRepository: UserAccessRepository) {}
 
+  async findLevelUserByUserId(userId: number) {
+    return this.userAccessRepository.findLevelUserByUserId(userId);
+  }
+
   async findManyUserAccess(userId: number) {
     const access_permission =
       await this.userAccessRepository.findManyUserAccessByUserId(userId);
