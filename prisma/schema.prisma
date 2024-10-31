@@ -274,7 +274,8 @@ model Employee {
   email                   String    @db.VarChar(100)
   no_npwp                 String    @db.VarChar(25)
   no_ktp                  String    @db.VarChar(25)
-  foto                    String?   @db.Text
+  no_ktam                 String    @db.VarChar(25)
+  foto                    String?   @db.Text // new endpoints 1
   kode_arsip              String?   @db.VarChar(20)
   id_finger               String    @db.VarChar(10)
   kode_dpjp               String?   @db.VarChar(20)
@@ -283,6 +284,10 @@ model Employee {
   status_pns              Int
   status_aktif            Int
   id_pelamar              Int?
+  file_ktp                String?   @db.Text // new endpoints 2
+  file_kk                 String?   @db.Text // new endpoints 3
+  file_ktam               String?   @db.Text // new endpoints 4
+  file_npwp               String?   @db.Text // new endpoints 5
   created_at              DateTime  @default(now())
   created_by              Int       @default(0)
   modified_at             DateTime? @db.DateTime(0)
