@@ -1,4 +1,4 @@
-type BuildingPayloadDTO = {
+export interface BuildingPayloadDTO {
   nama_gedung: string;
   status: number;
   created_by?: number;
@@ -6,6 +6,4 @@ type BuildingPayloadDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-export type { BuildingPayloadDTO };
+}

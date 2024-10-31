@@ -14,7 +14,9 @@ $ npm install
 
 ```bash
 $ npx prisma migrate dev
+$ npx prisma migrate deploy
 ```
+
 
 ## Compile and run the project
 
@@ -29,16 +31,4 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
+test

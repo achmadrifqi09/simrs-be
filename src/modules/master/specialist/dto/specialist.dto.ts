@@ -1,4 +1,4 @@
-type SpecialistPayloadDTO = {
+export interface SpecialistPayloadDTO {
   nama_spesialis: string;
   status: number;
   created_by?: number;
@@ -6,6 +6,4 @@ type SpecialistPayloadDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-export type { SpecialistPayloadDTO };
+}

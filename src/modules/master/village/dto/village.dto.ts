@@ -1,4 +1,4 @@
-type VillagePayloadDTO = {
+export interface VillagePayloadDTO {
   id: string;
   nama: string;
   id_kecamatan: string;
@@ -7,6 +7,4 @@ type VillagePayloadDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-export type { VillagePayloadDTO };
+}

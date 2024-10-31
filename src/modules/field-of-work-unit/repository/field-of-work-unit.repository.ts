@@ -1,7 +1,7 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
-import { FieldOfWorkUnit } from '../type/field-of-work-unit.type';
+import { FieldOfWorkUnit } from '../dto/field-of-work-unit.dto';
 import { PrismaErrorHandler } from '../../../common/handler/prisma-error.handler';
 import { SoftDelete, UpdateStatus } from '../../../common/types/common.type';
 

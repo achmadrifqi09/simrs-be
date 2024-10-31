@@ -24,7 +24,7 @@ import {
   workUnitStatusValidation,
   workUnitValidation,
 } from '../validation/work-unit.validation';
-import { WorkUnit, WorkUnitUpdateQueueStatus } from '../type/work-unit.type';
+import { WorkUnit, WorkUnitUpdateQueueStatus } from '../dto/work-unit.dto';
 import { UpdateStatus } from '../../../common/types/common.type';
 
 @Dependencies([WorkUnitService])

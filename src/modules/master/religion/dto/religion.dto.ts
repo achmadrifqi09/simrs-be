@@ -1,4 +1,4 @@
-type ReligionPayloadDTO = {
+export interface ReligionPayloadDTO {
   nama_agama: string;
   status: number;
   created_by?: number;
@@ -6,12 +6,4 @@ type ReligionPayloadDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-type ReligionDTO = {
-  id_ms_agama: number;
-  nama_agama: string;
-  status: number;
-};
-
-export type { ReligionPayloadDTO, ReligionDTO };
+}

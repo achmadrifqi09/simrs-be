@@ -1,4 +1,4 @@
-type BedPayloadDTO = {
+export interface BedPayloadDTO {
   id_ms_kamar: number;
   nama_bed: string;
   keterangan: string;
@@ -10,5 +10,3 @@ type BedPayloadDTO = {
   modified_by?: number;
   deleted_at?: Date;
 };
-
-export type { BedPayloadDTO };

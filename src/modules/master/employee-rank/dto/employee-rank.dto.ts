@@ -1,4 +1,4 @@
-type RankOfEmployeesPayloadDTO = {
+export interface RankOfEmployeesPayloadDTO {
   nama_pangkat: string;
   status: number;
   created_by?: number;
@@ -6,6 +6,4 @@ type RankOfEmployeesPayloadDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-export type { RankOfEmployeesPayloadDTO };
+}

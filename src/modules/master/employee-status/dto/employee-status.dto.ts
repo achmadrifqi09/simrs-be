@@ -1,4 +1,4 @@
-type EmployeeStatusDTO = {
+export interface EmployeeStatusDTO {
   nama_status_pegawai: string;
   status: number;
   created_by?: number;
@@ -6,6 +6,4 @@ type EmployeeStatusDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-export type { EmployeeStatusDTO };
+}

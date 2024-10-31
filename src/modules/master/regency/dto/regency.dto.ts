@@ -1,4 +1,4 @@
-type RegencyPayloadDTO = {
+export interface RegencyPayloadDTO {
   id: string;
   nama: string;
   id_provinsi: string;
@@ -7,6 +7,4 @@ type RegencyPayloadDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-export type { RegencyPayloadDTO };
+}

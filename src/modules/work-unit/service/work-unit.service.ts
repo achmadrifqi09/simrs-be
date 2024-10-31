@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { WorkUnitRepository } from '../repository/work-unit.repository';
 import { generateCurrentDate } from '../../../utils/date-formatter';
-import { WorkUnit, WorkUnitUpdateQueueStatus } from '../type/work-unit.type';
+import { WorkUnit, WorkUnitUpdateQueueStatus } from '../dto/work-unit.dto';
 import { SoftDelete, UpdateStatus } from '../../../common/types/common.type';
 
 @Dependencies([WorkUnitRepository])

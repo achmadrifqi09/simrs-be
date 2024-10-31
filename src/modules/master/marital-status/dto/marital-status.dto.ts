@@ -1,4 +1,4 @@
-type MaritalStatusPayloadDTO = {
+export interface MaritalStatusPayloadDTO {
   nama_status_kawin: string;
   status: number;
   created_by?: number;
@@ -6,6 +6,4 @@ type MaritalStatusPayloadDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-export type { MaritalStatusPayloadDTO };
+}

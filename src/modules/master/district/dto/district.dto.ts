@@ -1,4 +1,4 @@
-type DistrictPayloadDTO = {
+export interface DistrictPayloadDTO {
   id: string;
   nama: string;
   id_kabkot: string;
@@ -7,6 +7,4 @@ type DistrictPayloadDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-export type { DistrictPayloadDTO };
+}

@@ -1,4 +1,4 @@
-type RoomClassPayloadDTO = {
+export interface RoomClassPayloadDTO {
   nama_kelas_kamar: string;
   kode_bpjs_kamar: string;
   status: number;
@@ -7,6 +7,4 @@ type RoomClassPayloadDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
-
-export type { RoomClassPayloadDTO };
+}

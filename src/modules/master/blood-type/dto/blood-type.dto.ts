@@ -1,4 +1,4 @@
-type BloodTypePayloadDTO = {
+export interface BloodTypePayloadDTO {
   nama_golongan_darah: string;
   status: number;
   created_by?: number;
@@ -6,18 +6,16 @@ type BloodTypePayloadDTO = {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
+}
 
-type BloodTypeDTO = {
+export interface BloodTypeDTO {
   id_ms_golongan_darah: number;
   nama_golongan_darah: string;
   status: number;
-};
+}
 
-type BloodTypeUpdateStatusDTO = {
+export interface BloodTypeUpdateStatusDTO {
   status: number;
   modified_at?: Date;
   modified_by?: number;
-};
-
-export type { BloodTypePayloadDTO, BloodTypeDTO, BloodTypeUpdateStatusDTO };
+}
