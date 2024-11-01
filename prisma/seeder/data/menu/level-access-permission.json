@@ -126,24 +126,6 @@
     "can_delete": true
   },
   {
-    "id": 15,
-    "id_menu": 15,
-    "id_level_akses": 1,
-    "can_view": true,
-    "can_create": true,
-    "can_update": true,
-    "can_delete": true
-  },
-  {
-    "id": 16,
-    "id_menu": 16,
-    "id_level_akses": 1,
-    "can_view": true,
-    "can_create": true,
-    "can_update": true,
-    "can_delete": true
-  },
-  {
     "id": 17,
     "id_menu": 17,
     "id_level_akses": 1,

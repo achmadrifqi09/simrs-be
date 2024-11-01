@@ -26,8 +26,8 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     ConfigModule.forRoot({ isGlobal: true }),
     ThrottlerModule.forRoot([
       {
-        ttl: 60000,
-        limit: 20,
+        ttl: Number(process.env.THROTTLER_TTL || 60000),
+        limit: Number(process.env.THROTTLER_LIMIT || 100),
       },
     ]),
     UserModule,

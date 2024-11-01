@@ -142,31 +142,11 @@
     "tag": "penjadwalan-dokter"
   },
   {
-    "id": 15,
-    "parent_id": 13,
-    "order": 2,
-    "label": "Jadwal Dokter Hari ini",
-    "pathname": "/doctor-schedule/today-schedule",
-    "is_submenu": false,
-    "status": true,
-    "tag": "jadwal-dokter-hari-ini"
-  },
-  {
-    "id": 16,
-    "parent_id": 13,
-    "order": 3,
-    "label": "Tambah Kuota Dokter",
-    "pathname": "/doctor-schedule/doctor-quota",
-    "is_submenu": false,
-    "status": true,
-    "tag": "tambah-kuota-dokter"
-  },
-  {
     "id": 17,
     "parent_id": 13,
     "order": 4,
-    "label": "Izin Libur",
-    "pathname": "/doctor-schedule/vacation",
+    "label": "Jadwal Pertanggal",
+    "pathname": "/doctor-schedule/per-date",
     "is_submenu": false,
     "status": true,
     "tag": "izin-libur"
