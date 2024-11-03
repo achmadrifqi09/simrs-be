@@ -28,7 +28,7 @@ describe('EmployeeService', () => {
     }).compile();
 
     service = module.get<EmployeeService>(EmployeeService);
-    repository = module.get<EmployeeRepository>(EmployeeRepository);
+    // repository = module.get<EmployeeRepository>(EmployeeRepository);
   });
 
   it('should be defined', () => {

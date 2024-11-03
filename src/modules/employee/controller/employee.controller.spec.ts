@@ -23,7 +23,7 @@ describe('EmployeeController', () => {
     }).compile();
 
     controller = module.get<EmployeeController>(EmployeeController);
-    service = module.get<EmployeeService>(EmployeeService);
+    // service = module.get<EmployeeService>(EmployeeService);
   });
 
   it('should be defined', () => {
