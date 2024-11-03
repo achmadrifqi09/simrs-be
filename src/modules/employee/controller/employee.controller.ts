@@ -15,7 +15,7 @@ import {
 import { EmployeeService } from '../service/employee.service';
 import {
   EmployeeValidation,
-  KtpFileValidationPipe,
+  // KtpFileValidationPipe,
 } from '../validation/employee.validation';
 import { ZodPipe } from 'src/pipes/zod-pipe/zod-pipe.pipe';
 import { z } from 'zod';
@@ -47,11 +47,8 @@ export class EmployeeController {
   }
 
   @Put(':id')
-  async updateEmployee(
-    // @Param('id', ParseIntPipe) id: number,
-    // @Body(new ZodPipe(EmployeeValidation.updateEmployee))
-    // updateEmployeeDto: z.infer<typeof EmployeeValidation.updateEmployee>,
-  ) {
+  async updateEmployee() {
+    // updateEmployeeDto: z.infer<typeof EmployeeValidation.updateEmployee>, // @Body(new ZodPipe(EmployeeValidation.updateEmployee)) // @Param('id', ParseIntPipe) id: number,
     // return this.employeeService.updateEmployee(id, updateEmployeeDto);
   }
 
@@ -106,11 +103,11 @@ export class EmployeeController {
 
       const filePath = path.join(storageDir, newFileName);
       await fs.promises.writeFile(filePath, file.buffer);
-
-      const employee = await this.employeeService.updateEmployeeFilename(
-        id,
-        newFileName,
-      );
+      //
+      // const employee = await this.employeeService.updateEmployeeFilename(
+      //   id,
+      //   newFileName,
+      // );
 
       return {
         message: 'File berhasil diunggah dan disimpan',

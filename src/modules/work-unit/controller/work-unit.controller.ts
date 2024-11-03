@@ -64,7 +64,10 @@ export class WorkUnitController {
 
   @Get('/queue-unit')
   @Header('Content-Type', 'application/json')
-  async findQueueUnit(@Query('keyword') keyword: string, @Query('unit_id') unit_id: number) {
+  async findQueueUnit(
+    @Query('keyword') keyword: string,
+    @Query('unit_id') unit_id: number,
+  ) {
     return this.workUnitService.findQueueUnit(keyword, unit_id);
   }
 

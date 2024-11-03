@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EmployeeService } from './employee.service';
 import { EmployeeRepository } from '../repository/employee.repository';
-import { NotFoundException } from '@nestjs/common';
+// import { NotFoundException } from '@nestjs/common';
 
 describe('EmployeeService', () => {
   let service: EmployeeService;
-  let repository: EmployeeRepository;
+  // let repository: EmployeeRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

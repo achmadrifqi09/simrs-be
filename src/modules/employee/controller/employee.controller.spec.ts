@@ -4,7 +4,7 @@ import { EmployeeService } from '../service/employee.service';
 
 describe('EmployeeController', () => {
   let controller: EmployeeController;
-  let service: EmployeeService;
+  // let service: EmployeeService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

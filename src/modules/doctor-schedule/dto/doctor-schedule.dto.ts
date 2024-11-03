@@ -18,6 +18,4 @@ interface DoctorScheduleDTO {
   deleted_at?: Date;
 }
 
-
-
 export { DoctorScheduleDTO };

@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { Employee, Prisma } from '@prisma/client';
-import { z } from 'zod';
-import { CreateEmployeeDto, UpdateEmployeeDto } from '../dto/employee.dto';
+// import { z } from 'zod';
+// import { CreateEmployeeDto } from '../dto/employee.dto';
 
 @Injectable()
 export class EmployeeRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createEmployee(data: z.infer<typeof CreateEmployeeDto>) {
+  async createEmployee() {
     // return this.prisma.employee.create({
     //   data,
     // });
