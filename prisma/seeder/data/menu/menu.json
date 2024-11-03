@@ -145,11 +145,11 @@
     "id": 17,
     "parent_id": 13,
     "order": 4,
-    "label": "Jadwal Pertanggal",
-    "pathname": "/doctor-schedule/per-date",
+    "label": "Dokter praktek/jaga",
+    "pathname": "/doctor-schedule/practice",
     "is_submenu": false,
     "status": true,
-    "tag": "izin-libur"
+    "tag": "dokter-praktek"
   },
   {
     "id": 18,

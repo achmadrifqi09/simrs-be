@@ -229,33 +229,33 @@ model Patient {
 }
 
 model Employee {
-  id_pegawai              Int       @id @default(autoincrement())
-  no_reg                  String    @db.VarChar(50)
-  nip_pegawai             String?   @db.VarChar(50)
-  nip_pns                 String?   @db.VarChar(50)
-  gelar_depan             String?   @db.VarChar(100)
-  gelar_belakang          String?   @db.VarChar(100)
-  nama_pegawai            String    @db.VarChar(100)
+  id_pegawai              Int              @id @default(autoincrement())
+  no_reg                  String           @db.VarChar(50)
+  nip_pegawai             String?          @db.VarChar(50)
+  nip_pns                 String?          @db.VarChar(50)
+  gelar_depan             String?          @db.VarChar(100)
+  gelar_belakang          String?          @db.VarChar(100)
+  nama_pegawai            String           @db.VarChar(100)
   id_ms_negara_asal       Int?
   id_ms_provinsi_asal     Int?
   id_ms_kota_asal         Int?
   id_ms_kecamatan_asal    Int?
   id_ms_desa_asal         Int?
-  alamat_asal             String?   @db.Text
-  kode_pos_asal           String?   @db.VarChar(10)
-  rt_asal                 String?   @db.VarChar(5)
-  rw_asal                 String?   @db.VarChar(5)
+  alamat_asal             String?          @db.Text
+  kode_pos_asal           String?          @db.VarChar(10)
+  rt_asal                 String?          @db.VarChar(5)
+  rw_asal                 String?          @db.VarChar(5)
   id_ms_negara_tinggal    Int
   id_ms_provinsi_tinggal  Int
   id_ms_kota_tinggal      Int
   id_ms_kecamatan_tinggal Int
   id_ms_desa_tinggal      Int
-  alamat_tinggal          String    @db.Text
-  kode_pos_tinggal        String    @db.VarChar(10)
-  rt_tinggal              String    @db.VarChar(3)
-  rw_tinggal              String    @db.VarChar(3)
-  tempat_lahir            String    @db.VarChar(100)
-  tgl_lahir               DateTime  @db.Date
+  alamat_tinggal          String           @db.Text
+  kode_pos_tinggal        String           @db.VarChar(10)
+  rt_tinggal              String           @db.VarChar(3)
+  rw_tinggal              String           @db.VarChar(3)
+  tempat_lahir            String           @db.VarChar(100)
+  tgl_lahir               DateTime         @db.Date
   id_jenis_kelamin        Int
   id_ms_golongan_darah    Int?
   id_ms_status_kawin      Int
@@ -270,34 +270,35 @@ model Employee {
   id_unit_jabatan         Int
   id_gaji                 Int?
   pjs                     Int?
-  hp                      String    @db.VarChar(15)
-  email                   String    @db.VarChar(100)
-  no_npwp                 String    @db.VarChar(25)
-  no_ktp                  String    @db.VarChar(25)
-  no_ktam                 String    @db.VarChar(25)
-  foto                    String?   @db.Text // new endpoints 1
-  kode_arsip              String?   @db.VarChar(20)
-  id_finger               String    @db.VarChar(10)
-  kode_dpjp               String?   @db.VarChar(20)
-  tgl_masuk               DateTime  @db.Date
-  tgl_keluar              DateTime? @db.Date
+  hp                      String           @db.VarChar(15)
+  email                   String           @db.VarChar(100)
+  no_npwp                 String           @db.VarChar(25)
+  no_ktp                  String           @db.VarChar(25)
+  no_ktam                 String           @db.VarChar(25)
+  foto                    String?          @db.Text // new endpoints 1
+  kode_arsip              String?          @db.VarChar(20)
+  id_finger               String           @db.VarChar(10)
+  kode_dpjp               String?          @db.VarChar(20)
+  tgl_masuk               DateTime         @db.Date
+  tgl_keluar              DateTime?        @db.Date
   status_pns              Int
   status_aktif            Int
   id_pelamar              Int?
-  file_ktp                String?   @db.Text // new endpoints 2
-  file_kk                 String?   @db.Text // new endpoints 3
-  file_ktam               String?   @db.Text // new endpoints 4
-  file_npwp               String?   @db.Text // new endpoints 5
-  created_at              DateTime  @default(now())
-  created_by              Int       @default(0)
-  modified_at             DateTime? @db.DateTime(0)
-  modified_by             Int?      @default(0)
-  deleted_at              DateTime? @db.DateTime(0)
-  deleted_by              Int?      @default(0)
-  restored_at             DateTime? @db.DateTime(0)
-  restored_by             Int?      @default(0)
-  is_deleted              Boolean   @default(false)
-  is_restored             Boolean   @default(false)
+  file_ktp                String?          @db.Text // new endpoints 2
+  file_kk                 String?          @db.Text // new endpoints 3
+  file_ktam               String?          @db.Text // new endpoints 4
+  file_npwp               String?          @db.Text // new endpoints 5
+  created_at              DateTime         @default(now())
+  created_by              Int              @default(0)
+  modified_at             DateTime?        @db.DateTime(0)
+  modified_by             Int?             @default(0)
+  deleted_at              DateTime?        @db.DateTime(0)
+  deleted_by              Int?             @default(0)
+  restored_at             DateTime?        @db.DateTime(0)
+  restored_by             Int?             @default(0)
+  is_deleted              Boolean          @default(false)
+  is_restored             Boolean          @default(false)
+  DoctorSchedule          DoctorSchedule[]
 
   @@index([id_ms_status_kawin], map: "id_status_kawin")
   @@index([nama_pegawai])
@@ -336,6 +337,7 @@ model WorkUnit {
   is_deleted          Boolean          @default(false)
   is_restored         Boolean          @default(false)
   antrian             Qeueu[]
+  jadwal_dokter       DoctorSchedule[]
 
   @@index([nama_unit_kerja])
   @@index([id_unit_induk])
@@ -646,33 +648,37 @@ model Qeueu {
 }
 
 model DoctorSchedule {
-  id_jadwal_dokter  Int       @id @default(autoincrement())
-  id_hari           Int
-  tgl_praktek       DateTime  @db.Date
-  id_pegawai        Int
-  id                Int
-  jam_awal_prakter  DateTime  @db.Time(0)
-  jam_akhir_praktek DateTime  @db.Time(0)
-  online_bpjs_mjkn  Int
-  online_umum       Int
-  onsite_bpjs       Int
-  onsite_umum       Int
-  status            Int       @default(1)
-  created_at        DateTime  @default(now())
-  created_by        Int       @default(0)
-  modified_at       DateTime? @db.DateTime(0)
-  modified_by       Int?      @default(0)
-  deleted_at        DateTime? @db.DateTime(0)
-  deleted_by        Int?      @default(0)
-  restored_at       DateTime? @db.DateTime(0)
-  restored_by       Int?      @default(0)
-  is_deleted        Boolean   @default(false)
-  is_restored       Boolean   @default(false)
+  id_jadwal_dokter    Int       @id @default(autoincrement())
+  id_pegawai          Int
+  pegawai             Employee  @relation(references: [id_pegawai], fields: [id_pegawai])
+  kode_instalasi_bpjs String
+  poliklinik          WorkUnit  @relation(references: [kode_instalasi_bpjs], fields: [kode_instalasi_bpjs])
+  jenis_jadwal        Int       @default(1)
+  hari_praktek        Int?
+  tgl_praktek         DateTime? @db.Date
+  jam_buka_praktek    String
+  jam_tutup_praktek   String
+  kuota_mjkn          Int
+  kuota_online_umum   Int
+  kuota_onsite        Int
+  tanggal_libur       DateTime? @db.Date
+  keterangan_libur    String?
+  created_at          DateTime  @default(now())
+  created_by          Int       @default(0)
+  modified_at         DateTime? @db.DateTime(0)
+  modified_by         Int?      @default(0)
+  deleted_at          DateTime? @db.DateTime(0)
+  deleted_by          Int?      @default(0)
+  restored_at         DateTime? @db.DateTime(0)
+  restored_by         Int?      @default(0)
+  is_deleted          Boolean   @default(false)
+  is_restored         Boolean   @default(false)
 
   @@index([id_pegawai])
-  @@index([id])
   @@index([tgl_praktek])
-  @@index([status, is_deleted])
+  @@index([hari_praktek])
+  @@index([tgl_praktek, is_deleted, tanggal_libur])
+  @@index([hari_praktek, is_deleted, tanggal_libur])
   @@map("db_jadwal_dokter")
 }
 

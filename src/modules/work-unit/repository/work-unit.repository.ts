@@ -28,11 +28,33 @@ export class WorkUnitRepository {
     });
   }
 
+  async findQueueUnit(keyword?: string, unit_id?: number | undefined) {
+    const whereClause: Prisma.WorkUnitWhereInput = {
+      OR: [
+        {
+          nama_unit_kerja: { contains: keyword },
+        },
+        {
+          kode_instalasi_bpjs: { contains: keyword },
+        },
+      ],
+      status_antrian: 1,
+      status: 1,
+      is_deleted: false,
+    };
+
+    if (Number(unit_id)) whereClause.id = Number(unit_id);
+    return this.prismaService.workUnit.findMany({
+      where: whereClause,
+    });
+  }
+
   async findParentWorkUnit(keyword: string) {
     const whereClause: Prisma.WorkUnitWhereInput = {
       OR: [{ nama_unit_kerja: { contains: keyword } }],
       id_unit_induk: null,
       status: 1,
+      is_deleted: false,
     };
     if (Number(keyword)) whereClause.OR.push({ id: Number(keyword) });
     return this.prismaService.workUnit.findMany({
@@ -113,6 +135,7 @@ export class WorkUnitRepository {
       },
     });
   }
+
   async findPolyclinicCounter(currentDate: string, keyword: string) {
     const results = await this.prismaService.$queryRaw<PolyclinicCounter[]>(
       Prisma.sql`

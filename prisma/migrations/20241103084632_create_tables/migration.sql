@@ -260,6 +260,7 @@ CREATE TABLE `db_pegawai` (
     `email` VARCHAR(100) NOT NULL,
     `no_npwp` VARCHAR(25) NOT NULL,
     `no_ktp` VARCHAR(25) NOT NULL,
+    `no_ktam` VARCHAR(25) NOT NULL,
     `foto` TEXT NULL,
     `kode_arsip` VARCHAR(20) NULL,
     `id_finger` VARCHAR(10) NOT NULL,
@@ -269,6 +270,10 @@ CREATE TABLE `db_pegawai` (
     `status_pns` INTEGER NOT NULL,
     `status_aktif` INTEGER NOT NULL,
     `id_pelamar` INTEGER NULL,
+    `file_ktp` TEXT NULL,
+    `file_kk` TEXT NULL,
+    `file_ktam` TEXT NULL,
+    `file_npwp` TEXT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `created_by` INTEGER NOT NULL DEFAULT 0,
     `modified_at` DATETIME(0) NULL,
@@ -444,6 +449,7 @@ CREATE TABLE `ms_jenis_pegawai` (
 CREATE TABLE `ms_jenis_pegawai_status` (
     `id_ms_jenis_pegawai_status` INTEGER NOT NULL AUTO_INCREMENT,
     `status_jenis_pegawai` VARCHAR(100) NOT NULL,
+    `kode_nip` VARCHAR(2) NOT NULL,
     `status` INTEGER NOT NULL DEFAULT 1,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `created_by` INTEGER NOT NULL DEFAULT 0,
@@ -457,6 +463,7 @@ CREATE TABLE `ms_jenis_pegawai_status` (
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
     INDEX `ms_jenis_pegawai_status_status_jenis_pegawai_idx`(`status_jenis_pegawai`),
+    INDEX `ms_jenis_pegawai_status_kode_nip_idx`(`kode_nip`),
     INDEX `ms_jenis_pegawai_status_status_is_deleted_idx`(`status`, `is_deleted`),
     PRIMARY KEY (`id_ms_jenis_pegawai_status`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -632,17 +639,18 @@ CREATE TABLE `db_antrian` (
 -- CreateTable
 CREATE TABLE `db_jadwal_dokter` (
     `id_jadwal_dokter` INTEGER NOT NULL AUTO_INCREMENT,
-    `id_hari` INTEGER NOT NULL,
-    `tgl_praktek` DATE NOT NULL,
     `id_pegawai` INTEGER NOT NULL,
-    `id` INTEGER NOT NULL,
-    `jam_awal_prakter` TIME(0) NOT NULL,
-    `jam_akhir_praktek` TIME(0) NOT NULL,
-    `online_bpjs_mjkn` INTEGER NOT NULL,
-    `online_umum` INTEGER NOT NULL,
-    `onsite_bpjs` INTEGER NOT NULL,
-    `onsite_umum` INTEGER NOT NULL,
-    `status` INTEGER NOT NULL DEFAULT 1,
+    `kode_instalasi_bpjs` VARCHAR(191) NOT NULL,
+    `jenis_jadwal` INTEGER NOT NULL DEFAULT 1,
+    `hari_praktek` INTEGER NULL,
+    `tgl_praktek` DATE NULL,
+    `jam_buka_praktek` VARCHAR(191) NOT NULL,
+    `jam_tutup_praktek` VARCHAR(191) NOT NULL,
+    `kuota_mjkn` INTEGER NOT NULL,
+    `kuota_online_umum` INTEGER NOT NULL,
+    `kuota_onsite` INTEGER NOT NULL,
+    `tanggal_libur` DATE NULL,
+    `keterangan_libur` VARCHAR(191) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `created_by` INTEGER NOT NULL DEFAULT 0,
     `modified_at` DATETIME(0) NULL,
@@ -655,9 +663,10 @@ CREATE TABLE `db_jadwal_dokter` (
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
     INDEX `db_jadwal_dokter_id_pegawai_idx`(`id_pegawai`),
-    INDEX `db_jadwal_dokter_id_idx`(`id`),
     INDEX `db_jadwal_dokter_tgl_praktek_idx`(`tgl_praktek`),
-    INDEX `db_jadwal_dokter_status_is_deleted_idx`(`status`, `is_deleted`),
+    INDEX `db_jadwal_dokter_hari_praktek_idx`(`hari_praktek`),
+    INDEX `db_jadwal_dokter_tgl_praktek_is_deleted_tanggal_libur_idx`(`tgl_praktek`, `is_deleted`, `tanggal_libur`),
+    INDEX `db_jadwal_dokter_hari_praktek_is_deleted_tanggal_libur_idx`(`hari_praktek`, `is_deleted`, `tanggal_libur`),
     PRIMARY KEY (`id_jadwal_dokter`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -988,6 +997,12 @@ ALTER TABLE `ms_jenis_pegawai` ADD CONSTRAINT `ms_jenis_pegawai_id_ms_jenis_pega
 
 -- AddForeignKey
 ALTER TABLE `db_antrian` ADD CONSTRAINT `db_antrian_kode_poliklinik_fkey` FOREIGN KEY (`kode_poliklinik`) REFERENCES `db_unit_kerja`(`kode_instalasi_bpjs`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_jadwal_dokter` ADD CONSTRAINT `db_jadwal_dokter_id_pegawai_fkey` FOREIGN KEY (`id_pegawai`) REFERENCES `db_pegawai`(`id_pegawai`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_jadwal_dokter` ADD CONSTRAINT `db_jadwal_dokter_kode_instalasi_bpjs_fkey` FOREIGN KEY (`kode_instalasi_bpjs`) REFERENCES `db_unit_kerja`(`kode_instalasi_bpjs`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ms_desa` ADD CONSTRAINT `fk_kecamatan` FOREIGN KEY (`id_kecamatan`) REFERENCES `ms_kecamatan`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;

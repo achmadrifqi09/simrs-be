@@ -20,6 +20,7 @@ import { CounterGateway } from './gateways/counter/gateway/counter.gateway';
 import { FieldOfWorkUnitModule } from './modules/field-of-work-unit/field-of-work-unit.module';
 import { AuthGuard } from './guards/auth/auth.guard';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { DoctorScheduleModule } from './modules/doctor-schedule/doctor-schedule.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     MenuModule,
     UserAccessModule,
     FieldOfWorkUnitModule,
+    DoctorScheduleModule,
   ],
   controllers: [AppController],
   providers: [

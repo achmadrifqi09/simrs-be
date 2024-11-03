@@ -14,3 +14,10 @@ export const generateExpiresDate = () => {
   const finalDate = `${expiresDate.format('YYYY-MM-DDTHH:mm:ss')}Z`;
   return new Date(finalDate);
 };
+
+export const timeFormatter = (timeString: string) => {
+  const [hours, minutes, seconds] = timeString.split(':');
+  const date = new Date();
+  date.setHours(Number(hours), Number(minutes), Number(seconds));
+  return date;
+};

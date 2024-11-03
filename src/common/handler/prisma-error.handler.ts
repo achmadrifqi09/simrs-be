@@ -15,7 +15,7 @@ export class PrismaErrorHandler {
         );
       case 'P2003':
         throw new HttpException(
-          'Data masih memiliki relasi lain',
+          'Terjadi masalah relasi pada data yang anda masukkan',
           HttpStatus.CONFLICT,
         );
       case 'P2004':

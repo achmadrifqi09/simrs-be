@@ -22,6 +22,13 @@ export class WorkUnitService {
     return this.workUnitRepository.findActiveSubOrParentUnit(keyword || '');
   }
 
+  async findQueueUnit(keyword?: string, unit_id?: number){
+    return this.workUnitRepository.findQueueUnit(
+      keyword || '',
+      unit_id || undefined,
+    );
+  }
+
   async findParentWorkUnit(keyword?: string) {
     return this.workUnitRepository.findParentWorkUnit(keyword || '');
   }

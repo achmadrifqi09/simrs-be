@@ -9,4 +9,4 @@ export interface BedPayloadDTO {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
-};
+}

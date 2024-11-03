@@ -62,6 +62,12 @@ export class WorkUnitController {
     return this.workUnitService.findActivePolyclinic(keyword);
   }
 
+  @Get('/queue-unit')
+  @Header('Content-Type', 'application/json')
+  async findQueueUnit(@Query('keyword') keyword: string, @Query('unit_id') unit_id: number) {
+    return this.workUnitService.findQueueUnit(keyword, unit_id);
+  }
+
   @Get('/polyclinic/counter')
   @Header('Content-Type', 'application/json')
   async findPolyclinicCounter(@Query('keyword') keyword: string) {
