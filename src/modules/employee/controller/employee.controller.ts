@@ -48,11 +48,11 @@ export class EmployeeController {
 
   @Put(':id')
   async updateEmployee(
-    @Param('id', ParseIntPipe) id: number,
-    @Body(new ZodPipe(EmployeeValidation.updateEmployee))
-    updateEmployeeDto: z.infer<typeof EmployeeValidation.updateEmployee>,
+    // @Param('id', ParseIntPipe) id: number,
+    // @Body(new ZodPipe(EmployeeValidation.updateEmployee))
+    // updateEmployeeDto: z.infer<typeof EmployeeValidation.updateEmployee>,
   ) {
-    return this.employeeService.updateEmployee(id, updateEmployeeDto);
+    // return this.employeeService.updateEmployee(id, updateEmployeeDto);
   }
 
   @Delete('soft-delete/:id')
