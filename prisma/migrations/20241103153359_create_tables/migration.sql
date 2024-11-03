@@ -222,20 +222,20 @@ CREATE TABLE `db_pegawai` (
     `gelar_depan` VARCHAR(100) NULL,
     `gelar_belakang` VARCHAR(100) NULL,
     `nama_pegawai` VARCHAR(100) NOT NULL,
-    `id_ms_negara_asal` INTEGER NULL,
-    `id_ms_provinsi_asal` INTEGER NULL,
-    `id_ms_kota_asal` INTEGER NULL,
-    `id_ms_kecamatan_asal` INTEGER NULL,
-    `id_ms_desa_asal` INTEGER NULL,
+    `id_ms_negara_asal` INTEGER NOT NULL,
+    `id_ms_provinsi_asal` VARCHAR(191) NOT NULL,
+    `id_ms_kota_asal` VARCHAR(191) NOT NULL,
+    `id_ms_kecamatan_asal` VARCHAR(191) NOT NULL,
+    `id_ms_desa_asal` VARCHAR(191) NOT NULL,
     `alamat_asal` TEXT NULL,
     `kode_pos_asal` VARCHAR(10) NULL,
     `rt_asal` VARCHAR(5) NULL,
     `rw_asal` VARCHAR(5) NULL,
     `id_ms_negara_tinggal` INTEGER NOT NULL,
-    `id_ms_provinsi_tinggal` INTEGER NOT NULL,
-    `id_ms_kota_tinggal` INTEGER NOT NULL,
-    `id_ms_kecamatan_tinggal` INTEGER NOT NULL,
-    `id_ms_desa_tinggal` INTEGER NOT NULL,
+    `id_ms_provinsi_tinggal` VARCHAR(191) NOT NULL,
+    `id_ms_kota_tinggal` VARCHAR(191) NOT NULL,
+    `id_ms_kecamatan_tinggal` VARCHAR(191) NOT NULL,
+    `id_ms_desa_tinggal` VARCHAR(191) NOT NULL,
     `alamat_tinggal` TEXT NOT NULL,
     `kode_pos_tinggal` VARCHAR(10) NOT NULL,
     `rt_tinggal` VARCHAR(3) NOT NULL,
@@ -289,6 +289,16 @@ CREATE TABLE `db_pegawai` (
     INDEX `db_pegawai_nama_pegawai_idx`(`nama_pegawai`),
     INDEX `db_pegawai_nip_pegawai_idx`(`nip_pegawai`),
     INDEX `db_pegawai_nip_pns_idx`(`nip_pns`),
+    INDEX `db_pegawai_id_ms_negara_asal_idx`(`id_ms_negara_asal`),
+    INDEX `db_pegawai_id_ms_negara_tinggal_idx`(`id_ms_negara_tinggal`),
+    INDEX `db_pegawai_id_ms_provinsi_asal_idx`(`id_ms_provinsi_asal`),
+    INDEX `db_pegawai_id_ms_provinsi_tinggal_idx`(`id_ms_provinsi_tinggal`),
+    INDEX `db_pegawai_id_ms_kota_asal_idx`(`id_ms_kota_asal`),
+    INDEX `db_pegawai_id_ms_kota_tinggal_idx`(`id_ms_kota_tinggal`),
+    INDEX `db_pegawai_id_ms_kecamatan_asal_idx`(`id_ms_kecamatan_asal`),
+    INDEX `db_pegawai_id_ms_kecamatan_tinggal_idx`(`id_ms_kecamatan_tinggal`),
+    INDEX `db_pegawai_id_ms_desa_asal_idx`(`id_ms_desa_asal`),
+    INDEX `db_pegawai_id_ms_desa_tinggal_idx`(`id_ms_desa_tinggal`),
     INDEX `db_pegawai_no_ktp_idx`(`no_ktp`),
     INDEX `db_pegawai_email_idx`(`email`),
     INDEX `db_pegawai_hp_idx`(`hp`),
@@ -644,8 +654,8 @@ CREATE TABLE `db_jadwal_dokter` (
     `jenis_jadwal` INTEGER NOT NULL DEFAULT 1,
     `hari_praktek` INTEGER NULL,
     `tgl_praktek` DATE NULL,
-    `jam_buka_praktek` VARCHAR(191) NOT NULL,
-    `jam_tutup_praktek` VARCHAR(191) NOT NULL,
+    `jam_buka_praktek` TIME(0) NOT NULL,
+    `jam_tutup_praktek` TIME(0) NOT NULL,
     `kuota_mjkn` INTEGER NOT NULL,
     `kuota_online_umum` INTEGER NOT NULL,
     `kuota_onsite` INTEGER NOT NULL,
@@ -663,10 +673,11 @@ CREATE TABLE `db_jadwal_dokter` (
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
     INDEX `db_jadwal_dokter_id_pegawai_idx`(`id_pegawai`),
-    INDEX `db_jadwal_dokter_tgl_praktek_idx`(`tgl_praktek`),
-    INDEX `db_jadwal_dokter_hari_praktek_idx`(`hari_praktek`),
-    INDEX `db_jadwal_dokter_tgl_praktek_is_deleted_tanggal_libur_idx`(`tgl_praktek`, `is_deleted`, `tanggal_libur`),
-    INDEX `db_jadwal_dokter_hari_praktek_is_deleted_tanggal_libur_idx`(`hari_praktek`, `is_deleted`, `tanggal_libur`),
+    INDEX `db_jadwal_dokter_jenis_jadwal_idx`(`jenis_jadwal`),
+    INDEX `db_jadwal_dokter_kode_instalasi_bpjs_idx`(`kode_instalasi_bpjs`),
+    INDEX `db_jadwal_dokter_id_pegawai_kode_instalasi_bpjs_idx`(`id_pegawai`, `kode_instalasi_bpjs`),
+    INDEX `db_jadwal_dokter_tgl_praktek_jenis_jadwal_is_deleted_idx`(`tgl_praktek`, `jenis_jadwal`, `is_deleted`),
+    INDEX `db_jadwal_dokter_hari_praktek_jenis_jadwal_is_deleted_idx`(`hari_praktek`, `jenis_jadwal`, `is_deleted`),
     PRIMARY KEY (`id_jadwal_dokter`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -987,6 +998,36 @@ ALTER TABLE `db_akses_user` ADD CONSTRAINT `db_akses_user_id_user_fkey` FOREIGN 
 ALTER TABLE `db_akses_user` ADD CONSTRAINT `db_akses_user_id_level_akses_fkey` FOREIGN KEY (`id_level_akses`) REFERENCES `db_level_akses`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_negara_asal_fkey` FOREIGN KEY (`id_ms_negara_asal`) REFERENCES `ms_negara`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_provinsi_asal_fkey` FOREIGN KEY (`id_ms_provinsi_asal`) REFERENCES `ms_provinsi`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_kota_asal_fkey` FOREIGN KEY (`id_ms_kota_asal`) REFERENCES `ms_kabkot`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_kecamatan_asal_fkey` FOREIGN KEY (`id_ms_kecamatan_asal`) REFERENCES `ms_kecamatan`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_desa_asal_fkey` FOREIGN KEY (`id_ms_desa_asal`) REFERENCES `ms_desa`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_negara_tinggal_fkey` FOREIGN KEY (`id_ms_negara_tinggal`) REFERENCES `ms_negara`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_provinsi_tinggal_fkey` FOREIGN KEY (`id_ms_provinsi_tinggal`) REFERENCES `ms_provinsi`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_kota_tinggal_fkey` FOREIGN KEY (`id_ms_kota_tinggal`) REFERENCES `ms_kabkot`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_kecamatan_tinggal_fkey` FOREIGN KEY (`id_ms_kecamatan_tinggal`) REFERENCES `ms_kecamatan`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_desa_tinggal_fkey` FOREIGN KEY (`id_ms_desa_tinggal`) REFERENCES `ms_desa`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `db_unit_kerja` ADD CONSTRAINT `db_unit_kerja_id_unit_induk_fkey` FOREIGN KEY (`id_unit_induk`) REFERENCES `db_unit_kerja`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -1000,9 +1041,6 @@ ALTER TABLE `db_antrian` ADD CONSTRAINT `db_antrian_kode_poliklinik_fkey` FOREIG
 
 -- AddForeignKey
 ALTER TABLE `db_jadwal_dokter` ADD CONSTRAINT `db_jadwal_dokter_id_pegawai_fkey` FOREIGN KEY (`id_pegawai`) REFERENCES `db_pegawai`(`id_pegawai`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `db_jadwal_dokter` ADD CONSTRAINT `db_jadwal_dokter_kode_instalasi_bpjs_fkey` FOREIGN KEY (`kode_instalasi_bpjs`) REFERENCES `db_unit_kerja`(`kode_instalasi_bpjs`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ms_desa` ADD CONSTRAINT `fk_kecamatan` FOREIGN KEY (`id_kecamatan`) REFERENCES `ms_kecamatan`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
