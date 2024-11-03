@@ -32,7 +32,7 @@ export class DoctorScheduleRepository {
     const whereClause: Prisma.DoctorScheduleWhereInput = {
       OR: [
         {
-          poliklinik: {
+          unit: {
             nama_unit_kerja: { contains: keyword || '' },
           },
         },
@@ -81,7 +81,7 @@ export class DoctorScheduleRepository {
         kuota_onsite: true,
         tanggal_libur: true,
         keterangan_libur: true,
-        poliklinik: {
+        unit: {
           select: { id: true, nama_unit_kerja: true },
         },
         pegawai: {

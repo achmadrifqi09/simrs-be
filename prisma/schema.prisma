@@ -310,6 +310,7 @@ model Employee {
   is_restored             Boolean          @default(false)
   DoctorSchedule          DoctorSchedule[]
 
+  @@index([id_pegawai])
   @@index([id_ms_status_kawin], map: "id_status_kawin")
   @@index([nama_pegawai])
   @@index([nip_pegawai])
@@ -357,8 +358,10 @@ model WorkUnit {
   is_deleted          Boolean          @default(false)
   is_restored         Boolean          @default(false)
   antrian             Qeueu[]
+  DoctorSchedule      DoctorSchedule[]
 
   @@index([nama_unit_kerja])
+  @@index([kode_instalasi_bpjs])
   @@index([id_unit_induk])
   @@index([id_bidang])
   @@index([status, is_deleted])
@@ -671,6 +674,7 @@ model DoctorSchedule {
   id_pegawai          Int
   pegawai             Employee  @relation(fields: [id_pegawai], references: [id_pegawai])
   kode_instalasi_bpjs String
+  unit                WorkUnit  @relation(fields: [kode_instalasi_bpjs], references: [kode_instalasi_bpjs])
   jenis_jadwal        Int       @default(1)
   hari_praktek        Int?
   tgl_praktek         DateTime? @db.Date
@@ -695,6 +699,7 @@ model DoctorSchedule {
   @@index([id_pegawai])
   @@index([jenis_jadwal])
   @@index([kode_instalasi_bpjs])
+  @@index([tgl_praktek, hari_praktek])
   @@index([id_pegawai, kode_instalasi_bpjs])
   @@index([tgl_praktek, jenis_jadwal, is_deleted])
   @@index([hari_praktek, jenis_jadwal, is_deleted])

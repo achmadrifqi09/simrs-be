@@ -7,7 +7,7 @@ import { AppMiddleware } from './middlewares/app/app.middleware';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpExceptionFilter } from './filters/http-exception/http-exception.filter';
 import { ConfigModule } from '@nestjs/config';
-import { EmployeeModule } from './modules/employee/employee.module';
+// import { EmployeeModule } from './modules/employee/employee.module';
 import { WorkUnitModule } from './modules/work-unit/work-unit.module';
 import { ValidationFilter } from './filters/validation/validation.filter';
 import { ResponseInterceptor } from './interceptors/response/response.interceptor';
@@ -33,7 +33,7 @@ import { DoctorScheduleModule } from './modules/doctor-schedule/doctor-schedule.
     ]),
     UserModule,
     PrismaModule,
-    EmployeeModule,
+    // EmployeeModule,
     WorkUnitModule,
     AuthModule,
     ReligionModule,

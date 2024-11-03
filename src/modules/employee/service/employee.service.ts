@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { EmployeeRepository } from '../repository/employee.repository';
 import { z } from 'zod';
-import { CreateEmployeeDto, UpdateEmployeeDto } from '../dto/employee.dto';
+import { CreateEmployeeDto } from '../dto/employee.dto';
 import { Employee } from '@prisma/client';
-import path from 'path';
-import fs from 'fs';
+// import path from 'path';
+// import fs from 'fs';
 
 @Injectable()
 export class EmployeeService {
@@ -26,9 +26,9 @@ export class EmployeeService {
     return this.employeeRepository.getAllEmployees();
   }
 
-  async updateEmployee(id: number, data: z.infer<typeof UpdateEmployeeDto>) {
-    await this.getEmployeeById(id);
-    return this.employeeRepository.updateEmployee(id, data);
+  async updateEmployee() {
+    // await this.getEmployeeById(id);
+    // return this.employeeRepository.updateEmployee(id, data);
   }
 
   async softDeleteEmployee(id: number) {
@@ -56,18 +56,18 @@ export class EmployeeService {
     }
 
     // delete jika ada file lama
-    if (employee.file_ktp) {
-      const oldFilePath = path.join(
-        process.cwd(),
-        'storage/ktp',
-        employee.file_ktp,
-      );
-      try {
-        await fs.promises.unlink(oldFilePath);
-      } catch (error) {
-        console.warn(`Old file not found: ${oldFilePath}`);
-      }
-    }
+    // if (employee.file_ktp) {
+    //   const oldFilePath = path.join(
+    //     process.cwd(),
+    //     'storage/ktp',
+    //     employee.file_ktp,
+    //   );
+    //   try {
+    //     await fs.promises.unlink(oldFilePath);
+    //   } catch (error) {
+    //     console.warn(`Old file not found: ${oldFilePath}`);
+    //   }
+    // }
 
     return this.employeeRepository.updateEmployee(id, { file_ktp: filename });
   }
