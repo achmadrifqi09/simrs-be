@@ -8,7 +8,6 @@ import { DoctorScheduleRepository } from '../repository/doctor-schedule.reposito
 import { DoctorScheduleDTO, DoctorVacation } from '../dto/doctor-schedule.dto';
 import { generateCurrentDate } from '../../../utils/date-formatter';
 import moment from 'moment-timezone';
-import { UpdateStatus } from '../../../common/types/common.type';
 
 @Dependencies([DoctorScheduleRepository])
 @Injectable()

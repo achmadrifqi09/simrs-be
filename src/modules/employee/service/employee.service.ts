@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { EmployeeRepository } from '../repository/employee.repository';
-import { z } from 'zod';
-import { CreateEmployeeDto } from '../dto/employee.dto';
+// import { z } from 'zod';
+// import { CreateEmployeeDto } from '../dto/employee.dto';
 // import { Employee } from '@prisma/client';
 // import path from 'path';
 // import fs from 'fs';
@@ -10,7 +10,7 @@ import { CreateEmployeeDto } from '../dto/employee.dto';
 export class EmployeeService {
   constructor(private readonly employeeRepository: EmployeeRepository) {}
 
-  async createEmployee(data: z.infer<typeof CreateEmployeeDto>) {
+  async createEmployee(/*data: z.infer<typeof CreateEmployeeDto>*/) {
     // return this.employeeRepository.createEmployee(data);
   }
 
@@ -48,7 +48,7 @@ export class EmployeeService {
 
   async updateEmployeeFilename(
     id: number,
-    filename: string,
+    /*filename: string,*/
   ) {
     const employee = await this.getEmployeeById(id);
     if (!employee) {
