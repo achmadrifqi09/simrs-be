@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { EmployeeRepository } from '../repository/employee.repository';
 import { z } from 'zod';
 import { CreateEmployeeDto } from '../dto/employee.dto';
-import { Employee } from '@prisma/client';
+// import { Employee } from '@prisma/client';
 // import path from 'path';
 // import fs from 'fs';
 
