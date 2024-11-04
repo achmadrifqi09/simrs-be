@@ -11,7 +11,7 @@ export class EmployeeService {
   constructor(private readonly employeeRepository: EmployeeRepository) {}
 
   async createEmployee(data: z.infer<typeof CreateEmployeeDto>) {
-    return this.employeeRepository.createEmployee(data);
+    // return this.employeeRepository.createEmployee(data);
   }
 
   async getEmployeeById(id: number) {
@@ -49,7 +49,7 @@ export class EmployeeService {
   async updateEmployeeFilename(
     id: number,
     filename: string,
-  ): Promise<Employee> {
+  ) {
     const employee = await this.getEmployeeById(id);
     if (!employee) {
       throw new NotFoundException(`Employee with ID ${id} not found`);
@@ -69,7 +69,7 @@ export class EmployeeService {
     //   }
     // }
 
-    return this.employeeRepository.updateEmployee(id, { file_ktp: filename });
+    // return this.employeeRepository.updateEmployee(id, { file_ktp: filename });
   }
 
   // async uploadFileKtp(id: number, filename: string) {

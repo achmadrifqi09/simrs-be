@@ -16,8 +16,7 @@ export const generateExpiresDate = () => {
 };
 
 export const timeFormatter = (timeString: string) => {
-  const [hours, minutes, seconds] = timeString.split(':');
-  const date = new Date();
-  date.setHours(Number(hours), Number(minutes), Number(seconds));
-  return date;
+  const [hours, minutes, seconds] = timeString.split(':').map(Number);
+  const date = new Date(Date.UTC(1970, 0, 1, hours, minutes, seconds));
+  return date.toISOString();
 };

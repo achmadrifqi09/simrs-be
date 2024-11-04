@@ -285,6 +285,7 @@ CREATE TABLE `db_pegawai` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `db_pegawai_id_pegawai_idx`(`id_pegawai`),
     INDEX `id_status_kawin`(`id_ms_status_kawin`),
     INDEX `db_pegawai_nama_pegawai_idx`(`nama_pegawai`),
     INDEX `db_pegawai_nip_pegawai_idx`(`nip_pegawai`),
@@ -332,6 +333,7 @@ CREATE TABLE `db_unit_kerja` (
 
     UNIQUE INDEX `db_unit_kerja_kode_instalasi_bpjs_key`(`kode_instalasi_bpjs`),
     INDEX `db_unit_kerja_nama_unit_kerja_idx`(`nama_unit_kerja`),
+    INDEX `db_unit_kerja_kode_instalasi_bpjs_idx`(`kode_instalasi_bpjs`),
     INDEX `db_unit_kerja_id_unit_induk_idx`(`id_unit_induk`),
     INDEX `db_unit_kerja_id_bidang_idx`(`id_bidang`),
     INDEX `db_unit_kerja_status_is_deleted_idx`(`status`, `is_deleted`),
@@ -675,6 +677,7 @@ CREATE TABLE `db_jadwal_dokter` (
     INDEX `db_jadwal_dokter_id_pegawai_idx`(`id_pegawai`),
     INDEX `db_jadwal_dokter_jenis_jadwal_idx`(`jenis_jadwal`),
     INDEX `db_jadwal_dokter_kode_instalasi_bpjs_idx`(`kode_instalasi_bpjs`),
+    INDEX `db_jadwal_dokter_tgl_praktek_hari_praktek_idx`(`tgl_praktek`, `hari_praktek`),
     INDEX `db_jadwal_dokter_id_pegawai_kode_instalasi_bpjs_idx`(`id_pegawai`, `kode_instalasi_bpjs`),
     INDEX `db_jadwal_dokter_tgl_praktek_jenis_jadwal_is_deleted_idx`(`tgl_praktek`, `jenis_jadwal`, `is_deleted`),
     INDEX `db_jadwal_dokter_hari_praktek_jenis_jadwal_is_deleted_idx`(`hari_praktek`, `jenis_jadwal`, `is_deleted`),
@@ -1041,6 +1044,9 @@ ALTER TABLE `db_antrian` ADD CONSTRAINT `db_antrian_kode_poliklinik_fkey` FOREIG
 
 -- AddForeignKey
 ALTER TABLE `db_jadwal_dokter` ADD CONSTRAINT `db_jadwal_dokter_id_pegawai_fkey` FOREIGN KEY (`id_pegawai`) REFERENCES `db_pegawai`(`id_pegawai`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_jadwal_dokter` ADD CONSTRAINT `db_jadwal_dokter_kode_instalasi_bpjs_fkey` FOREIGN KEY (`kode_instalasi_bpjs`) REFERENCES `db_unit_kerja`(`kode_instalasi_bpjs`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ms_desa` ADD CONSTRAINT `fk_kecamatan` FOREIGN KEY (`id_kecamatan`) REFERENCES `ms_kecamatan`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
