@@ -22,6 +22,30 @@ const DateValidation = z.union([
   z.null(),
 ]);
 
+const doctorVacationValidation = z.object({
+  tanggal_libur: z
+    .string({ message: 'Tanggal libur harus di isi' })
+    .refine(
+      (val) => {
+        const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/;
+        return regex.test(val) || !isNaN(Date.parse(val));
+      },
+      {
+        message: 'Tanggal tidak valid',
+      },
+    )
+    .transform((val) => {
+      if (/^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/.test(val)) {
+        const [day, month, year] = val.split('-');
+        val = `${year}-${month}-${day}`;
+      }
+      return new Date(val);
+    }),
+  keterangan_libur: z
+    .string()
+    .min(4, { message: 'Keterangan libur minimal 4 karakter' }),
+});
+
 const doctorScheduleValidation = z.object({
   id_pegawai: z
     .number({ message: 'Dokter harus di isi' })
@@ -56,4 +80,4 @@ const doctorScheduleValidation = z.object({
   keterangan_libur: z.string().nullish(),
 });
 
-export { doctorScheduleValidation };
+export { doctorScheduleValidation, doctorVacationValidation };

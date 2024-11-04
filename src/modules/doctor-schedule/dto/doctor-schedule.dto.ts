@@ -18,4 +18,11 @@ interface DoctorScheduleDTO {
   deleted_at?: Date;
 }
 
-export { DoctorScheduleDTO };
+interface DoctorVacation {
+  tanggal_libur: Date | null;
+  keterangan_libur: string | null;
+  modified_at?: Date;
+  modified_by?: number;
+}
+
+export { DoctorScheduleDTO, DoctorVacation };

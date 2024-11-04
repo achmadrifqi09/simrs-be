@@ -5,9 +5,10 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { DoctorScheduleRepository } from '../repository/doctor-schedule.repository';
-import { DoctorScheduleDTO } from '../dto/doctor-schedule.dto';
+import { DoctorScheduleDTO, DoctorVacation } from '../dto/doctor-schedule.dto';
 import { generateCurrentDate } from '../../../utils/date-formatter';
 import moment from 'moment-timezone';
+import { UpdateStatus } from '../../../common/types/common.type';
 
 @Dependencies([DoctorScheduleRepository])
 @Injectable()
@@ -85,5 +86,38 @@ export class DoctorScheduleService {
       created_by: req?.user?.id,
     };
     return this.doctorScheduleRepository.createDoctorSchedule(payload);
+  }
+
+  async doctorVacation(id: number, payload: DoctorVacation, req: any) {
+    if (!Number(id)) {
+      throw new HttpException(
+        'Jadwal dokter (id) tidak valid',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    payload = {
+      ...payload,
+      modified_at: generateCurrentDate(),
+      modified_by: req.user?.id,
+    };
+    return this.doctorScheduleRepository.doctorVacation(Number(id), payload);
+  }
+
+  async cancelDoctorVacation(id: number, req: any) {
+    if (!Number(id)) {
+      throw new HttpException(
+        'Jadwal dokter (id) tidak valid',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const payload: DoctorVacation = {
+      tanggal_libur: null,
+      keterangan_libur: null,
+      modified_at: generateCurrentDate(),
+      modified_by: req.user?.id,
+    };
+    return this.doctorScheduleRepository.doctorVacation(id, payload);
   }
 }

@@ -5,6 +5,8 @@ import {
   Header,
   HttpCode,
   HttpStatus,
+  Param,
+  Patch,
   Post,
   Query,
   Req,
@@ -15,8 +17,11 @@ import { AccessMenuGuard } from '../../../guards/access-menu/access-menu.guard';
 import { Permission } from '../../../decorators/permission/permission.decorator';
 import { Action } from '../../../common/enums/action.enum';
 import { ZodPipe } from '../../../pipes/zod-pipe/zod-pipe.pipe';
-import { doctorScheduleValidation } from '../validation/doctor-schedule.validation';
-import { DoctorScheduleDTO } from '../dto/doctor-schedule.dto';
+import {
+  doctorScheduleValidation,
+  doctorVacationValidation,
+} from '../validation/doctor-schedule.validation';
+import { DoctorScheduleDTO, DoctorVacation } from '../dto/doctor-schedule.dto';
 
 @Controller('doctor-schedule')
 export class DoctorScheduleController {
@@ -52,5 +57,27 @@ export class DoctorScheduleController {
     @Body(new ZodPipe(doctorScheduleValidation)) schedule: DoctorScheduleDTO,
   ) {
     return this.doctorScheduleService.createDoctorSchedule(schedule, req);
+  }
+
+  @Patch('/:id/vacation')
+  @HttpCode(HttpStatus.OK)
+  @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('dokter-praktek', Action.CAN_UPDATE)
+  async updateDoctorVacation(
+    @Param('id') id: number,
+    @Req() req: any,
+    @Body(new ZodPipe(doctorVacationValidation)) payload: DoctorVacation,
+  ) {
+    return this.doctorScheduleService.doctorVacation(id, payload, req);
+  }
+
+  @Patch('/:id/cancel-vacation')
+  @HttpCode(HttpStatus.OK)
+  @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('dokter-praktek', Action.CAN_UPDATE)
+  async cancelDoctorVacation(@Param('id') id: number, @Req() req: any) {
+    return this.doctorScheduleService.cancelDoctorVacation(id, req);
   }
 }

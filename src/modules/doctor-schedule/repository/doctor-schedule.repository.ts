@@ -1,6 +1,6 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { DoctorScheduleDTO } from '../dto/doctor-schedule.dto';
+import { DoctorScheduleDTO, DoctorVacation } from '../dto/doctor-schedule.dto';
 import { PrismaErrorHandler } from '../../../common/handler/prisma-error.handler';
 import { Prisma } from '@prisma/client';
 import { timeFormatter } from '../../../utils/date-formatter';
@@ -16,9 +16,7 @@ export class DoctorScheduleRepository {
         data: {
           ...schedule,
           jam_buka_praktek: timeFormatter(schedule.jam_buka_praktek),
-          jam_tutup_praktek: timeFormatter(
-            schedule.jam_tutup_praktek,
-          ),
+          jam_tutup_praktek: timeFormatter(schedule.jam_tutup_praktek),
         },
       });
     } catch (error) {
@@ -26,10 +24,18 @@ export class DoctorScheduleRepository {
     }
   }
 
-  private convertStringToDate(timeString: string) {
-    const [hours, minutes, seconds] = timeString.split(':').map(Number);
-    const date = new Date(Date.UTC(1970, 0, 1, hours, minutes, seconds));
-    return date.toISOString();
+  async doctorVacation(id: number, payload: DoctorVacation) {
+    try {
+      return await this.prismaService.doctorSchedule.update({
+        where: {
+          id_jadwal_dokter: Number(id),
+          is_deleted: false,
+        },
+        data: payload,
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
   }
 
   async findDoctorSchedule(
