@@ -5,7 +5,7 @@ import {
   Put,
   Delete,
   Param,
-  Body,
+  // Body,
   UploadedFile,
   UseInterceptors,
   ParseIntPipe,
@@ -13,12 +13,12 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { EmployeeService } from '../service/employee.service';
-import {
-  EmployeeValidation,
-  // KtpFileValidationPipe,
-} from '../validation/employee.validation';
-import { ZodPipe } from 'src/pipes/zod-pipe/zod-pipe.pipe';
-import { z } from 'zod';
+// import {
+//   EmployeeValidation,
+//   // KtpFileValidationPipe,
+// } from '../validation/employee.validation';
+// import { ZodPipe } from 'src/pipes/zod-pipe/zod-pipe.pipe';
+// import { z } from 'zod';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import path from 'path';
@@ -29,11 +29,8 @@ export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
   @Post()
-  async createEmployee(
-    @Body(new ZodPipe(EmployeeValidation.createEmployee))
-    createEmployeeDto: z.infer<typeof EmployeeValidation.createEmployee>,
-  ) {
-    return this.employeeService.createEmployee(createEmployeeDto);
+  async createEmployee(/* @Body(new ZodPipe(EmployeeValidation.createEmployee)) createEmployeeDto: z.infer<typeof EmployeeValidation.createEmployee>,*/) {
+    // return this.employeeService.createEmployee(createEmployeeDto);
   }
 
   @Get(':id')
