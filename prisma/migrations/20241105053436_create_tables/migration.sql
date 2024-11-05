@@ -685,20 +685,13 @@ CREATE TABLE `db_jadwal_dokter` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `db_jadwal_dokter_ganti` (
-    `id_jadwal_dokter_ganti` INTEGER NOT NULL AUTO_INCREMENT,
-    `id_jadwal_dokter` INTEGER NOT NULL,
-    `tgl_praktek` DATE NOT NULL,
-    `id_pegawai` INTEGER NOT NULL,
-    `id` INTEGER NOT NULL,
-    `jam_awal_prakter` TIME(0) NOT NULL,
-    `jam_akhir_praktek` TIME(0) NOT NULL,
-    `online_bpjs_mjkn` INTEGER NOT NULL,
-    `online_umum` INTEGER NOT NULL,
-    `onsite_bpjs` INTEGER NOT NULL,
-    `onsite_umum` INTEGER NOT NULL,
-    `keterangan_ganti` TEXT NOT NULL,
-    `status` INTEGER NOT NULL DEFAULT 1,
+CREATE TABLE `db_kuota_tambahan_jadwal_dokter` (
+    `id_kuota_tambahan` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_jadwal_dokter` INTEGER NULL,
+    `kuota_mjkn` INTEGER NOT NULL,
+    `kuota_online_umum` INTEGER NOT NULL,
+    `kuota_onsite` INTEGER NOT NULL,
+    `tanggal_diterapkan` DATE NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `created_by` INTEGER NOT NULL DEFAULT 0,
     `modified_at` DATETIME(0) NULL,
@@ -710,12 +703,9 @@ CREATE TABLE `db_jadwal_dokter_ganti` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
-    INDEX `db_jadwal_dokter_ganti_id_jadwal_dokter_idx`(`id_jadwal_dokter`),
-    INDEX `db_jadwal_dokter_ganti_id_pegawai_idx`(`id_pegawai`),
-    INDEX `db_jadwal_dokter_ganti_id_idx`(`id`),
-    INDEX `db_jadwal_dokter_ganti_tgl_praktek_idx`(`tgl_praktek`),
-    INDEX `db_jadwal_dokter_ganti_status_is_deleted_idx`(`status`, `is_deleted`),
-    PRIMARY KEY (`id_jadwal_dokter_ganti`)
+    INDEX `db_kuota_tambahan_jadwal_dokter_id_jadwal_dokter_idx`(`id_jadwal_dokter`),
+    INDEX `db_kuota_tambahan_jadwal_dokter_id_kuota_tambahan_idx`(`id_kuota_tambahan`),
+    PRIMARY KEY (`id_kuota_tambahan`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -1047,6 +1037,9 @@ ALTER TABLE `db_jadwal_dokter` ADD CONSTRAINT `db_jadwal_dokter_id_pegawai_fkey`
 
 -- AddForeignKey
 ALTER TABLE `db_jadwal_dokter` ADD CONSTRAINT `db_jadwal_dokter_kode_instalasi_bpjs_fkey` FOREIGN KEY (`kode_instalasi_bpjs`) REFERENCES `db_unit_kerja`(`kode_instalasi_bpjs`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_kuota_tambahan_jadwal_dokter` ADD CONSTRAINT `db_kuota_tambahan_jadwal_dokter_id_jadwal_dokter_fkey` FOREIGN KEY (`id_jadwal_dokter`) REFERENCES `db_jadwal_dokter`(`id_jadwal_dokter`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ms_desa` ADD CONSTRAINT `fk_kecamatan` FOREIGN KEY (`id_kecamatan`) REFERENCES `ms_kecamatan`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;

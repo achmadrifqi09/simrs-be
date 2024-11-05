@@ -1,9 +1,14 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { DoctorScheduleDTO, DoctorVacation } from '../dto/doctor-schedule.dto';
+import {
+  AdditionalQuotaDTO,
+  DoctorScheduleDTO,
+  DoctorVacationDTO,
+} from '../dto/doctor-schedule.dto';
 import { PrismaErrorHandler } from '../../../common/handler/prisma-error.handler';
 import { Prisma } from '@prisma/client';
 import { timeFormatter } from '../../../utils/date-formatter';
+import { SoftDelete } from '../../../common/types/common.type';
 
 @Dependencies([PrismaService])
 @Injectable()
@@ -24,7 +29,39 @@ export class DoctorScheduleRepository {
     }
   }
 
-  async doctorVacation(id: number, payload: DoctorVacation) {
+  async updateDoctorSchedule(id: number, schedule: DoctorScheduleDTO) {
+    try {
+      return await this.prismaService.doctorSchedule.update({
+        where: {
+          id_jadwal_dokter: Number(id),
+          is_deleted: false,
+        },
+        data: {
+          ...schedule,
+          jam_buka_praktek: timeFormatter(schedule.jam_buka_praktek),
+          jam_tutup_praktek: timeFormatter(schedule.jam_tutup_praktek),
+        },
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
+  }
+
+  async softDeleteDoctorSchedule(id: number, payload: SoftDelete) {
+    try {
+      return await this.prismaService.doctorSchedule.update({
+        where: {
+          id_jadwal_dokter: Number(id),
+          is_deleted: false,
+        },
+        data: payload,
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
+  }
+
+  async doctorVacation(id: number, payload: DoctorVacationDTO) {
     try {
       return await this.prismaService.doctorSchedule.update({
         where: {
@@ -70,13 +107,14 @@ export class DoctorScheduleRepository {
       whereClause.kode_instalasi_bpjs = poly_code;
     }
 
+    let practiceDate: Date | undefined = undefined;
     if (practice_date && practice_date !== '') {
       const [day, month, year] = practice_date.split('-').map(Number);
-      const date = new Date(Date.UTC(year, month - 1, day));
-      const isoDay = ((date.getDay() + 6) % 7) + 1;
+      practiceDate = new Date(Date.UTC(year, month - 1, day));
+      const isoDay = ((practiceDate.getDay() + 6) % 7) + 1;
       whereClause.AND = [
         {
-          OR: [{ tgl_praktek: date }, { hari_praktek: isoDay }],
+          OR: [{ tgl_praktek: practiceDate }, { hari_praktek: isoDay }],
         },
       ];
     }
@@ -109,6 +147,18 @@ export class DoctorScheduleRepository {
             gelar_belakang: true,
           },
         },
+        kuota_tambahan: {
+          select: {
+            id_kuota_tambahan: true,
+            kuota_mjkn: true,
+            kuota_onsite: true,
+            kuota_online_umum: true,
+            tanggal_diterapkan: true,
+          },
+          where: practiceDate
+            ? { tanggal_diterapkan: practiceDate, is_deleted: false }
+            : undefined,
+        },
       },
       orderBy: {
         id_pegawai: 'desc',
@@ -122,5 +172,44 @@ export class DoctorScheduleRepository {
         take: Number(take) || 10,
       },
     };
+  }
+
+  async createAdditionalDoctorQuota(additionalQuota: AdditionalQuotaDTO) {
+    try {
+      return await this.prismaService.additionalDoctorQuota.create({
+        data: additionalQuota,
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
+  }
+
+  async updateAdditionalQuota(id: number, additionalQuota: AdditionalQuotaDTO) {
+    try {
+      return await this.prismaService.additionalDoctorQuota.update({
+        where: {
+          id_kuota_tambahan: Number(id),
+          is_deleted: false,
+        },
+        data: additionalQuota,
+      });
+    } catch (error) {
+      console.log(error);
+      PrismaErrorHandler.handle(error);
+    }
+  }
+
+  async softDeleteAdditionalDoctorQuota(id: number, payload: SoftDelete) {
+    try {
+      return await this.prismaService.additionalDoctorQuota.update({
+        where: {
+          id_kuota_tambahan: Number(id),
+          is_deleted: false,
+        },
+        data: payload,
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
   }
 }

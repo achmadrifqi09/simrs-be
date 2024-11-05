@@ -308,7 +308,7 @@ model Employee {
   restored_by             Int?             @default(0)
   is_deleted              Boolean          @default(false)
   is_restored             Boolean          @default(false)
-  DoctorSchedule          DoctorSchedule[]
+  jadwal_dokter           DoctorSchedule[]
 
   @@index([id_pegawai])
   @@index([id_ms_status_kawin], map: "id_status_kawin")
@@ -670,31 +670,32 @@ model Qeueu {
 }
 
 model DoctorSchedule {
-  id_jadwal_dokter    Int       @id @default(autoincrement())
+  id_jadwal_dokter    Int                     @id @default(autoincrement())
   id_pegawai          Int
-  pegawai             Employee  @relation(fields: [id_pegawai], references: [id_pegawai])
+  pegawai             Employee                @relation(fields: [id_pegawai], references: [id_pegawai])
   kode_instalasi_bpjs String
-  unit                WorkUnit  @relation(fields: [kode_instalasi_bpjs], references: [kode_instalasi_bpjs])
-  jenis_jadwal        Int       @default(1)
+  unit                WorkUnit                @relation(fields: [kode_instalasi_bpjs], references: [kode_instalasi_bpjs])
+  jenis_jadwal        Int                     @default(1)
   hari_praktek        Int?
-  tgl_praktek         DateTime? @db.Date
-  jam_buka_praktek    DateTime  @db.Time(0)
-  jam_tutup_praktek   DateTime  @db.Time(0)
+  tgl_praktek         DateTime?               @db.Date
+  jam_buka_praktek    DateTime                @db.Time(0)
+  jam_tutup_praktek   DateTime                @db.Time(0)
   kuota_mjkn          Int
   kuota_online_umum   Int
   kuota_onsite        Int
-  tanggal_libur       DateTime? @db.Date
+  tanggal_libur       DateTime?               @db.Date
   keterangan_libur    String?
-  created_at          DateTime  @default(now())
-  created_by          Int       @default(0)
-  modified_at         DateTime? @db.DateTime(0)
-  modified_by         Int?      @default(0)
-  deleted_at          DateTime? @db.DateTime(0)
-  deleted_by          Int?      @default(0)
-  restored_at         DateTime? @db.DateTime(0)
-  restored_by         Int?      @default(0)
-  is_deleted          Boolean   @default(false)
-  is_restored         Boolean   @default(false)
+  created_at          DateTime                @default(now())
+  created_by          Int                     @default(0)
+  modified_at         DateTime?               @db.DateTime(0)
+  modified_by         Int?                    @default(0)
+  deleted_at          DateTime?               @db.DateTime(0)
+  deleted_by          Int?                    @default(0)
+  restored_at         DateTime?               @db.DateTime(0)
+  restored_by         Int?                    @default(0)
+  is_deleted          Boolean                 @default(false)
+  is_restored         Boolean                 @default(false)
+  kuota_tambahan      AdditionalDoctorQuota[]
 
   @@index([id_pegawai])
   @@index([jenis_jadwal])
@@ -707,37 +708,28 @@ model DoctorSchedule {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model DoctorChangeSchedule {
-  id_jadwal_dokter_ganti Int       @id @default(autoincrement())
-  id_jadwal_dokter       Int
-  tgl_praktek            DateTime  @db.Date
-  id_pegawai             Int
-  id                     Int
-  jam_awal_prakter       DateTime  @db.Time(0)
-  jam_akhir_praktek      DateTime  @db.Time(0)
-  online_bpjs_mjkn       Int
-  online_umum            Int
-  onsite_bpjs            Int
-  onsite_umum            Int
-  keterangan_ganti       String    @db.Text
-  status                 Int       @default(1)
-  created_at             DateTime  @default(now())
-  created_by             Int       @default(0)
-  modified_at            DateTime? @db.DateTime(0)
-  modified_by            Int?      @default(0)
-  deleted_at             DateTime? @db.DateTime(0)
-  deleted_by             Int?      @default(0)
-  restored_at            DateTime? @db.DateTime(0)
-  restored_by            Int?      @default(0)
-  is_deleted             Boolean   @default(false)
-  is_restored            Boolean   @default(false)
+model AdditionalDoctorQuota {
+  id_kuota_tambahan  Int             @id @default(autoincrement())
+  id_jadwal_dokter   Int?
+  jadwal_dokter      DoctorSchedule? @relation(fields: [id_jadwal_dokter], references: [id_jadwal_dokter])
+  kuota_mjkn         Int
+  kuota_online_umum  Int
+  kuota_onsite       Int
+  tanggal_diterapkan DateTime?       @db.Date
+  created_at         DateTime        @default(now())
+  created_by         Int             @default(0)
+  modified_at        DateTime?       @db.DateTime(0)
+  modified_by        Int?            @default(0)
+  deleted_at         DateTime?       @db.DateTime(0)
+  deleted_by         Int?            @default(0)
+  restored_at        DateTime?       @db.DateTime(0)
+  restored_by        Int?            @default(0)
+  is_deleted         Boolean         @default(false)
+  is_restored        Boolean         @default(false)
 
   @@index([id_jadwal_dokter])
-  @@index([id_pegawai])
-  @@index([id])
-  @@index([tgl_praktek])
-  @@index([status, is_deleted])
-  @@map("db_jadwal_dokter_ganti")
+  @@index([id_kuota_tambahan])
+  @@map("db_kuota_tambahan_jadwal_dokter")
 }
 
 model Village {
