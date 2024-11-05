@@ -27,7 +27,10 @@ import { Permission } from '../../../../decorators/permission/permission.decorat
 import { Action } from '../../../../common/enums/action.enum';
 
 @Dependencies([EmployeeStatusService])
-@Controller('/master/employee-status')
+@Controller({
+  path: '/master/employee-status',
+  version: '1',
+})
 export class EmployeeStatusController {
   constructor(private readonly employeeStatusService: EmployeeStatusService) {}
 

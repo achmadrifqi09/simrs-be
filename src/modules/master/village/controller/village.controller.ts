@@ -21,7 +21,10 @@ import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guar
 import { Permission } from '../../../../decorators/permission/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/master/village')
+@Controller({
+  path: '/master/village',
+  version: '1',
+})
 export class VillageController {
   constructor(private readonly villageService: VillageService) {}
 

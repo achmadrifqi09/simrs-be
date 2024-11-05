@@ -29,7 +29,10 @@ import {
   DoctorVacationDTO,
 } from '../dto/doctor-schedule.dto';
 
-@Controller('doctor-schedule')
+@Controller({
+  path: 'doctor-schedule',
+  version: '1',
+})
 export class DoctorScheduleController {
   constructor(private readonly doctorScheduleService: DoctorScheduleService) {}
 

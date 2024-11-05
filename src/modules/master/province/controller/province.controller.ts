@@ -23,7 +23,10 @@ import { Action } from '../../../../common/enums/action.enum';
 import { Permission } from '../../../../decorators/permission/permission.decorator';
 
 @Dependencies([ProvinceService])
-@Controller('/master/province')
+@Controller({
+  path: '/master/province',
+  version: '1',
+})
 export class ProvinceController {
   constructor(private readonly provinceService: ProvinceService) {}
 

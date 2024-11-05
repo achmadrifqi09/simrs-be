@@ -25,7 +25,10 @@ import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guar
 import { Permission } from '../../../../decorators/permission/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/master/employee-rank')
+@Controller({
+  path: '/master/employee-rank',
+  version: '1',
+})
 export class RankOfEmployeesController {
   constructor(
     private readonly rankOfEmployeesService: RankOfEmployeesService,

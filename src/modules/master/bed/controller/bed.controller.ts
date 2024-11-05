@@ -29,7 +29,10 @@ import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guar
 import { Permission } from '../../../../decorators/permission/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/master/bed')
+@Controller({
+  path: '/master/bed',
+  version: '1',
+})
 export class BedController {
   constructor(private readonly bedService: BedService) {}
 
