@@ -15,6 +15,20 @@ export const generateExpiresDate = () => {
   return new Date(finalDate);
 };
 
+export const convertToTimeString = (date: Date): string => {
+  const hours = date.getUTCHours().toString().padStart(2, '0');
+  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+  const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+  return `${hours}:${minutes}:${seconds}`;
+};
+
+export const convertToDateString = (date: Date): string => {
+  const year = date.getUTCFullYear();
+  const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+  const day = date.getUTCDate().toString().padStart(2, '0');
+  return `${day}-${month}-${year}`;
+};
+
 export const timeFormatter = (timeString: string) => {
   const [hours, minutes, seconds] = timeString.split(':').map(Number);
   const date = new Date(Date.UTC(1970, 0, 1, hours, minutes, seconds));

@@ -18,11 +18,24 @@ interface DoctorScheduleDTO {
   deleted_at?: Date;
 }
 
-interface DoctorVacation {
+interface DoctorVacationDTO {
   tanggal_libur: Date | null;
   keterangan_libur: string | null;
   modified_at?: Date;
   modified_by?: number;
 }
 
-export { DoctorScheduleDTO, DoctorVacation };
+interface AdditionalQuotaDTO {
+  id_jadwal_dokter: number;
+  kuota_mjkn: number;
+  kuota_online_umum: number;
+  kuota_onsite: number;
+  tanggal_diterapkan: Date;
+  created_by?: number;
+  created_at?: Date;
+  modified_at?: Date;
+  modified_by?: number;
+  deleted_at?: Date;
+}
+
+export { DoctorScheduleDTO, DoctorVacationDTO, AdditionalQuotaDTO };

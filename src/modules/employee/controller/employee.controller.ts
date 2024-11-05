@@ -16,7 +16,7 @@ import { EmployeeService } from '../service/employee.service';
 // import {
 //   EmployeeValidation,
 //   // KtpFileValidationPipe,
-// } from '../validation/employee.validation';
+// } from '../validation/employee.validation';npnpm run dev
 // import { ZodPipe } from 'src/pipes/zod-pipe/zod-pipe.pipe';
 // import { z } from 'zod';
 import { FileInterceptor } from '@nestjs/platform-express';

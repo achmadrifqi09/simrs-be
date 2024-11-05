@@ -5,11 +5,11 @@ const DateValidation = z.union([
     .string()
     .refine(
       (val) => {
-        const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/;
-        return regex.test(val) || !isNaN(Date.parse(val));
+        const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/;
+        return regex.test(val);
       },
       {
-        message: 'Tanggal tidak valid',
+        message: 'Tanggal tidak valid, format harus dd-mm-yyyy',
       },
     )
     .transform((val) => {
@@ -27,11 +27,11 @@ const doctorVacationValidation = z.object({
     .string({ message: 'Tanggal libur harus di isi' })
     .refine(
       (val) => {
-        const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/;
-        return regex.test(val) || !isNaN(Date.parse(val));
+        const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/;
+        return regex.test(val);
       },
       {
-        message: 'Tanggal tidak valid',
+        message: 'Tanggal tidak valid, format harus dd-mm-yyyy',
       },
     )
     .transform((val) => {
@@ -44,6 +44,30 @@ const doctorVacationValidation = z.object({
   keterangan_libur: z
     .string()
     .min(4, { message: 'Keterangan libur minimal 4 karakter' }),
+});
+
+const additionalDoctorQuotaValidation = z.object({
+  kuota_mjkn: z.number({ message: 'Kuota MJKN harus di isi' }),
+  kuota_online_umum: z.number({ message: 'Kuota online umum harus di isi' }),
+  kuota_onsite: z.number({ message: 'Kuota onsite harus di isi' }),
+  tanggal_diterapkan: z
+    .string()
+    .refine(
+      (val) => {
+        const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/;
+        return regex.test(val);
+      },
+      {
+        message: 'Tanggal tidak valid, format harus dd-mm-yyyy',
+      },
+    )
+    .transform((val) => {
+      if (/^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/.test(val)) {
+        const [day, month, year] = val.split('-');
+        val = `${year}-${month}-${day}`;
+      }
+      return new Date(val);
+    }),
 });
 
 const doctorScheduleValidation = z.object({
@@ -80,4 +104,8 @@ const doctorScheduleValidation = z.object({
   keterangan_libur: z.string().nullish(),
 });
 
-export { doctorScheduleValidation, doctorVacationValidation };
+export {
+  doctorScheduleValidation,
+  doctorVacationValidation,
+  additionalDoctorQuotaValidation,
+};
