@@ -21,7 +21,10 @@ import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guar
 import { Permission } from '../../../../decorators/permission/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/master/district')
+@Controller({
+  path: '/master/district',
+  version: '1',
+})
 export class DistrictController {
   constructor(private readonly districtService: DistrictService) {}
 

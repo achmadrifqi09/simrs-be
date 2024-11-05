@@ -28,7 +28,10 @@ import { WorkUnit, WorkUnitUpdateQueueStatus } from '../dto/work-unit.dto';
 import { UpdateStatus } from '../../../common/types/common.type';
 
 @Dependencies([WorkUnitService])
-@Controller('/work-unit')
+@Controller({
+  path: '/work-unit',
+  version: '1',
+})
 export class WorkUnitController {
   constructor(private readonly workUnitService: WorkUnitService) {}
 

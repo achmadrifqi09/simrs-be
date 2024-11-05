@@ -25,7 +25,10 @@ import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guar
 import { Permission } from '../../../../decorators/permission/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/master/employee-category')
+@Controller({
+  path: '/master/employee-category',
+  version: '1',
+})
 export class TypeOfStatusOfficerController {
   constructor(
     private readonly typeOfStatusOfficerService: TypeOfStatusOfficerService,

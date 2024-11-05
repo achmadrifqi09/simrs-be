@@ -25,7 +25,10 @@ import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guar
 import { Permission } from '../../../../decorators/permission/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/master/room-type')
+@Controller({
+  path: '/master/room-type',
+  version: '1',
+})
 export class RoomTypeController {
   constructor(private readonly roomTypeService: RoomTypeService) {}
 

@@ -25,7 +25,10 @@ import {
 import { FieldOfWorkUnit } from '@prisma/client';
 import { UpdateStatus } from '../../../common/types/common.type';
 
-@Controller('/field-of-work-unit')
+@Controller({
+  path: 'field-of-work-unit',
+  version: '1',
+})
 export class FieldOfWorkUnitController {
   constructor(
     private readonly fieldOfWorkUnitService: FieldOfWorkUnitService,

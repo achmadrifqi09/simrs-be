@@ -25,7 +25,10 @@ import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guar
 import { Permission } from '../../../../decorators/permission/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/master/religion')
+@Controller({
+  path: '/master/religion',
+  version: '1',
+})
 export class ReligionController {
   constructor(private readonly religionService: ReligionService) {}
 

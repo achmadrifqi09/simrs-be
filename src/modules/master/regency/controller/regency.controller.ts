@@ -20,8 +20,10 @@ import { RegencyPayloadDTO } from '../dto/regency.dto';
 import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guard';
 import { Permission } from '../../../../decorators/permission/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
-
-@Controller('/master/regency')
+@Controller({
+  path: '/master/regency',
+  version: '1',
+})
 export class RegencyController {
   constructor(private readonly regencyService: RegencyService) {}
 

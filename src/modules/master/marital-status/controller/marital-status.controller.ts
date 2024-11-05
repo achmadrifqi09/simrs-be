@@ -23,7 +23,10 @@ import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guar
 import { Permission } from '../../../../decorators/permission/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/master/marital-status')
+@Controller({
+  path: '/master/marital-status',
+  version: '1',
+})
 export class MaritalStatusController {
   constructor(private readonly maritalStatusService: MaritalStatusService) {}
 

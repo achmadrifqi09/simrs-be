@@ -25,7 +25,10 @@ import { AccessMenuGuard } from '../../../../guards/access-menu/access-menu.guar
 import { Permission } from '../../../../decorators/permission/permission.decorator';
 import { Action } from '../../../../common/enums/action.enum';
 
-@Controller('/master/building')
+@Controller({
+  path: '/master/building',
+  version: '1',
+})
 export class BuildingController {
   constructor(private readonly buildingService: BuildingService) {}
 

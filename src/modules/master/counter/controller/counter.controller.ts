@@ -25,7 +25,10 @@ import {
 } from '../validation/counter.validation';
 import { UpdateStatus } from '../../../../common/types/common.type';
 
-@Controller('/master/counter')
+@Controller({
+  path: '/master/counter',
+  version: '1',
+})
 export class CounterController {
   constructor(private readonly counterService: CounterService) {}
 
