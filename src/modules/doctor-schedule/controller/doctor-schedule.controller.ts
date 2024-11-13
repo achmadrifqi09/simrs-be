@@ -28,6 +28,7 @@ import {
   DoctorScheduleDTO,
   DoctorVacationDTO,
 } from '../dto/doctor-schedule.dto';
+import { Public } from '../../../decorators/public/public.decorator';
 
 @Controller({
   path: 'doctor-schedule',
@@ -53,6 +54,23 @@ export class DoctorScheduleController {
       keyword,
       cursor,
       take,
+    );
+  }
+
+  @Public()
+  @Get('/:id')
+  @Header('Content-Type', 'application/json')
+  async findDoctorScheduledById(@Param('id') id: number) {
+    return this.doctorScheduleService.findDoctorScheduleById(id);
+  }
+
+  @Public()
+  @Get('/current/:installation_code')
+  async findCurrentDoctorScheduleByUnit(
+    @Param('installation_code') installation_code: string,
+  ) {
+    return this.doctorScheduleService.findCurrentDoctorScheduleByUnitCode(
+      installation_code,
     );
   }
 

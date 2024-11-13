@@ -28,7 +28,11 @@ export class WorkUnitRepository {
     });
   }
 
-  async findQueueUnit(keyword?: string, unit_id?: number | undefined) {
+  async findQueueUnit(
+    keyword?: string,
+    unit_id?: number | undefined,
+    service_type?: number,
+  ) {
     const whereClause: Prisma.WorkUnitWhereInput = {
       OR: [
         {
@@ -44,6 +48,8 @@ export class WorkUnitRepository {
     };
 
     if (Number(unit_id)) whereClause.id = Number(unit_id);
+    if (Number(service_type))
+      whereClause.jenis_pelayanan = Number(service_type);
     return this.prismaService.workUnit.findMany({
       where: whereClause,
     });
@@ -61,6 +67,14 @@ export class WorkUnitRepository {
       where: whereClause,
       orderBy: {
         id: 'desc',
+      },
+    });
+  }
+
+  async findQueueUnitByBPJSCode(BPJSCode: string) {
+    return this.prismaService.workUnit.findFirst({
+      where: {
+        kode_instalasi_bpjs: BPJSCode,
       },
     });
   }
@@ -102,7 +116,6 @@ export class WorkUnitRepository {
         id: 'desc',
       },
     });
-
     return {
       results: result,
       pagination: {
@@ -137,38 +150,77 @@ export class WorkUnitRepository {
   }
 
   async findPolyclinicCounter(currentDate: string, keyword: string) {
-    const results = await this.prismaService.$queryRaw<PolyclinicCounter[]>(
-      Prisma.sql`
-    SELECT 
-        unit.id, 
-        unit.nama_unit_kerja, 
-        unit.kode_instalasi_bpjs, 
-        COUNT(a.kode_poliklinik) AS total_antrean,
-        COUNT(b.kode_poliklinik) AS total_antrean_selesai
-    FROM 
-        db_unit_kerja AS unit
-    LEFT JOIN 
-        db_antrian AS a ON a.kode_poliklinik = unit.kode_instalasi_bpjs 
-        AND a.created_at LIKE CONCAT(${currentDate}, '%')
-    LEFT JOIN
-        db_antrian as b ON b.kode_poliklinik = unit.kode_instalasi_bpjs
-        AND b.created_at LIKE CONCAT(${currentDate}, '%')
-        AND b.status = 1
-    WHERE 
-        unit.jenis_pelayanan = 1
-        AND unit.nama_unit_kerja LIKE CONCAT('%', ${keyword}, '%')
-    GROUP BY 
-        unit.id, 
-        unit.nama_unit_kerja, 
-        unit.kode_instalasi_bpjs`,
-    );
+    try {
+      const results: PolyclinicCounter[] = await this.prismaService.$queryRaw<
+        PolyclinicCounter[]
+      >(
+        Prisma.sql`
+          SELECT
+              unit.id,
+              unit.nama_unit_kerja,
+              unit.kode_instalasi_bpjs,
+              COUNT(a.kode_instalasi_bpjs) AS total_antrean,
+              COUNT(b.kode_instalasi_bpjs) AS total_antrean_selesai
+          FROM
+              db_unit_kerja AS unit
+          LEFT JOIN (
+              SELECT
+                  jadwal.id_jadwal_dokter,
+                  jadwal.kode_instalasi_bpjs
+              FROM db_jadwal_dokter AS jadwal
+              LEFT JOIN (
+                  SELECT
+                      antrian.created_at,
+                      antrian.id_jadwal_dokter,
+                      antrian.is_deleted
+                  FROM db_antrian AS antrian
+                  WHERE
+                      antrian.created_at LIKE CONCAT(${currentDate}, '%')
+                      AND antrian.is_deleted = 0
+                      AND antrian.status != 2
+              ) antrian ON jadwal.id_jadwal_dokter = antrian.id_jadwal_dokter
+          ) a ON unit.kode_instalasi_bpjs = a.kode_instalasi_bpjs
+          LEFT JOIN (
+                  SELECT
+                      jadwal.id_jadwal_dokter,
+                      jadwal.kode_instalasi_bpjs
+                  FROM db_jadwal_dokter AS jadwal
+                  LEFT JOIN (
+                      SELECT
+                          antrian.id_jadwal_dokter,
+                          antrian.created_at,
+                          antrian.status,
+                          antrian.is_deleted
+                      FROM db_antrian AS antrian
+                      WHERE
+                          antrian.status = 1
+                        AND
+                          antrian.created_at LIKE CONCAT(${currentDate}, '%')
+                        AND antrian.is_deleted = 0
+                  ) antrian ON jadwal.id_jadwal_dokter = antrian.id_jadwal_dokter
+                  WHERE antrian.status = true AND antrian.is_deleted = 0
+          ) b ON unit.kode_instalasi_bpjs = b.kode_instalasi_bpjs
+          WHERE
+              (unit.jenis_pelayanan = 1 OR unit.jenis_pelayanan = 2)
+              AND unit.nama_unit_kerja LIKE CONCAT('%', ${keyword}, '%')
+              AND unit.is_deleted = 0
+          GROUP BY
+              unit.id,
+              unit.nama_unit_kerja,
+              unit.kode_instalasi_bpjs
+          ORDER BY unit.id DESC
+          `,
+      );
 
-    return results.map((item) => ({
-      ...item,
-      id: Number(item.id),
-      total_antrean: Number(item.total_antrean),
-      total_antrean_selesai: Number(item.total_antrean_selesai),
-    }));
+      return results.map((item) => ({
+        ...item,
+        id: Number(item.id),
+        total_antrean: Number(item.total_antrean),
+        total_antrean_selesai: Number(item.total_antrean_selesai),
+      }));
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
   }
 
   async createWorkUnit(workUnit: WorkUnit) {

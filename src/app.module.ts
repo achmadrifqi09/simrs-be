@@ -21,6 +21,8 @@ import { FieldOfWorkUnitModule } from './modules/field-of-work-unit/field-of-wor
 import { AuthGuard } from './guards/auth/auth.guard';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { DoctorScheduleModule } from './modules/doctor-schedule/doctor-schedule.module';
+import { QueueModule } from './modules/queue/queue.module';
+import { PatientModule } from './modules/patient/patient.module';
 
 @Module({
   imports: [
@@ -42,6 +44,8 @@ import { DoctorScheduleModule } from './modules/doctor-schedule/doctor-schedule.
     UserAccessModule,
     FieldOfWorkUnitModule,
     DoctorScheduleModule,
+    QueueModule,
+    PatientModule,
   ],
   controllers: [AppController],
   providers: [

@@ -22,10 +22,15 @@ export class WorkUnitService {
     return this.workUnitRepository.findActiveSubOrParentUnit(keyword || '');
   }
 
-  async findQueueUnit(keyword?: string, unit_id?: number) {
+  async findQueueUnit(
+    keyword?: string,
+    unit_id?: number,
+    service_type?: number,
+  ) {
     return this.workUnitRepository.findQueueUnit(
       keyword || '',
       unit_id || undefined,
+      service_type,
     );
   }
 
@@ -35,7 +40,7 @@ export class WorkUnitService {
 
   async findPolyclinicCounter(keyword?: string) {
     const date = new Date();
-    const currentDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    const currentDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}`;
     return this.workUnitRepository.findPolyclinicCounter(
       currentDate,
       keyword || '',
@@ -62,6 +67,10 @@ export class WorkUnitService {
       cursor,
       take,
     );
+  }
+
+  async findQueueUnitByBPJSCode(BPJSCode: string) {
+    return this.workUnitRepository.findQueueUnitByBPJSCode(BPJSCode || '');
   }
 
   async createWorkUnit(workUnit: WorkUnit, req: any) {
