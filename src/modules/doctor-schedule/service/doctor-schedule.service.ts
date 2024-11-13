@@ -7,8 +7,10 @@ import {
 import { DoctorScheduleRepository } from '../repository/doctor-schedule.repository';
 import {
   AdditionalQuotaDTO,
+  CurrentDoctorScheduleDTO,
   DoctorScheduleDTO,
   DoctorVacationDTO,
+  ResponseDoctorScheduleDTO,
 } from '../dto/doctor-schedule.dto';
 import { generateCurrentDate } from '../../../utils/date-formatter';
 import moment from 'moment-timezone';
@@ -45,6 +47,89 @@ export class DoctorScheduleService {
       keyword,
       cursor,
       take,
+    );
+  }
+  async findScheduleQuota(scheduleId: number) {
+    if (!Number(scheduleId)) {
+      throw new HttpException(
+        'Id jadwal dokter tidak valid',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return await this.doctorScheduleRepository.findScheduleQuota(scheduleId);
+  }
+  async findDoctorScheduleById(id: number) {
+    if (!Number(id)) {
+      throw new HttpException(
+        'Id jadwal dokter tidak valid',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return this.doctorScheduleRepository.findDoctorScheduleById(id);
+  }
+
+  private createScheduleObject(schedule: CurrentDoctorScheduleDTO) {
+    return {
+      id_jadwal_dokter: schedule.id_jadwal_dokter,
+      kode_instalasi_bpjs: schedule.kode_instalasi_bpjs,
+      jenis_jadwal: schedule.jenis_jadwal,
+      hari_praktek: schedule.hari_praktek,
+      tgl_praktek: schedule.tgl_praktek,
+      jam_buka_praktek: schedule.jam_buka_praktek,
+      jam_tutup_praktek: schedule.jam_tutup_praktek,
+      kuota_onsite: Number(schedule.kuota_onsite),
+      kuota_terisi: Number(schedule.kuota_terisi),
+      tanggal_libur: schedule.tanggal_libur,
+      keterangan_libur: schedule.keterangan_libur,
+    };
+  }
+
+  private createDoctorResponse(schedule: CurrentDoctorScheduleDTO) {
+    return {
+      id_pegawai: schedule.id_pegawai,
+      nama_dokter: schedule.nama_pegawai,
+      gelar_depan: schedule.gelar_depan,
+      gelar_belakang: schedule.gelar_belakang,
+      jadwal: [this.createScheduleObject(schedule)],
+    };
+  }
+
+  private isNewSchedule(
+    existingSchedules: any[],
+    newScheduleId: number,
+  ): boolean {
+    return !existingSchedules.some(
+      (schedule) => schedule.id_jadwal_dokter === newScheduleId,
+    );
+  }
+
+  async findCurrentDoctorScheduleByUnitCode(
+    installationCode: string,
+  ): Promise<ResponseDoctorScheduleDTO[]> {
+    const schedules =
+      await this.doctorScheduleRepository.findCurrentDoctorScheduleByUnit(
+        installationCode,
+      );
+
+    return schedules.reduce(
+      (
+        response: ResponseDoctorScheduleDTO[],
+        schedule: CurrentDoctorScheduleDTO,
+      ) => {
+        const existingDoctor = response.find(
+          (doctor) => doctor.id_pegawai === schedule.id_pegawai,
+        );
+
+        if (!existingDoctor) {
+          response.push(this.createDoctorResponse(schedule));
+        } else if (
+          this.isNewSchedule(existingDoctor.jadwal, schedule.id_jadwal_dokter)
+        ) {
+          existingDoctor.jadwal.push(this.createScheduleObject(schedule));
+        }
+        return response;
+      },
+      [],
     );
   }
 
@@ -97,6 +182,13 @@ export class DoctorScheduleService {
     ) {
       throw new HttpException(
         'Jam buka praktek harus lebih awal dari jam tutup praktek',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (payload?.tgl_praktek && payload?.hari_praktek) {
+      throw new HttpException(
+        'Tanggal atau hari praktek harus di sesuaikan dengan jenis jadwal',
         HttpStatus.BAD_REQUEST,
       );
     }

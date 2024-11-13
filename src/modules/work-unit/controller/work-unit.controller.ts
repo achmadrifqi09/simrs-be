@@ -26,6 +26,7 @@ import {
 } from '../validation/work-unit.validation';
 import { WorkUnit, WorkUnitUpdateQueueStatus } from '../dto/work-unit.dto';
 import { UpdateStatus } from '../../../common/types/common.type';
+import { Public } from '../../../decorators/public/public.decorator';
 
 @Dependencies([WorkUnitService])
 @Controller({
@@ -59,19 +60,28 @@ export class WorkUnitController {
     );
   }
 
+  @Public()
   @Get('/polyclinic')
   @Header('Content-Type', 'application/json')
   async findActivePolyclinic(@Query('keyword') keyword: string) {
     return this.workUnitService.findActivePolyclinic(keyword);
   }
 
+  @Get('/queue-unit/:bpjs_code')
+  @Public()
+  async findQueueUnitByBPJSCode(@Param('bpjs_code') BPJSCode: string) {
+    return this.workUnitService.findQueueUnitByBPJSCode(BPJSCode);
+  }
+
   @Get('/queue-unit')
+  @Public()
   @Header('Content-Type', 'application/json')
   async findQueueUnit(
     @Query('keyword') keyword: string,
     @Query('unit_id') unit_id: number,
+    @Query('service_type') service_type: number,
   ) {
-    return this.workUnitService.findQueueUnit(keyword, unit_id);
+    return this.workUnitService.findQueueUnit(keyword, unit_id, service_type);
   }
 
   @Get('/polyclinic/counter')

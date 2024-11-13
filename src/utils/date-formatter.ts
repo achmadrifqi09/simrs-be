@@ -22,11 +22,19 @@ export const convertToTimeString = (date: Date): string => {
   return `${hours}:${minutes}:${seconds}`;
 };
 
-export const convertToDateString = (date: Date): string => {
-  const year = date.getUTCFullYear();
-  const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-  const day = date.getUTCDate().toString().padStart(2, '0');
-  return `${day}-${month}-${year}`;
+export const generateCurrentDateWithCustomHour = (customTime: string) => {
+  const dateWithCustomTime = moment.tz('Asia/Jakarta').set({
+    hour: parseInt(customTime.split(':')[0]),
+    minute: parseInt(customTime.split(':')[1]),
+    second: parseInt(customTime.split(':')[2]),
+    millisecond: 0,
+  });
+
+  const isoString = dateWithCustomTime.toISOString();
+  const localDate = new Date(isoString);
+
+  localDate.setMinutes(localDate.getMinutes() + dateWithCustomTime.utcOffset());
+  return localDate;
 };
 
 export const timeFormatter = (timeString: string) => {
