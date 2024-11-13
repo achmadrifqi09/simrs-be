@@ -18,10 +18,7 @@ import { AccessMenuGuard } from '../../../guards/access-menu/access-menu.guard';
 import { Permission } from '../../../decorators/permission/permission.decorator';
 import { Action } from '../../../common/enums/action.enum';
 import { ZodPipe } from '../../../pipes/zod-pipe/zod-pipe.pipe';
-import { updateVisibilityBed } from '../../master/bed/validation/bed.validation';
-import { UpdateStatus } from '../../../common/types/common.type';
 import { PatientDTO } from '../dto/patient.dto';
-import { newPatientQueueValidation } from '../../queue/validation/queue.validation';
 import { patientValidation } from '../validation/patient.validation';
 
 @Controller({

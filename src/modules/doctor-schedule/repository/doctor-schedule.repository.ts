@@ -4,7 +4,8 @@ import {
   AdditionalQuotaDTO,
   CurrentDoctorScheduleDTO,
   DoctorScheduleDTO,
-  DoctorVacationDTO, ScheduleQuota,
+  DoctorVacationDTO,
+  ScheduleQuota,
 } from '../dto/doctor-schedule.dto';
 import { PrismaErrorHandler } from '../../../common/handler/prisma-error.handler';
 import { Prisma } from '@prisma/client';

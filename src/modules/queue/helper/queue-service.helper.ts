@@ -7,7 +7,8 @@ import {
 import { DoctorScheduleService } from '../../doctor-schedule/service/doctor-schedule.service';
 import { convertToTimeString } from '../../../utils/date-formatter';
 import moment from 'moment-timezone';
-import { generateDateString, generateIsoDate } from '../../../utils/date-generator';
+import { generateIsoDate } from '../../../utils/date-generator';
+
 @Dependencies([DoctorScheduleService])
 @Injectable()
 export class QueueServiceHelper {

@@ -19,8 +19,7 @@ const dateValidation = z
     return new Date(val);
   });
 
-const newPatientQueueValidation = z
-  .object({
+const newPatientQueueValidation = z.object({
   nama_pasien: z.string().min(3, { message: 'Nama pasien minimal 3 karakter' }),
   jenis_pasien: z
     .number({ message: 'Jenis pasien harus di isi' })
