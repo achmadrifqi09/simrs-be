@@ -5,7 +5,7 @@ import {
   CurrentDoctorScheduleDTO,
   DoctorScheduleDTO,
   DoctorVacationDTO,
-  ScheduleQuota,
+  ScheduleQuotaDTO,
 } from '../dto/doctor-schedule.dto';
 import { PrismaErrorHandler } from '../../../common/handler/prisma-error.handler';
 import { Prisma } from '@prisma/client';
@@ -35,11 +35,13 @@ export class DoctorScheduleRepository {
         {
           unit: {
             nama_unit_kerja: { contains: keyword || '' },
+            is_deleted: false,
           },
         },
         {
           pegawai: {
             nama_pegawai: { contains: keyword || '' },
+            is_deleted: false,
           },
         },
       ],
@@ -122,6 +124,41 @@ export class DoctorScheduleRepository {
     };
   }
 
+  async findScheduleByDoctorIdAndUnitCode(doctorId: number, unitCode: string) {
+    return this.prismaService.doctorSchedule.findMany({
+      where: {
+        AND: [
+          { id_pegawai: Number(doctorId) },
+          { kode_instalasi_bpjs: unitCode },
+        ],
+        is_deleted: false,
+      },
+      select: {
+        id_jadwal_dokter: true,
+        id_pegawai: true,
+        kode_instalasi_bpjs: true,
+        jenis_jadwal: true,
+        hari_praktek: true,
+        tgl_praktek: true,
+        jam_buka_praktek: true,
+        jam_tutup_praktek: true,
+        tanggal_libur: true,
+        keterangan_libur: true,
+        pegawai: {
+          select: {
+            id_pegawai: true,
+            nama_pegawai: true,
+            gelar_depan: true,
+            gelar_belakang: true,
+          },
+        },
+      },
+      orderBy: {
+        hari_praktek: 'asc',
+      },
+    });
+  }
+
   async findDoctorScheduleById(id: number) {
     return this.prismaService.doctorSchedule.findFirst({
       where: {
@@ -160,10 +197,11 @@ export class DoctorScheduleRepository {
   async findScheduleQuota(scheduleId: number) {
     const practiceDate = generateDateString();
 
-    const result = await this.prismaService.$queryRaw<ScheduleQuota>(
+    const result = await this.prismaService.$queryRaw<ScheduleQuotaDTO>(
       Prisma.sql`
       SELECT
         jadwal.id_jadwal_dokter,
+        jadwal.kode_instalasi_bpjs,
         jadwal.kuota_mjkn + COALESCE(kuota_tambahan.kuota_mjkn, 0) AS kuota_mjkn,
         jadwal.kuota_online_umum + COALESCE(kuota_tambahan.kuota_online_umum, 0) AS kuota_online_umum,
         CAST(
@@ -216,6 +254,7 @@ export class DoctorScheduleRepository {
           AND jadwal.is_deleted = FALSE
         GROUP BY
             jadwal.id_jadwal_dokter,
+            jadwal.kode_instalasi_bpjs,
             kuota_tambahan.kuota_mjkn,
             kuota_tambahan.kuota_online_umum,
             kuota_tambahan.kuota_onsite,

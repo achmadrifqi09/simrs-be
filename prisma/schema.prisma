@@ -671,6 +671,7 @@ model Queue {
   tgl_lahir           DateTime?      @db.Date
   no_hp               String?        @db.VarChar(20)
   no_bpjs             String?        @db.VarChar(50)
+  no_rujukan          String?        @db.VarChar(50)
   kode_antrian        String         @db.VarChar(1)
   no_antrian          Int
   id_jadwal_dokter    Int
@@ -691,6 +692,11 @@ model Queue {
   is_deleted          Boolean        @default(false)
   is_restored         Boolean        @default(false)
 
+  @@index([no_rujukan, no_bpjs, kode_rm])
+  @@index([kode_antrian, status_panggil, status, is_deleted])
+  @@index([created_at, is_deleted])
+  @@index([jenis_pasien, no_hp, tgl_lahir])
+  @@index([id_ms_loket_antrian, kode_antrian])
   @@index([kode_rm])
   @@index([nama_pasien])
   @@index([no_bpjs])

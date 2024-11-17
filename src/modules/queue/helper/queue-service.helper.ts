@@ -8,22 +8,36 @@ import { DoctorScheduleService } from '../../doctor-schedule/service/doctor-sche
 import { convertToTimeString } from '../../../utils/date-formatter';
 import moment from 'moment-timezone';
 import { generateIsoDate } from '../../../utils/date-generator';
+import {
+  Identifier,
+  RegisterQueuePayload,
+  QueueNumber,
+} from '../dto/queue.dto';
+import { QueueRepository } from '../repository/queue.repository';
 
-@Dependencies([DoctorScheduleService])
+@Dependencies([DoctorScheduleService, QueueRepository])
 @Injectable()
 export class QueueServiceHelper {
-  constructor(private readonly doctorScheduleService: DoctorScheduleService) {}
+  constructor(
+    private readonly doctorScheduleService: DoctorScheduleService,
+    private readonly queueRepository: QueueRepository,
+  ) {}
 
-  generateOnsiteQueueCode(closePracticeHour: Date, guarantorType: number) {
+  async generateQueueNumber(closePracticeHour: Date, guarantorType: number) {
     const closePracticeHoursString = convertToTimeString(closePracticeHour);
-    const changeoverTime = moment.tz('13:00:00', 'HH:mm:ss', 'Asia/Jakarta');
     const currentTime = moment.tz('Asia/Jakarta');
+    const changeoverTime = moment.tz(
+      `${currentTime.format('YYYY-MM-DD')} 12:00:00`,
+      'YYYY-MM-DD HH:mm:ss',
+      'Asia/Jakarta',
+    );
     const targetTime = moment.tz(
-      closePracticeHoursString,
-      'HH:mm:ss',
+      `${currentTime.format('YYYY-MM-DD')} ${closePracticeHoursString}`,
+      'YYYY-MM-DD HH:mm:ss',
       'Asia/Jakarta',
     );
 
+    let queueCode: string;
     if (currentTime.isAfter(targetTime)) {
       throw new HttpException(
         'Jam praktek dokter telah tutup',
@@ -31,22 +45,47 @@ export class QueueServiceHelper {
       );
     }
 
+    if (![1, 2].includes(guarantorType)) {
+      throw new HttpException(
+        'Jenis penjamin tidak valid',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     if (guarantorType === 1) {
-      return targetTime.isAfter(changeoverTime) ? 'D' : 'C';
+      queueCode = targetTime.isAfter(changeoverTime) ? 'D' : 'C';
     }
 
     if (guarantorType === 2) {
-      return targetTime.isAfter(changeoverTime) ? 'B' : 'A';
+      queueCode = targetTime.isAfter(changeoverTime) ? 'B' : 'A';
     }
 
-    throw new HttpException(
-      'Jenis penjamin tidak valid',
-      HttpStatus.BAD_REQUEST,
-    );
+    const onsiteQueueCount =
+      await this.queueRepository.findTotalAndRemainingOnsiteQueue(queueCode);
+
+    const queueNumber =
+      Number(onsiteQueueCount.jumlah_antrian_onsite) === 0
+        ? 1
+        : Number(onsiteQueueCount.jumlah_antrian_onsite) + 1;
+
+    const result: QueueNumber = {
+      kode_antrian: queueCode,
+      no_antrian: queueNumber,
+    };
+    return result;
+  }
+
+  async checkScheduleQuota(totalDoctorQueue: number, scheduleId: number) {
+    const scheduleQuota =
+      await this.doctorScheduleService.findScheduleQuota(scheduleId);
+
+    if (totalDoctorQueue >= Number(scheduleQuota.kuota_onsite)) {
+      throw new HttpException('Kuota dokter penuh', HttpStatus.BAD_REQUEST);
+    }
   }
 
   async checkAndGetDoctorSchedule(id: number) {
-    if (!Number(id)) {
+    if (isNaN(Number(id))) {
       throw new HttpException(
         'Id jadwal dokter tidak valid',
         HttpStatus.BAD_REQUEST,
@@ -71,6 +110,25 @@ export class QueueServiceHelper {
         HttpStatus.BAD_REQUEST,
       );
     }
+
     return doctorSchedule;
+  }
+
+  findIdentifierType(queue: RegisterQueuePayload) {
+    const identifier: Identifier = {
+      number: null,
+      type: 0,
+    };
+    if (queue?.kode_rm) {
+      identifier.type = 1;
+      identifier.number = queue.kode_rm;
+      return identifier;
+    }
+    if (queue?.no_bpjs) {
+      identifier.type = 2;
+      identifier.number = queue.no_bpjs;
+      return identifier;
+    }
+    return identifier;
   }
 }

@@ -4,11 +4,45 @@ import { PrismaErrorHandler } from '../../../../common/handler/prisma-error.hand
 import { CounterPayloadDTO } from '../dto/counter.dto';
 import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 import { Prisma } from '@prisma/client';
+import { generateCurrentDateWithCustomHour } from '../../../../utils/date-formatter';
 
 @Dependencies([PrismaService])
 @Injectable()
 export class CounterRepository {
   constructor(private readonly prismaService: PrismaService) {}
+
+  async findQueueDisplayCounter(counterType: number) {
+    return this.prismaService.counter.findMany({
+      where: {
+        jenis_loket: Number(counterType),
+        status: 1,
+        is_deleted: false,
+      },
+      select: {
+        id_ms_loket_antrian: true,
+        nama_loket: true,
+        jenis_loket: true,
+        antrian: {
+          where: {
+            created_at: {
+              gte: generateCurrentDateWithCustomHour('00:00:00'),
+              lte: generateCurrentDateWithCustomHour('23:59:59'),
+            },
+            status: { not: 2 },
+          },
+          select: {
+            id_antrian: true,
+            no_antrian: true,
+            kode_antrian: true,
+          },
+          orderBy: {
+            created_at: 'desc',
+          },
+          take: 1,
+        },
+      },
+    });
+  }
 
   async findCounterById(id: number) {
     return this.prismaService.counter.findFirst({

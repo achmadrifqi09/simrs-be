@@ -24,6 +24,10 @@ export class CounterService {
     return this.counterRepository.findCounterById(id);
   }
 
+  async findQueueDisplayCounter(counterType: number) {
+    return this.counterRepository.findQueueDisplayCounter(counterType);
+  }
+
   async findCounter(keyword: string, counterType: number) {
     if (!Number(counterType) && counterType !== undefined) {
       throw new HttpException(
@@ -35,9 +39,6 @@ export class CounterService {
   }
 
   async findActiveCounterByType(type: number): Promise<Counter[]> {
-    if (!Number(type) || type === undefined) {
-      throw new HttpException('Jenis loket tidak valid', HttpStatus.NOT_FOUND);
-    }
     return this.counterRepository.findActiveCounterByType(type);
   }
 

@@ -8,9 +8,13 @@ import { DoctorScheduleRepository } from '../repository/doctor-schedule.reposito
 import {
   AdditionalQuotaDTO,
   CurrentDoctorScheduleDTO,
+  DayOrDateScheduleDTO,
+  Doctor,
   DoctorScheduleDTO,
   DoctorVacationDTO,
+  RawScheduleData,
   ResponseDoctorScheduleDTO,
+  ResponseSingleDoctorScheduleDTO,
 } from '../dto/doctor-schedule.dto';
 import { generateCurrentDate } from '../../../utils/date-formatter';
 import moment from 'moment-timezone';
@@ -49,6 +53,115 @@ export class DoctorScheduleService {
       take,
     );
   }
+
+  async findScheduleByDoctorIdAndUnitCode(
+    doctorId: number,
+    unitCode: string,
+  ): Promise<ResponseSingleDoctorScheduleDTO | []> {
+    const schedules =
+      await this.doctorScheduleRepository.findScheduleByDoctorIdAndUnitCode(
+        doctorId,
+        unitCode,
+      );
+
+    if (!schedules.length) {
+      return [];
+    }
+
+    return this.transformScheduleData(schedules);
+  }
+
+  private transformScheduleData(
+    schedules: any[],
+  ): ResponseSingleDoctorScheduleDTO {
+    const result = this.initialSingleResponseDoctorSchedule();
+
+    schedules.forEach((schedule) => {
+      this.setDoctorInfo(result, schedule.pegawai);
+      this.updateSchedule(result, schedule);
+    });
+
+    return result;
+  }
+
+  private initialSingleResponseDoctorSchedule(): ResponseSingleDoctorScheduleDTO {
+    return {
+      id_dokter: null,
+      nama_dokter: '',
+      gelar_depan: '',
+      gelar_belakang: '',
+      jadwal: [],
+    };
+  }
+
+  private setDoctorInfo(
+    result: ResponseSingleDoctorScheduleDTO,
+    doctor: Doctor,
+  ): void {
+    if (!result.id_dokter) {
+      result.id_dokter = Number(doctor.id_pegawai);
+      result.nama_dokter = doctor.nama_pegawai;
+      result.gelar_depan = doctor.gelar_depan;
+      result.gelar_belakang = doctor.gelar_belakang;
+    }
+  }
+
+  private updateSchedule(
+    result: ResponseSingleDoctorScheduleDTO,
+    schedule: RawScheduleData,
+  ): void {
+    const existingScheduleIndex = this.findExistingScheduleIndex(
+      result.jadwal,
+      schedule.hari_praktek,
+    );
+
+    if (existingScheduleIndex !== -1) {
+      this.addPracticeTimeToExisting(
+        result.jadwal[existingScheduleIndex],
+        schedule,
+      );
+    } else {
+      this.addNewSchedule(result.jadwal, schedule);
+    }
+  }
+
+  private findExistingScheduleIndex(
+    jadwal: DayOrDateScheduleDTO[],
+    hariPraktek: number | null,
+  ): number {
+    return jadwal.findIndex(
+      (practiceDay) => practiceDay.hari_praktek === hariPraktek,
+    );
+  }
+
+  private addPracticeTimeToExisting(
+    existingSchedule: DayOrDateScheduleDTO,
+    schedule: RawScheduleData,
+  ): void {
+    existingSchedule.jam_praktek.push(this.createPracticeTimeEntry(schedule));
+  }
+
+  private addNewSchedule(
+    jadwal: DayOrDateScheduleDTO[],
+    schedule: RawScheduleData,
+  ): void {
+    jadwal.push({
+      jenis_jadwal: schedule.jenis_jadwal,
+      hari_praktek: schedule.hari_praktek,
+      tgl_praktek: schedule.tgl_praktek,
+      tanggal_libur: schedule.tanggal_libur,
+      jam_praktek: [this.createPracticeTimeEntry(schedule)],
+    });
+  }
+
+  private createPracticeTimeEntry(schedule: RawScheduleData) {
+    return {
+      id_jadwal_dokter: schedule.id_jadwal_dokter,
+      jam_buka_praktek: schedule.jam_buka_praktek,
+      jam_tutup_praktek: schedule.jam_tutup_praktek,
+    };
+  }
+
   async findScheduleQuota(scheduleId: number) {
     if (!Number(scheduleId)) {
       throw new HttpException(
@@ -58,6 +171,7 @@ export class DoctorScheduleService {
     }
     return await this.doctorScheduleRepository.findScheduleQuota(scheduleId);
   }
+
   async findDoctorScheduleById(id: number) {
     if (!Number(id)) {
       throw new HttpException(
@@ -70,6 +184,7 @@ export class DoctorScheduleService {
 
   private createScheduleObject(schedule: CurrentDoctorScheduleDTO) {
     return {
+      id_pegawai: schedule.id_pegawai,
       id_jadwal_dokter: schedule.id_jadwal_dokter,
       kode_instalasi_bpjs: schedule.kode_instalasi_bpjs,
       jenis_jadwal: schedule.jenis_jadwal,

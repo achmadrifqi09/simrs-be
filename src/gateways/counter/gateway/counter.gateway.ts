@@ -24,7 +24,7 @@ import { WsExceptionFilter } from '../../../filters/ws-exception/ws-exception.fi
 })
 export class CounterGateway {
   @WebSocketServer() server: Server;
-  private counterUsed: ConnectedCounter[] = [];
+  counterUsed: ConnectedCounter[] = [];
 
   constructor(private readonly counterService: CounterService) {}
 
@@ -40,7 +40,7 @@ export class CounterGateway {
         counter.counter_type,
       );
       const mappedCounters = this.mappingCounter(activeCounters);
-      this.server.emit(`counter-${counter?.counter_type}`, {
+      this.server.emit(`counter-type-${counter?.counter_type}`, {
         data: mappedCounters,
       });
     });
@@ -53,7 +53,7 @@ export class CounterGateway {
     let counters =
       await this.counterService.findActiveCounterByType(counter_type);
     counters = this.mappingCounter(counters);
-    this.server.emit(`counter-${counter_type}`, {
+    this.server.emit(`counter-type-${counter_type}`, {
       data: counters,
     });
   }
@@ -63,7 +63,9 @@ export class CounterGateway {
     if (this.findCounter(payload.counter_id)) {
       throw new WsException('Loket telah digunakan');
     }
-
+    if (isNaN(Number(payload.counter_type))) {
+      throw new WsException('Jenis loket tidak valid');
+    }
     if (this.findUser(payload.user_id)) {
       throw new WsException('Anda telah terhubung di loket lain');
     }
@@ -75,12 +77,25 @@ export class CounterGateway {
       payload.counter_type,
     );
     const counters = this.mappingCounter(updatedCounters);
-    this.server.emit(`counter-${payload.counter_type}`, {
+    const currentCounter = this.findCurrentCounterData(
+      payload.counter_id,
+      counters,
+    );
+    this.server.emit(`counter-type-${payload.counter_type}`, {
       data: counters,
+    });
+    this.server.emit(`counter-id-${payload.counter_id}`, {
+      data: currentCounter,
     });
   }
 
-  private findCounter(counterId: number) {
+  findCurrentCounterData(counterId: number, counters: Counter[]) {
+    return counters.find(
+      (counter: Counter) => counter.id_ms_loket_antrian === counterId,
+    );
+  }
+
+  findCounter(counterId: number) {
     return this.counterUsed.find(
       (counter) => counter?.counter_id === counterId,
     );

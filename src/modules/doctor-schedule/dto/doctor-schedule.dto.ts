@@ -45,8 +45,9 @@ interface QueueDoctorPracticeDTO {
   keterangan_libur: string | null;
 }
 
-interface ScheduleQuota {
+interface ScheduleQuotaDTO {
   id_jadwal_dokter: number;
+  kode_instalasi_bpjs: string;
   kuota_mjkn: number;
   kuota_online_umum: number;
   kuota_onsite: number;
@@ -58,6 +59,46 @@ interface ResponseDoctorScheduleDTO {
   gelar_depan: string;
   gelar_belakang: string;
   jadwal: QueueDoctorPracticeDTO[];
+}
+
+interface PracticeHour {
+  id_jadwal_dokter: number;
+  jam_buka_praktek: Date;
+  jam_tutup_praktek: Date;
+}
+
+interface DayOrDateScheduleDTO {
+  jenis_jadwal: number;
+  hari_praktek: number | null;
+  tgl_praktek: Date;
+  tanggal_libur: Date | null;
+  jam_praktek: PracticeHour[];
+}
+
+interface ResponseSingleDoctorScheduleDTO {
+  id_dokter: number | null;
+  nama_dokter: string;
+  gelar_depan: string;
+  gelar_belakang: string;
+  jadwal: DayOrDateScheduleDTO[];
+}
+
+interface Doctor {
+  id_pegawai: number;
+  nama_pegawai: string;
+  gelar_depan: string;
+  gelar_belakang: string;
+}
+
+interface RawScheduleData {
+  id_jadwal_dokter: number;
+  jenis_jadwal: number;
+  hari_praktek: number | null;
+  tgl_praktek: Date;
+  tanggal_libur: Date | null;
+  jam_buka_praktek: Date;
+  jam_tutup_praktek: Date;
+  doctor: Doctor;
 }
 
 interface DoctorVacationDTO {
@@ -104,5 +145,9 @@ export {
   AdditionalQuotaDTO,
   CurrentDoctorScheduleDTO,
   ResponseDoctorScheduleDTO,
-  ScheduleQuota,
+  ScheduleQuotaDTO,
+  ResponseSingleDoctorScheduleDTO,
+  DayOrDateScheduleDTO,
+  RawScheduleData,
+  Doctor,
 };
