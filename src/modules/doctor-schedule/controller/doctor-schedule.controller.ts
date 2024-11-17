@@ -37,6 +37,7 @@ import { Public } from '../../../decorators/public/public.decorator';
 export class DoctorScheduleController {
   constructor(private readonly doctorScheduleService: DoctorScheduleService) {}
 
+  @Public()
   @Get()
   @Header('Content-Type', 'application/json')
   async findDoctorSchedule(
@@ -62,6 +63,19 @@ export class DoctorScheduleController {
   @Header('Content-Type', 'application/json')
   async findDoctorScheduledById(@Param('id') id: number) {
     return this.doctorScheduleService.findDoctorScheduleById(id);
+  }
+
+  @Public()
+  @Get('/:unit_code/doctor/:id')
+  @Header('Content-Type', 'application/json')
+  async findScheduleByDoctorIdAndUnitCode(
+    @Param('unit_code') unit_code: string,
+    @Param('id') id: number,
+  ) {
+    return this.doctorScheduleService.findScheduleByDoctorIdAndUnitCode(
+      id,
+      unit_code,
+    );
   }
 
   @Public()

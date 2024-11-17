@@ -41,12 +41,12 @@ export class PatientService {
     );
   }
 
-  async updatePatient(id: number, patient: PatientDTO, req: any) {
+  async updatePatient(id: number, patient: PatientDTO, req?: any) {
     if (isNaN(Number(id))) {
       throw new HttpException('Id pasien tidak valid', HttpStatus.BAD_REQUEST);
     }
     patient.modified_at = generateCurrentDate();
-    patient.modified_by = req?.user?.id;
+    patient.modified_by = req?.user?.id || 0;
     return this.patientRepository.updatePatient(id, patient);
   }
 

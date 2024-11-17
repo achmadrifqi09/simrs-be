@@ -44,9 +44,8 @@ export class PatientRepository {
     identifierType = Number(identifierType);
 
     if (identifierType === 1) whereClause.kode_rm = identifierNumber.toString();
-    if (identifierNumber === 2)
-      whereClause.no_bpjs = identifierNumber.toString();
-    if (identifierNumber === 3)
+    if (identifierType === 2) whereClause.no_bpjs = identifierNumber.toString();
+    if (identifierType === 3)
       whereClause.no_identitas = identifierNumber.toString();
     if (!identifierType) whereClause.id_pasien = Number(identifierNumber);
 

@@ -37,6 +37,21 @@ export const generateCurrentDateWithCustomHour = (customTime: string) => {
   return localDate;
 };
 
+export const generateCustomDate = (customDateTime: string) => {
+  const dateWithCustomTime = moment.tz(
+    customDateTime,
+    'YYYY-MM-DD HH:mm:ss',
+    'Asia/Jakarta',
+  );
+
+  const isoString = dateWithCustomTime.toISOString();
+
+  const localDate = new Date(isoString);
+
+  localDate.setMinutes(localDate.getMinutes() + dateWithCustomTime.utcOffset());
+  return localDate;
+};
+
 export const timeFormatter = (timeString: string) => {
   const [hours, minutes, seconds] = timeString.split(':').map(Number);
   const date = new Date(Date.UTC(1970, 0, 1, hours, minutes, seconds));

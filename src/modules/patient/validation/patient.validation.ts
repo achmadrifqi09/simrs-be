@@ -40,7 +40,7 @@ const patientValidation = z.object({
   no_identitas: z
     .string()
     .max(100, 'No Identitas tidak boleh melebihi 100 karakter'),
-  no_bpjs: z.string().max(50, 'No BPJS tidak boleh melebihi 50 karakter'),
+  no_bpjs: z.string().max(50, 'No bpjs tidak boleh melebihi 50 karakter'),
   no_hp: z
     .string()
     .regex(phoneNumberRegex, 'No HP harus berupa nomor telepon yang valid')

@@ -9,5 +9,6 @@ import { UserAccessModule } from '../user-access/user-access.module';
   imports: [PrismaModule, UserAccessModule],
   controllers: [PatientController],
   providers: [PatientService, PatientRepository],
+  exports: [PatientService],
 })
 export class PatientModule {}

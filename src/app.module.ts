@@ -16,13 +16,15 @@ import { ReligionModule } from './modules/master/religion/religion.module';
 import { MasterModule } from './modules/master/master.module';
 import { MenuModule } from './modules/menu/menu.module';
 import { UserAccessModule } from './modules/user-access/user-access.module';
-import { CounterGateway } from './gateways/counter/gateway/counter.gateway';
 import { FieldOfWorkUnitModule } from './modules/field-of-work-unit/field-of-work-unit.module';
 import { AuthGuard } from './guards/auth/auth.guard';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { DoctorScheduleModule } from './modules/doctor-schedule/doctor-schedule.module';
 import { QueueModule } from './modules/queue/queue.module';
 import { PatientModule } from './modules/patient/patient.module';
+import { BPJSModule } from './modules/bpjs/bpjs.module';
+import { AdmissionQueueGateway } from './gateways/admission-queue/gateway/admission-queue.gateway';
+import { CounterGateway } from './gateways/counter/gateway/counter.gateway';
 
 @Module({
   imports: [
@@ -46,6 +48,7 @@ import { PatientModule } from './modules/patient/patient.module';
     DoctorScheduleModule,
     QueueModule,
     PatientModule,
+    BPJSModule,
   ],
   controllers: [AppController],
   providers: [
@@ -71,6 +74,7 @@ import { PatientModule } from './modules/patient/patient.module';
     },
     AppService,
     CounterGateway,
+    AdmissionQueueGateway,
   ],
 })
 export class AppModule {
