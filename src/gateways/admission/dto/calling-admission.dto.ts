@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber } from 'class-validator';
 
-export class AdmissionQueueCallingDto {
+export class CallingAdmissionDto {
   @IsNumber(
     {},
     {

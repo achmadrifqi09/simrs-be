@@ -11,7 +11,7 @@ export interface RegisterQueuePayload {
 
 export interface QueueAttendancePayload {
   id_antrian: number;
-  user_id: number;
+  id_user: number;
   id_ms_loket_antrian: number;
 }
 
@@ -26,17 +26,19 @@ export interface QueueAttendancePayloadInput {
 
 export interface StatusPayload {
   id_antrian: number;
-  user_id: number;
+  status_panggil: number;
+  id_user: number;
   status: number;
 }
 
 export interface StatusPayloadInput {
   status: number;
+  status_panggil: number;
   modified_at?: Date;
   modified_by?: number;
 }
 
-export interface UpdateQueueCounterIdPayload {
+export interface CounterIdUpdatePayload {
   id_ms_loket_antrian: number;
   modified_at?: Date;
   modified_by?: number;
@@ -44,7 +46,7 @@ export interface UpdateQueueCounterIdPayload {
 
 export interface CallStatusUpdatePayload {
   id_antrian: number;
-  user_id: number;
+  id_user: number;
   status_panggil?: number;
   id_ms_loket_antrian: number;
 }

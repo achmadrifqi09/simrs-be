@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class AdmissionQueueInitDto {
+export class AdmissionDto {
   @IsNumber(
     {},
     {
@@ -10,7 +10,7 @@ export class AdmissionQueueInitDto {
   @IsNotEmpty({
     message: 'Id loket antrian harus di isi',
   })
-  counter_id: number;
+  id_ms_loket_antrian: number;
 
   @IsString({
     message: 'Kode antrian harus berupa teks',
@@ -18,5 +18,16 @@ export class AdmissionQueueInitDto {
   @IsNotEmpty({
     message: 'Kode antrian harus di isi',
   })
-  queue_code: string;
+  kode_antrian: string;
+
+  @IsNumber(
+    {},
+    {
+      message: 'Id user harus berupa angka',
+    },
+  )
+  @IsNotEmpty({
+    message: 'Id user harus di isi',
+  })
+  id_user: number;
 }

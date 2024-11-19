@@ -8,6 +8,7 @@ type ConnectedCounter = {
   user_id: number;
   counter_type: number;
   counter_id: number;
+  id_queue_called?: number;
 };
 
 type Counter = {
