@@ -4,21 +4,91 @@ import { Prisma } from '@prisma/client';
 import { generateDateString } from '../../../utils/date-generator';
 import {
   CallStatusUpdate,
+  CounterIdUpdatePayload,
   DailyQueueSummary,
   PatientQueue,
   QueueAttendancePayloadInput,
   RegisterQueuePayload,
   StatusPayloadInput,
-  UpdateQueueCounterIdPayload,
 } from '../dto/queue.dto';
 import { PrismaErrorHandler } from '../../../common/handler/prisma-error.handler';
 import { bigIntReplacer } from '../../../utils/helper';
 import { generateCurrentDateWithCustomHour } from '../../../utils/date-formatter';
+import { counterQueue } from '../const/queue.const';
 
 @Dependencies([PrismaService])
 @Injectable()
 export class QueueRepository {
   constructor(private readonly prismaService: PrismaService) {}
+
+  // ==> NEW
+  async findRemainingQueueCode(queueCode: string) {
+    return this.prismaService.queue.count({
+      where: {
+        created_at: {
+          gte: generateCurrentDateWithCustomHour('00:00:00'),
+          lte: generateCurrentDateWithCustomHour('23:59:59'),
+        },
+        kode_antrian: queueCode,
+        status: { not: 2 },
+        status_panggil: 0,
+        id_ms_loket_antrian: null,
+      },
+    });
+  }
+
+  async findPendingQueueById(queueId: number) {
+    return this.prismaService.queue.findFirst({
+      where: {
+        id_antrian: Number(queueId),
+        created_at: {
+          gte: generateCurrentDateWithCustomHour('00:00:00'),
+          lte: generateCurrentDateWithCustomHour('23:59:59'),
+        },
+        status: { not: 2 },
+        OR: [{ status_panggil: 0 }, { status_panggil: null }],
+      },
+      select: counterQueue,
+    });
+  }
+
+  async updateCounterId(id: number, payload: CounterIdUpdatePayload) {
+    return this.prismaService.queue.update({
+      where: { id_antrian: Number(id) },
+      data: payload,
+      select: counterQueue,
+    });
+  }
+
+  async findNextQueueId(queueCode: string) {
+    return this.prismaService.queue.findFirst({
+      where: {
+        created_at: {
+          gte: generateCurrentDateWithCustomHour('00:00:00'),
+          lte: generateCurrentDateWithCustomHour('23:59:59'),
+        },
+        kode_antrian: queueCode,
+        status: { not: 2 },
+        status_panggil: 0,
+        id_ms_loket_antrian: null,
+      },
+      select: {
+        id_antrian: true,
+      },
+    });
+  }
+
+  async callStatusUpdate(queueId: number, payload: CallStatusUpdate) {
+    return this.prismaService.queue.update({
+      where: {
+        id_antrian: Number(queueId),
+      },
+      data: payload,
+      select: counterQueue,
+    });
+  }
+
+  // ==> NEW
 
   async findAllQueue(
     keyword?: string,
@@ -156,11 +226,13 @@ export class QueueRepository {
         status: { not: 2 },
         OR: [{ status_panggil: 0 }, { status_panggil: null }],
         is_deleted: false,
+        id_ms_loket_antrian: null,
         kode_antrian: queueCode,
       },
       select: {
         id_antrian: true,
         status_panggil: true,
+        id_ms_loket_antrian: true,
         jadwal_dokter: {
           select: {
             id_jadwal_dokter: true,
@@ -189,10 +261,7 @@ export class QueueRepository {
     });
   }
 
-  async updateQueueCounterId(
-    queueId: number,
-    payload: UpdateQueueCounterIdPayload,
-  ) {
+  async updateQueueCounterId(queueId: number, payload: CounterIdUpdatePayload) {
     return this.prismaService.queue.update({
       where: {
         id_antrian: Number(queueId),
@@ -213,7 +282,7 @@ export class QueueRepository {
     });
   }
 
-  async findSkippedQueue(counterId: number, queueCode: string) {
+  async findSkippedQueue(queueCode: string) {
     return this.prismaService.queue.findMany({
       where: {
         created_at: {
@@ -221,35 +290,11 @@ export class QueueRepository {
           lte: generateCurrentDateWithCustomHour('23:59:59'),
         },
         status: { not: 2 },
-        status_panggil: 2,
+        OR: [{ status_panggil: 2 }, { status_panggil: 3 }],
         is_deleted: false,
-        id_ms_loket_antrian: counterId,
         kode_antrian: queueCode,
       },
-      select: {
-        id_antrian: true,
-        status_panggil: true,
-        jadwal_dokter: {
-          select: {
-            id_jadwal_dokter: true,
-            kode_instalasi_bpjs: true,
-            jam_tutup_praktek: true,
-            jam_buka_praktek: true,
-            pegawai: {
-              select: {
-                gelar_depan: true,
-                gelar_belakang: true,
-                nama_pegawai: true,
-              },
-            },
-          },
-        },
-        jenis_pasien: true,
-        jenis_penjamin: true,
-        nama_pasien: true,
-        kode_antrian: true,
-        no_antrian: true,
-      },
+      select: counterQueue,
     });
   }
 
@@ -268,39 +313,6 @@ export class QueueRepository {
         id_antrian: Number(queueId),
       },
       data: payload,
-    });
-  }
-
-  async callStatusUpdate(queueId: number, payload: CallStatusUpdate) {
-    return this.prismaService.queue.update({
-      where: {
-        id_antrian: Number(queueId),
-      },
-      data: payload,
-      select: {
-        id_antrian: true,
-        status_panggil: true,
-        jadwal_dokter: {
-          select: {
-            id_jadwal_dokter: true,
-            kode_instalasi_bpjs: true,
-            jam_tutup_praktek: true,
-            jam_buka_praktek: true,
-            pegawai: {
-              select: {
-                gelar_depan: true,
-                gelar_belakang: true,
-                nama_pegawai: true,
-              },
-            },
-          },
-        },
-        jenis_pasien: true,
-        jenis_penjamin: true,
-        nama_pasien: true,
-        kode_antrian: true,
-        no_antrian: true,
-      },
     });
   }
 

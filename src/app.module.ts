@@ -23,8 +23,9 @@ import { DoctorScheduleModule } from './modules/doctor-schedule/doctor-schedule.
 import { QueueModule } from './modules/queue/queue.module';
 import { PatientModule } from './modules/patient/patient.module';
 import { BPJSModule } from './modules/bpjs/bpjs.module';
-import { AdmissionQueueGateway } from './gateways/admission-queue/gateway/admission-queue.gateway';
+// import { AdmissionQueueGateway } from './gateways/admission-queue/gateway/admission-queue.gateway';
 import { CounterGateway } from './gateways/counter/gateway/counter.gateway';
+import { AdmissionGateway } from './gateways/admission/gateway/admission.gateway';
 
 @Module({
   imports: [
@@ -74,7 +75,8 @@ import { CounterGateway } from './gateways/counter/gateway/counter.gateway';
     },
     AppService,
     CounterGateway,
-    AdmissionQueueGateway,
+    // AdmissionQueueGateway,
+    AdmissionGateway,
   ],
 })
 export class AppModule {

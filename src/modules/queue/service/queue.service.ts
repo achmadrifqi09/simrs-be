@@ -5,8 +5,10 @@ import {
   Injectable,
 } from '@nestjs/common';
 import {
+  CallingQueuePayload,
   CallStatusUpdateInput,
   CallStatusUpdatePayload,
+  CounterIdUpdatePayload,
   Identifier,
   PatientQueue,
   QueueAttendancePayload,
@@ -16,7 +18,6 @@ import {
   RegisterQueuePayload,
   StatusPayload,
   StatusPayloadInput,
-  UpdateQueueCounterIdPayload,
 } from '../dto/queue.dto';
 import { DoctorScheduleService } from '../../doctor-schedule/service/doctor-schedule.service';
 import { QueueRepository } from '../repository/queue.repository';
@@ -31,7 +32,6 @@ import { VClaimService } from '../../bpjs/service/v-claim.service';
 import { PatientReference } from '../../bpjs/dto/v-claim/participant-reference';
 import { PatientService } from '../../patient/service/patient.service';
 import { PatientDTO } from '../../patient/dto/patient.dto';
-import { CallingQueuePayload } from '../../../gateways/admission-queue/type/admission-queue.type';
 
 Dependencies([
   QueueRepository,
@@ -52,6 +52,33 @@ export class QueueService {
     private readonly patientService: PatientService,
   ) {}
 
+  // ==> NEW
+
+  async findPendingQueueById(queueId: number) {
+    return this.queueRepository.findPendingQueueById(queueId);
+  }
+
+  async findRemainingQueueCode(queueCode: string) {
+    return this.queueRepository.findRemainingQueueCode(queueCode);
+  }
+
+  async findNextQueue(queueCode: string, counterId: number, userId: number) {
+    const payload: CounterIdUpdatePayload = {
+      id_ms_loket_antrian: counterId,
+      modified_at: generateCurrentDate(),
+      modified_by: userId,
+    };
+    const queue = await this.queueRepository.findNextQueueId(queueCode);
+    if (queue?.id_antrian) {
+      return await this.queueRepository.updateCounterId(
+        queue.id_antrian,
+        payload,
+      );
+    }
+    return null;
+  }
+
+  // ==> NEW
   async findAllQueue(
     keyword?: string,
     fromDate?: string,
@@ -152,14 +179,15 @@ export class QueueService {
     return await this.queueRepository.findFirstQueueByCode(queueCode);
   }
 
-  async findSkippedQueue(counterId: number, queueCode: string) {
-    return this.queueRepository.findSkippedQueue(counterId, queueCode);
+  async findSkippedQueue(queueCode: string) {
+    return this.queueRepository.findSkippedQueue(queueCode);
   }
 
   async statusUpdate(payload: StatusPayload) {
     const finalPayload: StatusPayloadInput = {
+      status_panggil: Number(payload.status_panggil),
       status: Number(payload.status),
-      modified_by: payload.user_id,
+      modified_by: payload.id_user,
       modified_at: generateCurrentDate(),
     };
     return await this.queueRepository.statusUpdate(
@@ -174,9 +202,10 @@ export class QueueService {
       status_panggil: 1,
       tgl_panggil: generateCurrentDate(),
       id_ms_loket_antrian: payload.id_ms_loket_antrian,
-      modified_by: payload.user_id,
+      modified_by: payload.id_user,
       modified_at: generateCurrentDate(),
     };
+    console.log(payload.id_antrian);
     return await this.queueRepository.queueAttendance(
       payload.id_antrian,
       finalPayload,
@@ -185,7 +214,7 @@ export class QueueService {
 
   async callStatusUpdate(payload: CallStatusUpdatePayload) {
     const finalPayload: CallStatusUpdateInput = {
-      modified_by: payload.user_id,
+      modified_by: payload.id_user,
       id_ms_loket_antrian: payload.id_ms_loket_antrian,
       status_panggil: payload.status_panggil || 0,
       modified_at: generateCurrentDate(),
@@ -197,7 +226,7 @@ export class QueueService {
   }
 
   async updateQueueCounterId(payload: CallingQueuePayload) {
-    const finalPayload: UpdateQueueCounterIdPayload = {
+    const finalPayload: CounterIdUpdatePayload = {
       id_ms_loket_antrian: payload.id_ms_loket_antrian,
       modified_at: generateCurrentDate(),
       modified_by: payload.user_id,
