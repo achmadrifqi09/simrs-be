@@ -52,8 +52,6 @@ export class QueueService {
     private readonly patientService: PatientService,
   ) {}
 
-  // ==> NEW
-
   async findPendingQueueById(queueId: number) {
     return this.queueRepository.findPendingQueueById(queueId);
   }
@@ -78,7 +76,6 @@ export class QueueService {
     return null;
   }
 
-  // ==> NEW
   async findAllQueue(
     keyword?: string,
     fromDate?: string,

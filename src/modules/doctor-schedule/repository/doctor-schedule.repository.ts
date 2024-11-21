@@ -22,6 +22,26 @@ import {
 export class DoctorScheduleRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async findDoctorScheduleByDoctorIdAndDay(
+    doctorId: number,
+    dayOrDate: number | Date,
+  ) {
+    const whereClause: Prisma.DoctorScheduleWhereInput = {
+      id_pegawai: Number(doctorId),
+      is_deleted: false,
+    };
+
+    if (typeof dayOrDate === 'number') {
+      whereClause.hari_praktek = dayOrDate;
+    } else {
+      whereClause.tgl_praktek = dayOrDate;
+    }
+
+    return this.prismaService.doctorSchedule.findFirst({
+      where: whereClause,
+    });
+  }
+
   async findDoctorSchedule(
     poly_code?: string,
     practice_date?: string,

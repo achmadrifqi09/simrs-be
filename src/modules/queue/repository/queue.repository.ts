@@ -21,7 +21,6 @@ import { counterQueue } from '../const/queue.const';
 export class QueueRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  // ==> NEW
   async findRemainingQueueCode(queueCode: string) {
     return this.prismaService.queue.count({
       where: {
@@ -87,8 +86,6 @@ export class QueueRepository {
       select: counterQueue,
     });
   }
-
-  // ==> NEW
 
   async findAllQueue(
     keyword?: string,
