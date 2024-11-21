@@ -249,7 +249,7 @@ export class DoctorScheduleService {
   }
 
   async createDoctorSchedule(schedule: DoctorScheduleDTO, req: any) {
-    this.validatePayload(schedule);
+    await this.validatePayload(schedule);
     const payload: DoctorScheduleDTO = {
       ...schedule,
       created_at: generateCurrentDate(),
@@ -263,7 +263,7 @@ export class DoctorScheduleService {
     schedule: DoctorScheduleDTO,
     req: any,
   ) {
-    this.validatePayload(schedule);
+    await this.validatePayload(schedule);
     const payload: DoctorScheduleDTO = {
       ...schedule,
       modified_at: generateCurrentDate(),
@@ -288,7 +288,7 @@ export class DoctorScheduleService {
     return this.doctorScheduleRepository.softDeleteDoctorSchedule(id, payload);
   }
 
-  private validatePayload(payload: DoctorScheduleDTO) {
+  private async validatePayload(payload: DoctorScheduleDTO) {
     const openPracticeHour = moment(payload.jam_buka_praktek, 'HH:mm:ss');
     const closePracticeHour = moment(payload.jam_tutup_praktek, 'HH:mm:ss');
     if (
@@ -330,6 +330,39 @@ export class DoctorScheduleService {
         'Tanggal praktek harus di isi',
         HttpStatus.BAD_REQUEST,
       );
+    }
+    const existingSchedule =
+      await this.doctorScheduleRepository.findDoctorScheduleByDoctorIdAndDay(
+        Number(payload.id_pegawai),
+        payload.hari_praktek ?? payload.tgl_praktek,
+      );
+    if (existingSchedule) {
+      const existingOpenPracticeHour = moment(
+        existingSchedule.jam_buka_praktek.toISOString().split('T')[1],
+        'HH:mm:ss',
+      );
+      const existingClosePracticeHour = moment(
+        existingSchedule.jam_tutup_praktek.toISOString().split('T')[1],
+        'HH:mm:ss',
+      );
+      if (
+        openPracticeHour.isSameOrAfter(existingOpenPracticeHour) &&
+        openPracticeHour.isSameOrBefore(existingClosePracticeHour)
+      ) {
+        throw new HttpException(
+          'Jadwal praktek pada hari dan jam tersebut sudah ada',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      if (
+        closePracticeHour.isSameOrAfter(existingOpenPracticeHour) &&
+        closePracticeHour.isSameOrBefore(existingClosePracticeHour)
+      ) {
+        throw new HttpException(
+          'Jadwal praktek pada hari dan jam tersebut sudah ada',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
     }
   }
 
