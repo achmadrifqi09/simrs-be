@@ -93,6 +93,7 @@ export class QueueRepository {
     toDate?: Date,
     cursor: number = 0,
     take: number = 10,
+    guarantorType?: number,
   ) {
     const whereClause: Prisma.QueueWhereInput = {
       created_at: {
@@ -112,6 +113,10 @@ export class QueueRepository {
         { no_bpjs: { contains: keyword } },
         { kode_rm: { contains: keyword } },
       ];
+    }
+
+    if (Number(guarantorType)) {
+      whereClause.jenis_penjamin = Number(guarantorType);
     }
 
     const result = await this.prismaService.queue.findMany({

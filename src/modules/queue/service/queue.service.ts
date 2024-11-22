@@ -82,6 +82,7 @@ export class QueueService {
     toDate?: string,
     cursor: number = 0,
     take: number = 10,
+    guarantorType?: number,
   ) {
     if (!fromDate && toDate) {
       throw new HttpException(
@@ -110,19 +111,20 @@ export class QueueService {
         finalToDate,
         cursor,
         take,
+        guarantorType,
       );
     }
 
     if (fromDate && toDate) {
       if (!/^\d{4}-\d{2}-\d{2}$/.test(fromDate)) {
         throw new HttpException(
-          'Format tanggal mulai harus yyyy-mm-ddd',
+          'Format tanggal mulai harus yyyy-mm-dd',
           HttpStatus.BAD_REQUEST,
         );
       }
       if (!/^\d{4}-\d{2}-\d{2}$/.test(toDate)) {
         throw new HttpException(
-          'Format tanggal akhir harus yyyy-mm-ddd',
+          'Format tanggal akhir harus yyyy-mm-dd',
           HttpStatus.BAD_REQUEST,
         );
       }
@@ -134,6 +136,7 @@ export class QueueService {
         finalToDate,
         cursor,
         take,
+        guarantorType,
       );
     }
   }
