@@ -13,15 +13,15 @@ export class RegistrationController {
   @Get()
   async findAllOnsiteRegistrations(
     @Query('keyword') keyword: string,
-    @Query('guarantor_type') guarantorType: number,
+    @Query('id_unit') idUnit: number,
     @Query('cursor') cursor: number,
     @Query('take') take: number,
   ) {
-    return this.onsiteRegistrationService.findAllOnsiteRegistration(
+    return this.onsiteRegistrationService.findAllTodayRegistration(
       keyword,
+      idUnit,
       cursor,
       take,
-      guarantorType,
     );
   }
 }

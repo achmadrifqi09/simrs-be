@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { RegistrationService } from './service/registration.service';
 import { RegistrationController } from './controller/registration.controller';
-import { QueueModule } from '../queue/queue.module';
+import { PrismaModule } from '../../prisma/prisma.module';
+import { RegistrationRepository } from './repository/registration.repository';
 
 @Module({
-  imports: [QueueModule],
+  imports: [PrismaModule],
   controllers: [RegistrationController],
-  providers: [RegistrationService],
+  providers: [RegistrationService, RegistrationRepository],
+  exports: [RegistrationService],
 })
 export class RegistrationModule {}

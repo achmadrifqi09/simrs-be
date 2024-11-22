@@ -32,6 +32,8 @@ import { VClaimService } from '../../bpjs/service/v-claim.service';
 import { PatientReference } from '../../bpjs/dto/v-claim/participant-reference';
 import { PatientService } from '../../patient/service/patient.service';
 import { PatientDTO } from '../../patient/dto/patient.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { QueueEvent } from '../event/queue.event';
 
 Dependencies([
   QueueRepository,
@@ -50,7 +52,15 @@ export class QueueService {
     private readonly queueServiceHelper: QueueServiceHelper,
     private readonly vClaimService: VClaimService,
     private readonly patientService: PatientService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
+
+  async findQueueById(id: number) {
+    if (isNaN(Number(id))) {
+      throw new HttpException('Id antrean tidak valid', HttpStatus.BAD_REQUEST);
+    }
+    return this.queueRepository.findQueueById(id);
+  }
 
   async findPendingQueueById(queueId: number) {
     return this.queueRepository.findPendingQueueById(queueId);
@@ -83,6 +93,7 @@ export class QueueService {
     cursor: number = 0,
     take: number = 10,
     guarantorType?: number,
+    patientType?: number,
   ) {
     if (!fromDate && toDate) {
       throw new HttpException(
@@ -97,6 +108,12 @@ export class QueueService {
       );
     }
 
+    if (patientType && ![1, 2].includes(Number(patientType))) {
+      throw new HttpException(
+        'Jenis pasien tidak valid',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     if (!fromDate && !toDate) {
       const finalFromDate: Date = generateCustomDate(
         `${new Date().toISOString().split('T')[0]} 00:00:00`,
@@ -112,6 +129,7 @@ export class QueueService {
         cursor,
         take,
         guarantorType,
+        patientType,
       );
     }
 
@@ -137,6 +155,7 @@ export class QueueService {
         cursor,
         take,
         guarantorType,
+        patientType,
       );
     }
   }
@@ -205,11 +224,14 @@ export class QueueService {
       modified_by: payload.id_user,
       modified_at: generateCurrentDate(),
     };
-    console.log(payload.id_antrian);
-    return await this.queueRepository.queueAttendance(
+    const result = await this.queueRepository.queueAttendance(
       payload.id_antrian,
       finalPayload,
     );
+    if (result && result.jenis_pasien === 1) {
+      this.eventEmitter.emit('queue.attendance', new QueueEvent(result));
+    }
+    return result;
   }
 
   async callStatusUpdate(payload: CallStatusUpdatePayload) {

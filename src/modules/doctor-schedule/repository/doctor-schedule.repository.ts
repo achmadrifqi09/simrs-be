@@ -379,6 +379,7 @@ export class DoctorScheduleRepository {
       );
       return JSON.parse(JSON.stringify(schedules, bigIntReplacer));
     } catch (error) {
+      console.log(error);
       PrismaErrorHandler.handle(error);
     }
   }

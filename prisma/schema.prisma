@@ -33,37 +33,37 @@ model Registration {
   nomor_registrasi   String            @db.VarChar(50)
   id_antrian         Int
   antrian            Queue             @relation(fields: [id_antrian], references: [id_antrian])
-  id_online          Int
+  id_online          Int?
   kode_rm            String            @db.VarChar(50)
   tgl_daftar         DateTime
-  id_asuransi        Int
-  nomor_asuransi     String            @db.VarChar(50)
-  asuransi           Insurance         @relation(fields: [id_asuransi], references: [id])
-  no_rujukan         String            @db.VarChar(50)
-  status_rujukan     Int
-  nomor_rujuk_balik  String            @db.VarChar(50)
+  id_asuransi        Int?
+  nomor_asuransi     String?           @db.VarChar(50)
+  asuransi           Insurance?        @relation(fields: [id_asuransi], references: [id])
+  no_rujukan         String?           @db.VarChar(50)
+  status_rujukan     Int?
+  nomor_rujuk_balik  String?           @db.VarChar(50)
   no_sep             String?           @db.VarChar(50)
   cob                Int?
   no_cob             String?           @db.VarChar(50)
   status_bpjs        Int               @default(0)
-  status_keu         Int               @default(0)
+  status_keuangan    Int               @default(0)
   status_inap        Int               @default(0)
   status_koding      Int               @default(0)
   status_bayar       Int               @default(0)
   tgl_pulang         DateTime?
-  nama_wali          String            @db.VarChar(50)
-  telp_wali          String            @db.VarChar(50)
-  id_hub_wali        Int
-  hub_wali           FamilyStatus      @relation(fields: [id_hub_wali], references: [id])
+  nama_wali          String?           @db.VarChar(50)
+  telp_wali          String?           @db.VarChar(50)
+  id_hub_wali        Int?
+  hub_wali           FamilyStatus?     @relation(fields: [id_hub_wali], references: [id])
   asal_rujukan       String?           @db.VarChar(100)
   nama_perujuk       String?           @db.VarChar(100)
   tgl_rujukan        DateTime?         @db.Date
   ket_rujukan        String?           @db.Text
-  kode_antrian_poli  String            @db.VarChar(10)
-  nomor_antrian_poli String            @db.VarChar(3)
+  kode_antrian_poli  String?           @db.VarChar(10)
+  nomor_antrian_poli String?           @db.VarChar(3)
   status_batal       Int               @default(0)
   keterangan_batal   String?           @db.Text
-  task_id            Int
+  task_id            Int?
   created_at         DateTime          @default(now())
   created_by         Int               @default(0)
   modified_at        DateTime?         @db.DateTime(0)
@@ -83,7 +83,7 @@ model Registration {
   @@index([id_hub_wali])
   @@index([no_sep])
   @@index([tgl_daftar])
-  @@index([status_bpjs, status_keu, status_inap, status_koding, status_bayar])
+  @@index([status_bpjs, status_keuangan, status_inap, status_koding, status_bayar])
   @@index([is_deleted])
   @@map("db_pendaftaran")
 }
@@ -93,7 +93,7 @@ model OnlineRegistration {
   antrian                 Queue          @relation(fields: [id_antrian], references: [id_antrian])
   jenis_pasien            Int // 1:lama, 2:baru
   jenis_penjamin          Int // 1:umum, 2:bpjs
-  jenis_aplikasi          Int // 1:online, 2:mjkn
+  asal_pengambilan        Int // 1:online, 2:mjkn
   kode_rm                 String?        @db.VarChar(20)
   nama_pasien             String         @db.VarChar(100)
   identitas_pasien        Int // 1:KTP, 2:paspor, dsb
@@ -603,7 +603,7 @@ model WorkUnit {
   kode_instalasi_bpjs  String?          @unique @db.VarChar(10)
   status_antrian       Int              @default(0)
   is_parent_unit       Int              @default(0)
-  id_unit_induk        Int? // unit induk
+  id_unit_induk        Int?
   unit_induk           WorkUnit?        @relation("WorkUnitToWorkUnit", fields: [id_unit_induk], references: [id])
   id_bidang            Int?
   bidang               FieldOfWorkUnit? @relation(fields: [id_bidang], references: [id])
@@ -944,7 +944,7 @@ model Queue {
   is_deleted          Boolean              @default(false)
   is_restored         Boolean              @default(false)
   pendaftaran         Registration[]
-  OnlineRegistration  OnlineRegistration[]
+  pendaftaran_online  OnlineRegistration[]
 
   @@index([no_rujukan, no_bpjs, kode_rm])
   @@index([kode_antrian, status_panggil, status, is_deleted])
