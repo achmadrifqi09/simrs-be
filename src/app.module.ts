@@ -26,6 +26,7 @@ import { BPJSModule } from './modules/bpjs/bpjs.module';
 // import { AdmissionQueueGateway } from './gateways/admission-queue/gateway/admission-queue.gateway';
 import { CounterGateway } from './gateways/counter/gateway/counter.gateway';
 import { AdmissionGateway } from './gateways/admission/gateway/admission.gateway';
+import { RegistrationModule } from './modules/registration/registration.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { AdmissionGateway } from './gateways/admission/gateway/admission.gateway
     QueueModule,
     PatientModule,
     BPJSModule,
+    RegistrationModule,
   ],
   controllers: [AppController],
   providers: [

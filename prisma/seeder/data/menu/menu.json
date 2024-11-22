@@ -278,7 +278,7 @@
     "order": 1,
     "label": "Agama",
     "pathname": "/master/religion",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "agama"
   },
@@ -288,7 +288,7 @@
     "order": 2,
     "label": "Negara",
     "pathname": "/master/country",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "negara"
   },
@@ -298,7 +298,7 @@
     "order": 3,
     "label": "Provinsi",
     "pathname": "/master/province",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "provinsi"
   },
@@ -308,7 +308,7 @@
     "order": 4,
     "label": "Kabupaten/Kota",
     "pathname": "/master/regency",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "kabupaten-kota"
   },
@@ -318,7 +318,7 @@
     "order": 5,
     "label": "Kecamatan",
     "pathname": "/master/district",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "kecamatan"
   },
@@ -328,7 +328,7 @@
     "order": 6,
     "label": "Kelurahan/Desa",
     "pathname": "/master/village",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "kelurahan-desa"
   },
@@ -338,7 +338,7 @@
     "order": 7,
     "label": "Golongan Darah",
     "pathname": "/master/blood-type",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "golongan-darah"
   },
@@ -348,7 +348,7 @@
     "order": 8,
     "label": "Spesialis Dokter",
     "pathname": "/master/doctor-specialist",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "spesialis-dokter"
   },
@@ -358,7 +358,7 @@
     "order": 9,
     "label": "Jabatan Struktural",
     "pathname": "/master/structural-position",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "jabatan-struktural"
   },
@@ -368,7 +368,7 @@
     "order": 10,
     "label": "Kategori Pegawai",
     "pathname": "/master/employee-category",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "kategori-pegawai"
   },
@@ -378,7 +378,7 @@
     "order": 11,
     "label": "Jenis Pegawai",
     "pathname": "/master/employee-type",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "jenis-pegawai"
   },
@@ -388,7 +388,7 @@
     "order": 12,
     "label": "Status Pegawai",
     "pathname": "/master/employee-status",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "status-pegawai"
   },
@@ -398,7 +398,7 @@
     "order": 13,
     "label": "Status Kawin",
     "pathname": "/master/marital-status",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "status-kawin"
   },
@@ -408,7 +408,7 @@
     "order": 14,
     "label": "Status Keluarga",
     "pathname": "/master/family-status",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "status-keluarga"
   },
@@ -418,7 +418,7 @@
     "order": 15,
     "label": "Status Sosial",
     "pathname": "/master/social-status",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "status-sosial"
   },
@@ -428,7 +428,7 @@
     "order": 16,
     "label": "Pangkat/Golongan",
     "pathname": "/master/employee-rank",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "pangkat-golongan"
   },
@@ -438,7 +438,7 @@
     "order": 17,
     "label": "Tingkat Pendidikan",
     "pathname": "/master/education-level",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "tingkat-pendidikan"
   },
@@ -448,8 +448,18 @@
     "order": 18,
     "label": "Gedung",
     "pathname": "/master/building",
-    "is_submenu": false,
+    "is_submenu": true,
     "status": true,
     "tag": "gedung"
+  },
+  {
+    "id": 48,
+    "parent_id": 29,
+    "order": 19,
+    "label": "Asuransi",
+    "pathname": "/master/insurance",
+    "is_submenu": true,
+    "status": true,
+    "tag": "asuransi"
   }
 ]

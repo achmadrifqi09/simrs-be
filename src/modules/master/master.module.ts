@@ -22,6 +22,7 @@ import { BedModule } from './bed/bed.module';
 import { TypeOfStatusOfficerModule } from './employee-category/employee-category.module';
 import { CounterModule } from './counter/counter.module';
 import { TypeOfEmployeesModule } from './employee-type/employee-type.module';
+import { InsuranceModule } from './insurance/insurance.module';
 @Module({
   imports: [
     ReligionModule,
@@ -47,6 +48,7 @@ import { TypeOfEmployeesModule } from './employee-type/employee-type.module';
     TypeOfStatusOfficerModule,
     CounterModule,
     TypeOfEmployeesModule,
+    InsuranceModule,
   ],
   exports: [CounterModule],
 })

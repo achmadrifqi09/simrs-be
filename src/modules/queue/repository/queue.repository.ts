@@ -14,7 +14,7 @@ import {
 import { PrismaErrorHandler } from '../../../common/handler/prisma-error.handler';
 import { bigIntReplacer } from '../../../utils/helper';
 import { generateCurrentDateWithCustomHour } from '../../../utils/date-formatter';
-import { counterQueue } from '../const/queue.const';
+import { counterQueue, queueAttendance } from '../const/queue.const';
 
 @Dependencies([PrismaService])
 @Injectable()
@@ -34,6 +34,18 @@ export class QueueRepository {
         id_ms_loket_antrian: null,
       },
     });
+  }
+
+  async findQueueById(id: number) {
+    try {
+      return await this.prismaService.queue.findFirst({
+        where: {
+          id_antrian: Number(id),
+        },
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
   }
 
   async findPendingQueueById(queueId: number) {
@@ -93,6 +105,8 @@ export class QueueRepository {
     toDate?: Date,
     cursor: number = 0,
     take: number = 10,
+    guarantorType?: number,
+    patientType?: number,
   ) {
     const whereClause: Prisma.QueueWhereInput = {
       created_at: {
@@ -114,6 +128,13 @@ export class QueueRepository {
       ];
     }
 
+    if (Number(guarantorType)) {
+      whereClause.jenis_penjamin = Number(guarantorType);
+    }
+
+    if (Number(patientType)) {
+      whereClause.jenis_pasien = Number(patientType);
+    }
     const result = await this.prismaService.queue.findMany({
       take: Number(take) || 10,
       skip: Number(cursor) || 0,
@@ -300,6 +321,7 @@ export class QueueRepository {
       where: {
         id_antrian: Number(queueId),
       },
+      select: queueAttendance,
       data: payload,
     });
   }

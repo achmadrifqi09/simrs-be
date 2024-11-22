@@ -28,6 +28,218 @@ model AppClient {
   @@map("db_client")
 }
 
+model Registration {
+  id                 Int               @id @default(autoincrement())
+  nomor_registrasi   String            @db.VarChar(50)
+  id_antrian         Int
+  antrian            Queue             @relation(fields: [id_antrian], references: [id_antrian])
+  id_online          Int?
+  kode_rm            String            @db.VarChar(50)
+  tgl_daftar         DateTime
+  id_asuransi        Int?
+  nomor_asuransi     String?           @db.VarChar(50)
+  asuransi           Insurance?        @relation(fields: [id_asuransi], references: [id])
+  no_rujukan         String?           @db.VarChar(50)
+  status_rujukan     Int?
+  nomor_rujuk_balik  String?           @db.VarChar(50)
+  no_sep             String?           @db.VarChar(50)
+  cob                Int?
+  no_cob             String?           @db.VarChar(50)
+  status_bpjs        Int               @default(0)
+  status_keuangan    Int               @default(0)
+  status_inap        Int               @default(0)
+  status_koding      Int               @default(0)
+  status_bayar       Int               @default(0)
+  tgl_pulang         DateTime?
+  nama_wali          String?           @db.VarChar(50)
+  telp_wali          String?           @db.VarChar(50)
+  id_hub_wali        Int?
+  hub_wali           FamilyStatus?     @relation(fields: [id_hub_wali], references: [id])
+  asal_rujukan       String?           @db.VarChar(100)
+  nama_perujuk       String?           @db.VarChar(100)
+  tgl_rujukan        DateTime?         @db.Date
+  ket_rujukan        String?           @db.Text
+  kode_antrian_poli  String?           @db.VarChar(10)
+  nomor_antrian_poli String?           @db.VarChar(3)
+  status_batal       Int               @default(0)
+  keterangan_batal   String?           @db.Text
+  task_id            Int?
+  created_at         DateTime          @default(now())
+  created_by         Int               @default(0)
+  modified_at        DateTime?         @db.DateTime(0)
+  modified_by        Int?              @default(0)
+  deleted_at         DateTime?         @db.DateTime(0)
+  deleted_by         Int?              @default(0)
+  restored_at        DateTime?         @db.DateTime(0)
+  restored_by        Int?              @default(0)
+  is_deleted         Boolean           @default(false)
+  is_restored        Boolean           @default(false)
+  biaya_pendaftaran  RegistrationFee[]
+
+  @@index([nomor_registrasi])
+  @@index([kode_rm])
+  @@index([id_antrian])
+  @@index([id_asuransi])
+  @@index([id_hub_wali])
+  @@index([no_sep])
+  @@index([tgl_daftar])
+  @@index([status_bpjs, status_keuangan, status_inap, status_koding, status_bayar])
+  @@index([is_deleted])
+  @@map("db_pendaftaran")
+}
+
+model OnlineRegistration {
+  id_antrian              Int            @id @default(autoincrement())
+  antrian                 Queue          @relation(fields: [id_antrian], references: [id_antrian])
+  jenis_pasien            Int // 1:lama, 2:baru
+  jenis_penjamin          Int // 1:umum, 2:bpjs
+  asal_pengambilan        Int // 1:online, 2:mjkn
+  kode_rm                 String?        @db.VarChar(20)
+  nama_pasien             String         @db.VarChar(100)
+  identitas_pasien        Int // 1:KTP, 2:paspor, dsb
+  no_identitas            String         @db.VarChar(100)
+  no_bpjs                 String?        @db.VarChar(50)
+  jenis_kelamin           Int // 1:laki, 2:perempuan
+  tempat_lahir            String         @db.VarChar(100)
+  tgl_lahir               DateTime
+  hp                      String         @db.VarChar(20)
+  email                   String         @db.VarChar(100)
+  id_ms_status_kawin      Int            @default(0)
+  status_kawin            MaritalStatus  @relation(fields: [id_ms_status_kawin], references: [id_ms_status_kawin])
+  id_ms_agama             Int
+  agama                   Religion       @relation(fields: [id_ms_agama], references: [id_ms_agama])
+  id_ms_golongan_darah    Int            @default(0)
+  golongan_darah          BloodType      @relation(fields: [id_ms_golongan_darah], references: [id_ms_golongan_darah])
+  id_ms_pendidikan        Int
+  pendidikan              EducationLevel @relation(fields: [id_ms_pendidikan], references: [id_ms_tingkat_pendidikan])
+  nama_pekerjaan          String?        @db.VarChar(100)
+  suku                    String?        @db.VarChar(50)
+  id_ms_negara_asal       Int
+  negara_asal             Country        @relation("pendaftaran_negara_asal", fields: [id_ms_negara_asal], references: [id])
+  id_ms_propinsi_asal     String
+  provinsi_asal           Province       @relation("pendaftaran_provinsi_asal", fields: [id_ms_propinsi_asal], references: [id])
+  id_ms_kota_asal         String
+  kota_asal               Regency        @relation("pendaftaran_kota_asal", fields: [id_ms_kota_asal], references: [id])
+  id_ms_kecamatan_asal    String
+  kecamatan_asal          District       @relation("pendaftaran_kecamatan_asal", fields: [id_ms_kecamatan_asal], references: [id])
+  id_ms_desa_asal         String
+  desa_asal               Village        @relation("pendaftaran_desa_asal", fields: [id_ms_desa_asal], references: [id])
+  rw_asal                 String         @db.VarChar(5)
+  rt_asal                 String         @db.VarChar(5)
+  alamat_asal             String         @db.Text
+  kode_pos_asal           String         @db.VarChar(10)
+  alamatgab_asal          String         @db.Text
+  id_ms_negara_tinggal    Int
+  negara_tinggal          Country        @relation("pendaftaran_negara_tinggal", fields: [id_ms_negara_tinggal], references: [id])
+  id_ms_provinsi_tinggal  String
+  provinsi_tinggal        Province       @relation("pendaftaran_provinsi_tinggal", fields: [id_ms_provinsi_tinggal], references: [id])
+  id_ms_kota_tinggal      String
+  kota_tinggal            Regency        @relation("pendaftaran_kota_tinggal", fields: [id_ms_kota_tinggal], references: [id])
+  id_ms_desa_tinggal      String
+  desa_tinggal            Village        @relation("pendaftaran_desa_tinggal", fields: [id_ms_desa_tinggal], references: [id])
+  id_ms_kecamatan_tinggal String
+  kecamatan_tinggal       District       @relation("pendaftaran_kecamatan_tinggal", fields: [id_ms_kecamatan_tinggal], references: [id])
+  rw_tinggal              String         @db.VarChar(5)
+  rt_tinggal              String         @db.VarChar(5)
+  alamat_tinggal          String         @db.Text
+  kode_pos_tinggal        String         @db.VarChar(10)
+  alamatgab_tinggal       String         @db.Text
+  tgl_kunjungan           DateTime
+  no_rujukan              String         @db.VarChar(50)
+  kode_booking            String         @db.VarChar(50)
+  id_jadwal_dokter        Int
+  status                  Int            @default(1) // 1:aktif, 2:batal
+  keterangan_batal        String         @db.Text
+  tgl_cekin               DateTime
+  id_ms_loket_antrian     Int
+  loket                   Counter        @relation(fields: [id_ms_loket_antrian], references: [id_ms_loket_antrian])
+  created_at              DateTime       @default(now())
+  created_by              Int            @default(0)
+  modified_at             DateTime?      @db.DateTime(0)
+  modified_by             Int?           @default(0)
+  deleted_at              DateTime?      @db.DateTime(0)
+  deleted_by              Int?           @default(0)
+  restored_at             DateTime?      @db.DateTime(0)
+  restored_by             Int?           @default(0)
+  is_deleted              Boolean        @default(false)
+  is_restored             Boolean        @default(false)
+
+  @@index([kode_rm])
+  @@index([no_identitas])
+  @@index([no_bpjs])
+  @@index([kode_booking])
+  @@index([tgl_kunjungan])
+  @@index([id_jadwal_dokter])
+  @@index([status])
+  @@index([id_ms_status_kawin])
+  @@index([id_ms_agama])
+  @@index([id_ms_golongan_darah])
+  @@index([id_ms_pendidikan])
+  @@index([id_ms_negara_asal])
+  @@index([id_ms_propinsi_asal])
+  @@index([id_ms_kota_asal])
+  @@index([id_ms_kecamatan_asal])
+  @@index([id_ms_desa_asal])
+  @@index([id_ms_negara_tinggal])
+  @@index([id_ms_provinsi_tinggal])
+  @@index([id_ms_kota_tinggal])
+  @@index([id_ms_kecamatan_tinggal])
+  @@index([id_ms_desa_tinggal])
+  @@index([id_ms_loket_antrian])
+  @@index([is_deleted])
+  @@map("db_pendaftaran_online")
+}
+
+model RegistrationFee {
+  id                         Int          @id @default(autoincrement())
+  id_pendaftaran             Int
+  pendaftaran                Registration @relation(fields: [id_pendaftaran], references: [id])
+  biaya_daftar               String       @db.VarChar(20)
+  diskon_daftar              String       @db.VarChar(20)
+  biaya_kartu                String       @default("0000-00-00 00:00:00") @db.VarChar(20)
+  diskon_kartu               String       @db.VarChar(20)
+  biaya_dokter               String       @db.VarChar(20)
+  diskon_dokter              String       @db.VarChar(20)
+  tgl_billing_daftar         DateTime
+  tgl_billing_daftar_selesai DateTime
+  created_at                 DateTime     @default(now())
+  created_by                 Int          @default(0)
+  modified_at                DateTime?    @db.DateTime(0)
+  modified_by                Int?         @default(0)
+  deleted_at                 DateTime?    @db.DateTime(0)
+  deleted_by                 Int?         @default(0)
+  restored_at                DateTime?    @db.DateTime(0)
+  restored_by                Int?         @default(0)
+  is_deleted                 Boolean      @default(false)
+  is_restored                Boolean      @default(false)
+
+  @@index([id_pendaftaran])
+  @@index([tgl_billing_daftar])
+  @@index([is_deleted])
+  @@map("db_biaya_pendaftaran")
+}
+
+model Insurance {
+  id            Int            @id @default(autoincrement())
+  nama_asuransi String         @db.VarChar(100)
+  status        Int            @default(1)
+  created_at    DateTime       @default(now())
+  created_by    Int            @default(0)
+  modified_at   DateTime?      @db.DateTime(0)
+  modified_by   Int?           @default(0)
+  deleted_at    DateTime?      @db.DateTime(0)
+  deleted_by    Int?           @default(0)
+  restored_at   DateTime?      @db.DateTime(0)
+  restored_by   Int?           @default(0)
+  is_deleted    Boolean        @default(false)
+  is_restored   Boolean        @default(false)
+  pendaftaran   Registration[]
+
+  @@index([nama_asuransi])
+  @@index([status, is_deleted])
+  @@map("db_asuransi")
+}
+
 model User {
   id_user       Int          @id @default(autoincrement())
   id_pegawai    Int
@@ -391,7 +603,7 @@ model WorkUnit {
   kode_instalasi_bpjs  String?          @unique @db.VarChar(10)
   status_antrian       Int              @default(0)
   is_parent_unit       Int              @default(0)
-  id_unit_induk        Int? // unit induk
+  id_unit_induk        Int?
   unit_induk           WorkUnit?        @relation("WorkUnitToWorkUnit", fields: [id_unit_induk], references: [id])
   id_bidang            Int?
   bidang               FieldOfWorkUnit? @relation(fields: [id_bidang], references: [id])
@@ -453,21 +665,22 @@ model FieldOfWorkUnit {
 }
 
 model Religion {
-  id_ms_agama   Int        @id @default(autoincrement())
-  nama_agama    String     @db.VarChar(50)
-  status        Int        @default(1)
-  created_at    DateTime   @default(now())
-  created_by    Int        @default(0)
-  modified_at   DateTime?  @db.DateTime(0)
-  modified_by   Int?       @default(0)
-  deleted_at    DateTime?  @db.DateTime(0)
-  deleted_by    Int?       @default(0)
-  restored_at   DateTime?  @db.DateTime(0)
-  restored_by   Int?       @default(0)
-  is_deleted    Boolean    @default(false)
-  is_restored   Boolean    @default(false)
-  pasien        Patient[]
-  agama_pegawai Employee[] @relation("ReligionEmployee")
+  id_ms_agama        Int                  @id @default(autoincrement())
+  nama_agama         String               @db.VarChar(50)
+  status             Int                  @default(1)
+  created_at         DateTime             @default(now())
+  created_by         Int                  @default(0)
+  modified_at        DateTime?            @db.DateTime(0)
+  modified_by        Int?                 @default(0)
+  deleted_at         DateTime?            @db.DateTime(0)
+  deleted_by         Int?                 @default(0)
+  restored_at        DateTime?            @db.DateTime(0)
+  restored_by        Int?                 @default(0)
+  is_deleted         Boolean              @default(false)
+  is_restored        Boolean              @default(false)
+  pasien             Patient[]
+  agama_pegawai      Employee[]           @relation("ReligionEmployee")
+  OnlineRegistration OnlineRegistration[]
 
   @@index([nama_agama])
   @@index([status, is_deleted])
@@ -475,21 +688,22 @@ model Religion {
 }
 
 model BloodType {
-  id_ms_golongan_darah   Int        @id @default(autoincrement())
-  nama_golongan_darah    String     @db.VarChar(2)
-  status                 Int        @default(1)
-  created_at             DateTime   @default(now())
-  created_by             Int        @default(0)
-  modified_at            DateTime?  @db.DateTime(0)
-  modified_by            Int?       @default(0)
-  deleted_at             DateTime?  @db.DateTime(0)
-  deleted_by             Int?       @default(0)
-  restored_at            DateTime?  @db.DateTime(0)
-  restored_by            Int?       @default(0)
-  is_deleted             Boolean    @default(false)
-  is_restored            Boolean    @default(false)
+  id_ms_golongan_darah   Int                  @id @default(autoincrement())
+  nama_golongan_darah    String               @db.VarChar(2)
+  status                 Int                  @default(1)
+  created_at             DateTime             @default(now())
+  created_by             Int                  @default(0)
+  modified_at            DateTime?            @db.DateTime(0)
+  modified_by            Int?                 @default(0)
+  deleted_at             DateTime?            @db.DateTime(0)
+  deleted_by             Int?                 @default(0)
+  restored_at            DateTime?            @db.DateTime(0)
+  restored_by            Int?                 @default(0)
+  is_deleted             Boolean              @default(false)
+  is_restored            Boolean              @default(false)
   pasien                 Patient[]
-  golongan_darah_pegawai Employee[] @relation("BloodTypeEmployee")
+  golongan_darah_pegawai Employee[]           @relation("BloodTypeEmployee")
+  OnlineRegistration     OnlineRegistration[]
 
   @@index([nama_golongan_darah])
   @@index([status, is_deleted])
@@ -565,22 +779,23 @@ model TypeOfStatusOfficer {
 }
 
 model Counter {
-  id_ms_loket_antrian Int       @id @default(autoincrement())
+  id_ms_loket_antrian Int                  @id @default(autoincrement())
   nama_loket          String
-  keterangan          String?   @db.Text
-  jenis_loket         Int       @db.TinyInt
-  status              Int       @default(1)
-  created_at          DateTime  @default(now())
-  created_by          Int       @default(0)
-  modified_at         DateTime? @db.DateTime(0)
-  modified_by         Int?      @default(0)
-  deleted_at          DateTime? @db.DateTime(0)
-  deleted_by          Int?      @default(0)
-  restored_at         DateTime? @db.DateTime(0)
-  restored_by         Int?      @default(0)
-  is_deleted          Boolean   @default(false)
-  is_restored         Boolean   @default(false)
+  keterangan          String?              @db.Text
+  jenis_loket         Int                  @db.TinyInt
+  status              Int                  @default(1)
+  created_at          DateTime             @default(now())
+  created_by          Int                  @default(0)
+  modified_at         DateTime?            @db.DateTime(0)
+  modified_by         Int?                 @default(0)
+  deleted_at          DateTime?            @db.DateTime(0)
+  deleted_by          Int?                 @default(0)
+  restored_at         DateTime?            @db.DateTime(0)
+  restored_by         Int?                 @default(0)
+  is_deleted          Boolean              @default(false)
+  is_restored         Boolean              @default(false)
   antrian             Queue[]
+  pendaftaran_online  OnlineRegistration[]
 
   @@index([nama_loket])
   @@index([status, is_deleted, jenis_loket])
@@ -633,21 +848,22 @@ model Specialist {
 }
 
 model MaritalStatus {
-  id_ms_status_kawin   Int        @id @default(autoincrement())
-  nama_status_kawin    String     @db.VarChar(50)
-  status               Int        @default(1)
-  created_at           DateTime   @default(now())
-  created_by           Int        @default(0)
-  modified_at          DateTime?  @db.DateTime(0)
-  modified_by          Int?       @default(0)
-  deleted_at           DateTime?  @db.DateTime(0)
-  deleted_by           Int?       @default(0)
-  restored_at          DateTime?  @db.DateTime(0)
-  restored_by          Int?       @default(0)
-  is_deleted           Boolean    @default(false)
-  is_restored          Boolean    @default(false)
+  id_ms_status_kawin   Int                  @id @default(autoincrement())
+  nama_status_kawin    String               @db.VarChar(50)
+  status               Int                  @default(1)
+  created_at           DateTime             @default(now())
+  created_by           Int                  @default(0)
+  modified_at          DateTime?            @db.DateTime(0)
+  modified_by          Int?                 @default(0)
+  deleted_at           DateTime?            @db.DateTime(0)
+  deleted_by           Int?                 @default(0)
+  restored_at          DateTime?            @db.DateTime(0)
+  restored_by          Int?                 @default(0)
+  is_deleted           Boolean              @default(false)
+  is_restored          Boolean              @default(false)
   pasien               Patient[]
-  status_kawin_pegawai Employee[] @relation("MaritalStatusEmployee")
+  status_kawin_pegawai Employee[]           @relation("MaritalStatusEmployee")
+  OnlineRegistration   OnlineRegistration[]
 
   @@index([nama_status_kawin])
   @@index([status, is_deleted])
@@ -676,21 +892,22 @@ model EmployeeStatus {
 }
 
 model EducationLevel {
-  id_ms_tingkat_pendidikan   Int        @id @default(autoincrement())
-  nama_tingkat_pendidikan    String     @db.VarChar(100)
-  status                     Int        @default(1)
-  created_at                 DateTime   @default(now())
-  created_by                 Int        @default(0)
-  modified_at                DateTime?  @db.DateTime(0)
-  modified_by                Int?       @default(0)
-  deleted_at                 DateTime?  @db.DateTime(0)
-  deleted_by                 Int?       @default(0)
-  restored_at                DateTime?  @db.DateTime(0)
-  restored_by                Int?       @default(0)
-  is_deleted                 Boolean    @default(false)
-  is_restored                Boolean    @default(false)
+  id_ms_tingkat_pendidikan   Int                  @id @default(autoincrement())
+  nama_tingkat_pendidikan    String               @db.VarChar(100)
+  status                     Int                  @default(1)
+  created_at                 DateTime             @default(now())
+  created_by                 Int                  @default(0)
+  modified_at                DateTime?            @db.DateTime(0)
+  modified_by                Int?                 @default(0)
+  deleted_at                 DateTime?            @db.DateTime(0)
+  deleted_by                 Int?                 @default(0)
+  restored_at                DateTime?            @db.DateTime(0)
+  restored_by                Int?                 @default(0)
+  is_deleted                 Boolean              @default(false)
+  is_restored                Boolean              @default(false)
   pasien                     Patient[]
-  tingkat_pendidikan_pegawai Employee[] @relation("EducationLevelEmployee")
+  tingkat_pendidikan_pegawai Employee[]           @relation("EducationLevelEmployee")
+  OnlineRegistration         OnlineRegistration[]
 
   @@index([nama_tingkat_pendidikan])
   @@index([status, is_deleted])
@@ -698,34 +915,36 @@ model EducationLevel {
 }
 
 model Queue {
-  id_antrian          Int            @id @default(autoincrement())
+  id_antrian          Int                  @id @default(autoincrement())
   jenis_pasien        Int
   jenis_penjamin      Int
-  kode_rm             String?        @db.VarChar(20)
-  nama_pasien         String?        @db.VarChar(100)
-  tgl_lahir           DateTime?      @db.Date
-  no_hp               String?        @db.VarChar(20)
-  no_bpjs             String?        @db.VarChar(50)
-  no_rujukan          String?        @db.VarChar(50)
-  kode_antrian        String         @db.VarChar(1)
+  kode_rm             String?              @db.VarChar(20)
+  nama_pasien         String?              @db.VarChar(100)
+  tgl_lahir           DateTime?            @db.Date
+  no_hp               String?              @db.VarChar(20)
+  no_bpjs             String?              @db.VarChar(50)
+  no_rujukan          String?              @db.VarChar(50)
+  kode_antrian        String               @db.VarChar(1)
   no_antrian          Int
   id_jadwal_dokter    Int
-  jadwal_dokter       DoctorSchedule @relation(fields: [id_jadwal_dokter], references: [id_jadwal_dokter])
+  jadwal_dokter       DoctorSchedule       @relation(fields: [id_jadwal_dokter], references: [id_jadwal_dokter])
   id_ms_loket_antrian Int?
-  loket               Counter?       @relation(fields: [id_ms_loket_antrian], references: [id_ms_loket_antrian])
-  status_panggil      Int?           @default(0)
-  tgl_panggil         DateTime?      @db.DateTime(0)
-  status              Int            @default(0)
-  created_at          DateTime       @default(now())
-  created_by          Int            @default(0)
-  modified_at         DateTime?      @db.DateTime(0)
-  modified_by         Int?           @default(0)
-  deleted_at          DateTime?      @db.DateTime(0)
-  deleted_by          Int?           @default(0)
-  restored_at         DateTime?      @db.DateTime(0)
-  restored_by         Int?           @default(0)
-  is_deleted          Boolean        @default(false)
-  is_restored         Boolean        @default(false)
+  loket               Counter?             @relation(fields: [id_ms_loket_antrian], references: [id_ms_loket_antrian])
+  status_panggil      Int?                 @default(0)
+  tgl_panggil         DateTime?            @db.DateTime(0)
+  status              Int                  @default(0)
+  created_at          DateTime             @default(now())
+  created_by          Int                  @default(0)
+  modified_at         DateTime?            @db.DateTime(0)
+  modified_by         Int?                 @default(0)
+  deleted_at          DateTime?            @db.DateTime(0)
+  deleted_by          Int?                 @default(0)
+  restored_at         DateTime?            @db.DateTime(0)
+  restored_by         Int?                 @default(0)
+  is_deleted          Boolean              @default(false)
+  is_restored         Boolean              @default(false)
+  pendaftaran         Registration[]
+  pendaftaran_online  OnlineRegistration[]
 
   @@index([no_rujukan, no_bpjs, kode_rm])
   @@index([kode_antrian, status_panggil, status, is_deleted])
@@ -744,89 +963,6 @@ model Queue {
   @@index([tgl_panggil, status_panggil])
   @@index([status, is_deleted])
   @@map("db_antrian")
-}
-
-model OnlineRegistration {
-  id_antrian              Int       @id @default(autoincrement())
-  jenis_pasien            Int
-  jenis_penjamin          Int
-  asal_pengambilan        Int
-  kode_rm                 String    @db.VarChar(20)
-  nama_pasien             String    @db.VarChar(100)
-  identitas_pasien        Int
-  no_identitas            String    @db.VarChar(100)
-  no_bpjs                 String    @db.VarChar(50)
-  jenis_kelamin           Int
-  tempat_lahir            String    @db.VarChar(100)
-  tgl_lahir               DateTime
-  hp                      String    @db.VarChar(20)
-  email                   String    @db.VarChar(100)
-  id_ms_status_kawin      Int       @default(0)
-  id_ms_agama             Int
-  id_ms_golongan_darah    Int       @default(0)
-  id_ms_pendidikan        Int
-  id_warga_negara         Int
-  nama_pekerjaan          String    @db.VarChar(100)
-  suku                    String    @db.VarChar(50)
-  id_ms_propinsi_asal     Int
-  id_ms_negara_asal       Int
-  id_ms_kota_asal         Int
-  id_ms_kecamatan_asal    Int
-  id_ms_desa_asal         Int
-  rw_asal                 String    @db.VarChar(5)
-  rt_asal                 String    @db.VarChar(5)
-  alamat_asal             String    @db.Text
-  kode_pos_asal           String    @db.VarChar(10)
-  alamatgab_asal          String    @db.Text
-  id_ms_negara_tinggal    Int
-  id_ms_provinsi_tinggal  Int
-  id_ms_kota_tinggal      Int
-  id_ms_desa_tinggal      Int
-  id_ms_kecamatan_tinggal Int
-  rw_tinggal              String    @db.VarChar(5)
-  rt_tinggal              String    @db.VarChar(5)
-  alamat_tinggal          String    @db.Text
-  kode_pos_tinggal        String    @db.VarChar(10)
-  alamatgab_tinggal       String    @db.Text
-  tgl_kunjungan           DateTime
-  no_rujukan              String    @db.VarChar(50)
-  kode_booking            String    @db.VarChar(50)
-  kode_antrian            String    @db.VarChar(2)
-  no_antrian              Int
-  id_jadwal_dokter        Int
-  status                  Int       @default(1)
-  keterangan_batal        String    @db.Text
-  tgl_cekin               DateTime
-  id_ms_loket_antrian     Int
-  created_at              DateTime  @default(now())
-  created_by              String    @default("0") @db.Char(36)
-  modified_at             DateTime?
-  modified_by             String?   @db.Char(36)
-  deleted_at              DateTime?
-  deleted_by              String?   @db.Char(36)
-  restored_at             DateTime?
-  restored_by             String?   @db.Char(36)
-  is_deleted              Boolean   @default(false)
-  is_restored             Boolean   @default(false)
-
-  @@index([jenis_pasien])
-  @@index([jenis_penjamin])
-  @@index([asal_pengambilan])
-  @@index([kode_rm])
-  @@index([no_identitas])
-  @@index([no_bpjs])
-  @@index([tgl_lahir])
-  @@index([email])
-  @@index([kode_booking])
-  @@index([kode_antrian])
-  @@index([no_antrian])
-  @@index([id_jadwal_dokter])
-  @@index([status])
-  @@index([tgl_cekin])
-  @@index([created_at])
-  @@index([deleted_at])
-  @@index([restored_at])
-  @@map("db_pendaftaran_online")
 }
 
 model DoctorSchedule {
@@ -894,24 +1030,26 @@ model AdditionalDoctorQuota {
 }
 
 model Village {
-  id                   String     @id @db.Char(10)
-  id_kecamatan         String     @db.Char(6)
-  nama                 String     @db.VarChar(255)
-  created_at           DateTime   @default(now())
-  created_by           Int        @default(0)
-  modified_at          DateTime?  @db.DateTime(0)
-  modified_by          Int?       @default(0)
-  deleted_at           DateTime?  @db.DateTime(0)
-  deleted_by           Int?       @default(0)
-  restored_at          DateTime?  @db.DateTime(0)
-  restored_by          Int?       @default(0)
-  is_deleted           Boolean    @default(false)
-  is_restored          Boolean    @default(false)
-  ms_kecamatan         District   @relation(fields: [id_kecamatan], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_kecamatan")
-  desa_asal_pegawai    Employee[] @relation("VillageOfOrigin")
-  desa_tinggal_pegawai Employee[] @relation("VillageOfResidence")
-  desa_asal_pasien     Patient[]  @relation("desa_asal_pasien")
-  desa_tinggal_pasien  Patient[]  @relation("desa_tinggal_pasien")
+  id                       String               @id @db.Char(10)
+  id_kecamatan             String               @db.Char(6)
+  nama                     String               @db.VarChar(255)
+  created_at               DateTime             @default(now())
+  created_by               Int                  @default(0)
+  modified_at              DateTime?            @db.DateTime(0)
+  modified_by              Int?                 @default(0)
+  deleted_at               DateTime?            @db.DateTime(0)
+  deleted_by               Int?                 @default(0)
+  restored_at              DateTime?            @db.DateTime(0)
+  restored_by              Int?                 @default(0)
+  is_deleted               Boolean              @default(false)
+  is_restored              Boolean              @default(false)
+  ms_kecamatan             District             @relation(fields: [id_kecamatan], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_kecamatan")
+  desa_asal_pegawai        Employee[]           @relation("VillageOfOrigin")
+  desa_tinggal_pegawai     Employee[]           @relation("VillageOfResidence")
+  desa_asal_pasien         Patient[]            @relation("desa_asal_pasien")
+  desa_tinggal_pasien      Patient[]            @relation("desa_tinggal_pasien")
+  pendaftaran_desa_asal    OnlineRegistration[] @relation("pendaftaran_desa_asal")
+  pendaftaran_desa_tinggal OnlineRegistration[] @relation("pendaftaran_desa_tinggal")
 
   @@index([id_kecamatan], map: "fk_kecamatan")
   @@index([nama], map: "idx_village_nama")
@@ -920,25 +1058,27 @@ model Village {
 }
 
 model Regency {
-  id                     String     @id @db.Char(4)
-  id_provinsi            String     @db.Char(2)
-  nama                   String     @db.VarChar(255)
-  created_at             DateTime   @default(now())
-  created_by             Int        @default(0)
-  modified_at            DateTime?  @db.DateTime(0)
-  modified_by            Int?       @default(0)
-  deleted_at             DateTime?  @db.DateTime(0)
-  deleted_by             Int?       @default(0)
-  restored_at            DateTime?  @db.DateTime(0)
-  restored_by            Int?       @default(0)
-  is_deleted             Boolean    @default(false)
-  is_restored            Boolean    @default(false)
-  ms_provinsi            Province   @relation(fields: [id_provinsi], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_provinsi")
-  ms_kecamatan           District[]
-  kabkot_asal_pegawai    Employee[] @relation("RegencyOfOrigin")
-  kabkot_tinggal_pegawai Employee[] @relation("RegencyOfResidence")
-  kota_tinggal_pasien    Patient[]  @relation("kota_tinggal_pasien")
-  kota_asal_pasien       Patient[]  @relation("kota_asal_pasien")
+  id                       String               @id @db.Char(4)
+  id_provinsi              String               @db.Char(2)
+  nama                     String               @db.VarChar(255)
+  created_at               DateTime             @default(now())
+  created_by               Int                  @default(0)
+  modified_at              DateTime?            @db.DateTime(0)
+  modified_by              Int?                 @default(0)
+  deleted_at               DateTime?            @db.DateTime(0)
+  deleted_by               Int?                 @default(0)
+  restored_at              DateTime?            @db.DateTime(0)
+  restored_by              Int?                 @default(0)
+  is_deleted               Boolean              @default(false)
+  is_restored              Boolean              @default(false)
+  ms_provinsi              Province             @relation(fields: [id_provinsi], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_provinsi")
+  ms_kecamatan             District[]
+  kabkot_asal_pegawai      Employee[]           @relation("RegencyOfOrigin")
+  kabkot_tinggal_pegawai   Employee[]           @relation("RegencyOfResidence")
+  kota_tinggal_pasien      Patient[]            @relation("kota_tinggal_pasien")
+  kota_asal_pasien         Patient[]            @relation("kota_asal_pasien")
+  pendaftaran_kota_asal    OnlineRegistration[] @relation("pendaftaran_kota_asal")
+  pendaftaran_kota_tinggal OnlineRegistration[] @relation("pendaftaran_kota_tinggal")
 
   @@index([id_provinsi], map: "fk_provinsi")
   @@index([nama], map: "idx_regency_nama")
@@ -947,25 +1087,27 @@ model Regency {
 }
 
 model District {
-  id                        String     @id @db.Char(6)
-  id_kabkot                 String     @db.Char(4)
-  nama                      String     @db.VarChar(255)
-  created_at                DateTime   @default(now())
-  created_by                Int        @default(0)
-  modified_at               DateTime?  @db.DateTime(0)
-  modified_by               Int?       @default(0)
-  deleted_at                DateTime?  @db.DateTime(0)
-  deleted_by                Int?       @default(0)
-  restored_at               DateTime?  @db.DateTime(0)
-  restored_by               Int?       @default(0)
-  is_deleted                Boolean    @default(false)
-  is_restored               Boolean    @default(false)
-  ms_desa                   Village[]
-  ms_kabkot                 Regency    @relation(fields: [id_kabkot], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_kabkot")
-  kecamatan_asal_pegawai    Employee[] @relation("DistrictOfOrigin")
-  kecamatan_tinggal_pegawai Employee[] @relation("DistrictOfResidence")
-  kecamatan_asal_pasien     Patient[]  @relation("kecamatan_asal_pasien")
-  kecamatan_tinggal_pasien  Patient[]  @relation("kecamatan_tinggal_pasien")
+  id                            String               @id @db.Char(6)
+  id_kabkot                     String               @db.Char(4)
+  nama                          String               @db.VarChar(255)
+  created_at                    DateTime             @default(now())
+  created_by                    Int                  @default(0)
+  modified_at                   DateTime?            @db.DateTime(0)
+  modified_by                   Int?                 @default(0)
+  deleted_at                    DateTime?            @db.DateTime(0)
+  deleted_by                    Int?                 @default(0)
+  restored_at                   DateTime?            @db.DateTime(0)
+  restored_by                   Int?                 @default(0)
+  is_deleted                    Boolean              @default(false)
+  is_restored                   Boolean              @default(false)
+  ms_desa                       Village[]
+  ms_kabkot                     Regency              @relation(fields: [id_kabkot], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_kabkot")
+  kecamatan_asal_pegawai        Employee[]           @relation("DistrictOfOrigin")
+  kecamatan_tinggal_pegawai     Employee[]           @relation("DistrictOfResidence")
+  kecamatan_asal_pasien         Patient[]            @relation("kecamatan_asal_pasien")
+  kecamatan_tinggal_pasien      Patient[]            @relation("kecamatan_tinggal_pasien")
+  pendaftaran_kecamatan_asal    OnlineRegistration[] @relation("pendaftaran_kecamatan_asal")
+  pendaftaran_kecamatan_tinggal OnlineRegistration[] @relation("pendaftaran_kecamatan_tinggal")
 
   @@index([id_kabkot], map: "fk_kabkot")
   @@index([nama], map: "idx_district_nama")
@@ -974,25 +1116,27 @@ model District {
 }
 
 model Province {
-  id                       String     @id @db.Char(2)
-  nama                     String     @db.VarChar(255)
-  id_negara                Int
-  created_at               DateTime   @default(now())
-  created_by               Int        @default(0)
-  modified_at              DateTime?  @db.DateTime(0)
-  modified_by              Int?       @default(0)
-  deleted_at               DateTime?  @db.DateTime(0)
-  deleted_by               Int?       @default(0)
-  restored_at              DateTime?  @db.DateTime(0)
-  restored_by              Int?       @default(0)
-  is_deleted               Boolean    @default(false)
-  is_restored              Boolean    @default(false)
-  ms_kabkot                Regency[]
-  ms_negara                Country    @relation(fields: [id_negara], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_negara")
-  provinsi_asal_pegawai    Employee[] @relation("ProvinceOfOrigin")
-  provinsi_tinggal_pegawai Employee[] @relation("ProvinceOfResidence")
-  provinsi_asal_pasien     Patient[]  @relation("provinsi_asal_pasien")
-  provinsi_tinggal_pasien  Patient[]  @relation("provinsi_tinggal_pasien")
+  id                           String               @id @db.Char(2)
+  nama                         String               @db.VarChar(255)
+  id_negara                    Int
+  created_at                   DateTime             @default(now())
+  created_by                   Int                  @default(0)
+  modified_at                  DateTime?            @db.DateTime(0)
+  modified_by                  Int?                 @default(0)
+  deleted_at                   DateTime?            @db.DateTime(0)
+  deleted_by                   Int?                 @default(0)
+  restored_at                  DateTime?            @db.DateTime(0)
+  restored_by                  Int?                 @default(0)
+  is_deleted                   Boolean              @default(false)
+  is_restored                  Boolean              @default(false)
+  ms_kabkot                    Regency[]
+  ms_negara                    Country              @relation(fields: [id_negara], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_negara")
+  provinsi_asal_pegawai        Employee[]           @relation("ProvinceOfOrigin")
+  provinsi_tinggal_pegawai     Employee[]           @relation("ProvinceOfResidence")
+  provinsi_asal_pasien         Patient[]            @relation("provinsi_asal_pasien")
+  provinsi_tinggal_pasien      Patient[]            @relation("provinsi_tinggal_pasien")
+  pendaftaran_provinsi_asal    OnlineRegistration[] @relation("pendaftaran_provinsi_asal")
+  pendaftaran_provinsi_tinggal OnlineRegistration[] @relation("pendaftaran_provinsi_tinggal")
 
   @@index([id_negara], map: "fk_negara")
   @@index([nama], map: "idx_province_nama")
@@ -1001,24 +1145,26 @@ model Province {
 }
 
 model Country {
-  id                     Int        @id @default(autoincrement())
-  nama                   String     @db.VarChar(255)
-  status                 Int        @default(1)
-  created_at             DateTime   @default(now())
-  created_by             Int        @default(0)
-  modified_at            DateTime?  @db.DateTime(0)
-  modified_by            Int?       @default(0)
-  deleted_at             DateTime?  @db.DateTime(0)
-  deleted_by             Int?       @default(0)
-  restored_at            DateTime?  @db.DateTime(0)
-  restored_by            Int?       @default(0)
-  is_deleted             Boolean    @default(false)
-  is_restored            Boolean    @default(false)
-  ms_provinsi            Province[]
-  negara_asal_pegawai    Employee[] @relation("CountryOfOrigin")
-  negara_tinggal_pegawai Employee[] @relation("CountryOfResidence")
-  negara_asal_pasien     Patient[]  @relation("negara_asal_pasien")
-  negara_tinggal_pasien  Patient[]  @relation("negara_tinggal_pasien")
+  id                         Int                  @id @default(autoincrement())
+  nama                       String               @db.VarChar(255)
+  status                     Int                  @default(1)
+  created_at                 DateTime             @default(now())
+  created_by                 Int                  @default(0)
+  modified_at                DateTime?            @db.DateTime(0)
+  modified_by                Int?                 @default(0)
+  deleted_at                 DateTime?            @db.DateTime(0)
+  deleted_by                 Int?                 @default(0)
+  restored_at                DateTime?            @db.DateTime(0)
+  restored_by                Int?                 @default(0)
+  is_deleted                 Boolean              @default(false)
+  is_restored                Boolean              @default(false)
+  ms_provinsi                Province[]
+  negara_asal_pegawai        Employee[]           @relation("CountryOfOrigin")
+  negara_tinggal_pegawai     Employee[]           @relation("CountryOfResidence")
+  negara_asal_pasien         Patient[]            @relation("negara_asal_pasien")
+  negara_tinggal_pasien      Patient[]            @relation("negara_tinggal_pasien")
+  pendaftaran_negara_asal    OnlineRegistration[] @relation("pendaftaran_negara_asal")
+  pendaftaran_negara_tinggal OnlineRegistration[] @relation("pendaftaran_negara_tinggal")
 
   @@index([nama], map: "idx_country_nama")
   @@index([status, is_deleted], map: "idx_country_status")
@@ -1026,19 +1172,20 @@ model Country {
 }
 
 model FamilyStatus {
-  id                   Int       @id @default(autoincrement())
+  id                   Int            @id @default(autoincrement())
   nama_status_keluarga String
-  status               Int       @default(1) @db.TinyInt
-  created_at           DateTime  @default(now())
-  created_by           Int       @default(0)
-  modified_at          DateTime? @db.DateTime(0)
-  modified_by          Int?      @default(0)
-  deleted_at           DateTime? @db.DateTime(0)
-  deleted_by           Int?      @default(0)
-  restored_at          DateTime? @db.DateTime(0)
-  restored_by          Int?      @default(0)
-  is_deleted           Boolean   @default(false)
-  is_restored          Boolean   @default(false)
+  status               Int            @default(1) @db.TinyInt
+  created_at           DateTime       @default(now())
+  created_by           Int            @default(0)
+  modified_at          DateTime?      @db.DateTime(0)
+  modified_by          Int?           @default(0)
+  deleted_at           DateTime?      @db.DateTime(0)
+  deleted_by           Int?           @default(0)
+  restored_at          DateTime?      @db.DateTime(0)
+  restored_by          Int?           @default(0)
+  is_deleted           Boolean        @default(false)
+  is_restored          Boolean        @default(false)
+  pendaftaran          Registration[]
 
   @@index([nama_status_keluarga])
   @@index([status, is_deleted])

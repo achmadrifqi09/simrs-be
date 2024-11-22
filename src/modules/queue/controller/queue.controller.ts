@@ -34,6 +34,8 @@ export class QueueController {
     @Query('to_date') toDate: string,
     @Query('cursor') cursor: number,
     @Query('take') take: number,
+    @Query('guarantor_type') guarantorType: number,
+    @Query('patient_type') patientType: number,
   ) {
     return this.queueService.findAllQueue(
       keyword,
@@ -41,7 +43,15 @@ export class QueueController {
       toDate,
       cursor,
       take,
+      guarantorType,
+      patientType,
     );
+  }
+
+  @Get('/QUID/:id')
+  @Header('Content-Type', 'application/json')
+  async findQueueById(@Param('id') id: number) {
+    return this.queueService.findQueueById(id);
   }
 
   @Public()

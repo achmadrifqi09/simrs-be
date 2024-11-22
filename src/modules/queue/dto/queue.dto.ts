@@ -127,9 +127,29 @@ export interface QueueDisplay {
   no_antrian: number;
 }
 
-export interface CounterDisplayWS {
-  id_ms_loket_antrian: number;
-  jenis_loket: number;
-  nama_loket: string;
-  antrian: QueueDisplay[];
+export interface QueueDto {
+  id_antrian: number;
+  jenis_pasien: number;
+  jenis_penjamin: number;
+  kode_rm?: string;
+  nama_pasien?: string;
+  tgl_lahir?: Date;
+  no_hp?: string;
+  no_bpjs?: string;
+  no_rujukan?: string;
+  kode_antrian: string;
+  no_antrian: number;
+  jadwal_dokter: {
+    kode_instalasi_bpjs: string;
+  };
+  id_jadwal_dokter: number;
+  id_ms_loket_antrian?: number;
+  status_panggil?: number;
+  tgl_panggil?: Date;
+  status: number;
+  created_by?: number;
+  created_at?: Date;
+  modified_at?: Date;
+  modified_by?: number;
+  deleted_at?: Date;
 }
