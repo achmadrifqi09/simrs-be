@@ -56,6 +56,7 @@ export class RegistrationRepository {
         id: 'desc',
       },
     });
+
     return {
       results: results,
       pagination: {

@@ -48,6 +48,8 @@ export class RegistrationService {
       status_koding: 0,
       tgl_daftar: generateCurrentDate(),
       no_rujukan: queue.no_rujukan || null,
+      created_at: generateCurrentDate(),
+      created_by: 0,
     };
     await this.registrationRepository.createRegistration(
       Number(queue.id_antrian),
