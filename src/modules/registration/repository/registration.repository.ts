@@ -4,6 +4,10 @@ import { RegistrationDto } from '../dto/registration.dto';
 import { PrismaErrorHandler } from '../../../common/handler/prisma-error.handler';
 import { Prisma } from '@prisma/client';
 import { generateCurrentDateWithCustomHour } from '../../../utils/date-formatter';
+import {
+  registrationSelect,
+  registrationSelectForSingleResponse,
+} from '../const/registration.const';
 
 @Dependencies([PrismaService])
 @Injectable()
@@ -15,12 +19,25 @@ export class RegistrationRepository {
     take: number,
     keyword?: string,
     idUnit?: number,
+    idDoctor?: number,
+    patientType?: number,
+    guarantorType?: number,
   ) {
     const whereClause: Prisma.RegistrationWhereInput = {
       is_deleted: false,
       created_at: {
         gte: generateCurrentDateWithCustomHour('00:00:00'),
         lte: generateCurrentDateWithCustomHour('23:59:59'),
+      },
+      antrian: {
+        jenis_pasien: Number(patientType) || undefined,
+        jadwal_dokter: {
+          unit: {
+            id: Number(idUnit) || undefined,
+          },
+          pegawai: { id_pegawai: Number(idDoctor) || undefined },
+        },
+        jenis_penjamin: Number(guarantorType) || undefined,
       },
     };
     if (keyword) {
@@ -30,49 +47,11 @@ export class RegistrationRepository {
       ];
     }
 
-    if (idUnit) {
-      whereClause.antrian = {
-        jadwal_dokter: {
-          unit: {
-            id: Number(idUnit),
-          },
-        },
-      };
-    }
-
     const results = await this.prismaService.registration.findMany({
       take: Number(take) || 10,
       skip: Number(cursor) || 0,
       where: whereClause,
-      select: {
-        id: true,
-        kode_rm: true,
-        status_bpjs: true,
-        antrian: {
-          select: {
-            nama_pasien: true,
-            jenis_pasien: true,
-            jadwal_dokter: {
-              select: {
-                unit: {
-                  select: {
-                    nama_unit_kerja: true,
-                  },
-                },
-                pegawai: {
-                  select: {
-                    nama_pegawai: true,
-                    gelar_depan: true,
-                    gelar_belakang: true,
-                  },
-                },
-                jam_buka_praktek: true,
-                jam_tutup_praktek: true,
-              },
-            },
-          },
-        },
-      },
+      select: registrationSelect,
       orderBy: {
         id: 'desc',
       },
@@ -84,6 +63,13 @@ export class RegistrationRepository {
         take: Number(take) || 10,
       },
     };
+  }
+
+  async findRegistrationById(id: number) {
+    return this.prismaService.registration.findFirst({
+      where: { id: Number(id), is_deleted: false },
+      select: registrationSelectForSingleResponse,
+    });
   }
 
   async createRegistration(

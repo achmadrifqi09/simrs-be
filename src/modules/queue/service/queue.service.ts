@@ -228,7 +228,7 @@ export class QueueService {
       payload.id_antrian,
       finalPayload,
     );
-    if (result && result.jenis_pasien === 1) {
+    if (result) {
       this.eventEmitter.emit('queue.attendance', new QueueEvent(result));
     }
     return result;

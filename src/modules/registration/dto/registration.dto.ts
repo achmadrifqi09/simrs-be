@@ -1,7 +1,7 @@
 export interface RegistrationDto {
   nomor_registrasi: string;
   id_online?: number;
-  kode_rm: string;
+  kode_rm: string | null;
   tgl_daftar: Date;
   id_asuransi?: number;
   nomor_asuransi?: string;

@@ -3,7 +3,7 @@ import { prismaClient } from '../prisma';
 export const insuranceSeeder = async () => {
   try {
     console.log('Seeding insurance ...');
-    prismaClient.insurance.create({
+    await prismaClient.insurance.create({
       data: {
         id: 1,
         nama_asuransi: 'BPJS Kesehatan',

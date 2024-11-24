@@ -34,7 +34,7 @@ model Registration {
   id_antrian         Int
   antrian            Queue             @relation(fields: [id_antrian], references: [id_antrian])
   id_online          Int?
-  kode_rm            String            @db.VarChar(50)
+  kode_rm            String?           @db.VarChar(50)
   tgl_daftar         DateTime
   id_asuransi        Int?
   nomor_asuransi     String?           @db.VarChar(50)
