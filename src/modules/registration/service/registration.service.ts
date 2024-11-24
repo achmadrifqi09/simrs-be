@@ -15,6 +15,9 @@ export class RegistrationService {
   async findAllTodayRegistration(
     keyword?: string,
     idUnit?: number,
+    idDoctor?: number,
+    patientType?: number,
+    guarantorType?: number,
     cursor: number = 0,
     take: number = 10,
   ) {
@@ -23,12 +26,19 @@ export class RegistrationService {
       take,
       keyword,
       idUnit,
+      idDoctor,
+      patientType,
+      guarantorType,
     );
+  }
+
+  async findRegistrationById(id: number) {
+    return this.registrationRepository.findRegistrationById(id);
   }
 
   async createRegistrationFromQueue(queue: QueueDto) {
     const finalPayload: RegistrationDto = {
-      kode_rm: queue?.kode_rm,
+      kode_rm: queue?.kode_rm || null,
       nomor_registrasi: `${queue.jadwal_dokter.kode_instalasi_bpjs}${generateUniqueCodeWithDate()}`,
       status_batal: 0,
       status_bayar: 0,
