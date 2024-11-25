@@ -22,7 +22,6 @@ const dateValidation = z
 
 const patientValidation = z.object({
   id_pasien: z.number().int().optional(),
-  kode_rm: z.string().max(20, 'Kode RM tidak boleh melebihi 20 karakter'),
   nama_pasien: z
     .string()
     .max(100, 'Nama Pasien tidak boleh melebihi 100 karakter'),
