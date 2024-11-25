@@ -6,6 +6,8 @@ export const registrationSelect: Prisma.RegistrationSelect = {
   nomor_registrasi: true,
   status_bpjs: true,
   tgl_daftar: true,
+  status_batal: true,
+  keterangan_batal: true,
   antrian: {
     select: {
       nama_pasien: true,

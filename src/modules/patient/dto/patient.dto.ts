@@ -1,6 +1,6 @@
 export interface PatientDTO {
   id_pasien?: number;
-  kode_rm: string;
+  kode_rm?: string;
   nama_pasien: string;
   tempat_lahir: string;
   tgl_lahir: Date;
