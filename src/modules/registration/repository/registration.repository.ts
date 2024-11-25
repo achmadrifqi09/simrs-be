@@ -8,6 +8,7 @@ import {
   registrationSelect,
   registrationSelectForSingleResponse,
 } from '../const/registration.const';
+import { CancellationStatusPayload } from '../dto/registration.dto';
 
 @Dependencies([PrismaService])
 @Injectable()
@@ -100,5 +101,18 @@ export class RegistrationRepository {
     } catch (error) {
       PrismaErrorHandler.handle(error);
     }
+  }
+
+  async updateCancellationStatus(
+    id: number,
+    payload: CancellationStatusPayload,
+  ) {
+    return this.prismaService.registration.update({
+      where: {
+        id: Number(id),
+        is_deleted: false,
+      },
+      data: payload,
+    });
   }
 }

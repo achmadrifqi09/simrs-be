@@ -35,3 +35,10 @@ export interface RegistrationDto {
   modified_by?: number;
   deleted_at?: Date;
 }
+
+export interface CancellationStatusPayload {
+  status_batal: number;
+  keterangan_batal: string;
+  modified_at?: Date;
+  modified_by?: number;
+}

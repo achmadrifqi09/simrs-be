@@ -1,5 +1,21 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Header,
+  Param,
+  Patch,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { RegistrationService } from '../service/registration.service';
+import { AccessMenuGuard } from '../../../guards/access-menu/access-menu.guard';
+import { Permission } from '../../../decorators/permission/permission.decorator';
+import { Action } from '../../../common/enums/action.enum';
+import { ZodPipe } from '../../../pipes/zod-pipe/zod-pipe.pipe';
+import { cancellationValidation } from '../validation/registration.validation';
+import { CancellationStatusPayload } from '../dto/registration.dto';
 
 @Controller({
   path: 'registration',
@@ -32,5 +48,18 @@ export class RegistrationController {
   @Get('/:id')
   async findRegistrationById(@Param('id') id: number) {
     return this.registrationService.findRegistrationById(id);
+  }
+
+  @Patch('/:id/cancellation')
+  @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('pendaftaran-onsite', Action.CAN_UPDATE)
+  async updateCancellationStatus(
+    @Param('id') id: number,
+    @Req() req: any,
+    @Body(new ZodPipe(cancellationValidation))
+    payload: CancellationStatusPayload,
+  ) {
+    return this.registrationService.updateCancellationStatus(id, payload, req);
   }
 }

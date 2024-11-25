@@ -4,6 +4,7 @@ import { QueueDto } from '../../queue/dto/queue.dto';
 import { RegistrationDto } from '../dto/registration.dto';
 import { generateCurrentDate } from '../../../utils/date-formatter';
 import { generateUniqueCodeWithDate } from '../../../utils/unique-code-generator';
+import { CancellationStatusPayload } from '../dto/registration.dto';
 
 @Dependencies([RegistrationRepository])
 @Injectable()
@@ -55,6 +56,22 @@ export class RegistrationService {
       Number(queue.id_antrian),
       queue.jenis_penjamin == 2 ? 1 : null,
       finalPayload,
+    );
+  }
+
+  async updateCancellationStatus(
+    id: number,
+    payload: CancellationStatusPayload,
+    req: any,
+  ) {
+    payload = {
+      ...payload,
+      modified_at: generateCurrentDate(),
+      modified_by: req?.user?.id,
+    };
+    return await this.registrationRepository.updateCancellationStatus(
+      id,
+      payload,
     );
   }
 }
