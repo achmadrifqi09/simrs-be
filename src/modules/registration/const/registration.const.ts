@@ -10,6 +10,7 @@ export const registrationSelect: Prisma.RegistrationSelect = {
   keterangan_batal: true,
   antrian: {
     select: {
+      id_antrian: true,
       nama_pasien: true,
       jenis_pasien: true,
       jenis_penjamin: true,
