@@ -2,7 +2,7 @@ import {
   Dependencies,
   HttpException,
   HttpStatus,
-  Injectable
+  Injectable,
 } from '@nestjs/common';
 import { EmployeeRepository } from '../repository/employee.repository';
 import { generateCurrentDate } from '../../../utils/date-formatter';

@@ -5,18 +5,18 @@ import {
   Get,
   Header,
   HttpCode,
+  HttpException,
   HttpStatus,
   Param,
+  ParseFilePipeBuilder,
   Patch,
   Post,
   Query,
   Req,
   UploadedFile,
+  UploadedFiles,
   UseGuards,
   UseInterceptors,
-  UploadedFiles,
-  ParseFilePipeBuilder,
-  HttpException,
 } from '@nestjs/common';
 import { EmployeeService } from '../service/employee.service';
 import { AccessMenuGuard } from '../../../guards/access-menu/access-menu.guard';
@@ -228,7 +228,7 @@ export class EmployeeController {
         .addMaxSizeValidator({ maxSize: 2 * (1024 * 1024) })
         .build({
           errorHttpStatusCode: 400,
-          exceptionFactory: (errors) => {
+          exceptionFactory: () => {
             throw new HttpException(
               'Hanya file gambar PNG, JPG, atau JPEG yang diperbolehkan dan ukuran maksimal 2MB.',
               HttpStatus.BAD_REQUEST,
@@ -269,7 +269,7 @@ export class EmployeeController {
         .addMaxSizeValidator({ maxSize: 2 * (1024 * 1024) })
         .build({
           errorHttpStatusCode: 400,
-          exceptionFactory: (errors) => {
+          exceptionFactory: () => {
             throw new HttpException(
               'Hanya file gambar PNG, JPG, atau JPEG yang diperbolehkan dan ukuran maksimal 2MB.',
               HttpStatus.BAD_REQUEST,
@@ -310,7 +310,7 @@ export class EmployeeController {
         .addMaxSizeValidator({ maxSize: 2 * (1024 * 1024) })
         .build({
           errorHttpStatusCode: 400,
-          exceptionFactory: (errors) => {
+          exceptionFactory: () => {
             throw new HttpException(
               'Hanya file gambar PNG, JPG, atau JPEG yang diperbolehkan dan ukuran maksimal 2MB.',
               HttpStatus.BAD_REQUEST,
@@ -351,7 +351,7 @@ export class EmployeeController {
         .addMaxSizeValidator({ maxSize: 2 * (1024 * 1024) })
         .build({
           errorHttpStatusCode: 400,
-          exceptionFactory: (errors) => {
+          exceptionFactory: () => {
             throw new HttpException(
               'Hanya file gambar PNG, JPG, atau JPEG yang diperbolehkan dan ukuran maksimal 2MB.',
               HttpStatus.BAD_REQUEST,
@@ -392,7 +392,7 @@ export class EmployeeController {
         .addMaxSizeValidator({ maxSize: 2 * (1024 * 1024) })
         .build({
           errorHttpStatusCode: 400,
-          exceptionFactory: (errors) => {
+          exceptionFactory: () => {
             throw new HttpException(
               'Hanya file gambar PNG, JPG, atau JPEG yang diperbolehkan dan ukuran maksimal 2MB.',
               HttpStatus.BAD_REQUEST,
