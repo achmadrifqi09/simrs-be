@@ -7,7 +7,7 @@ import { AppMiddleware } from './middlewares/app/app.middleware';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpExceptionFilter } from './filters/http-exception/http-exception.filter';
 import { ConfigModule } from '@nestjs/config';
-// import { EmployeeModule } from './modules/employee/employee.module';
+import { EmployeeModule } from './modules/employee/employee.module';
 import { WorkUnitModule } from './modules/work-unit/work-unit.module';
 import { ValidationFilter } from './filters/validation/validation.filter';
 import { ResponseInterceptor } from './interceptors/response/response.interceptor';
@@ -23,10 +23,10 @@ import { DoctorScheduleModule } from './modules/doctor-schedule/doctor-schedule.
 import { QueueModule } from './modules/queue/queue.module';
 import { PatientModule } from './modules/patient/patient.module';
 import { BPJSModule } from './modules/bpjs/bpjs.module';
-// import { AdmissionQueueGateway } from './gateways/admission-queue/gateway/admission-queue.gateway';
 import { CounterGateway } from './gateways/counter/gateway/counter.gateway';
 import { AdmissionGateway } from './gateways/admission/gateway/admission.gateway';
 import { RegistrationModule } from './modules/registration/registration.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -37,9 +37,10 @@ import { RegistrationModule } from './modules/registration/registration.module';
         limit: Number(process.env.THROTTLER_LIMIT || 100),
       },
     ]),
+    EventEmitterModule.forRoot(),
     UserModule,
     PrismaModule,
-    // EmployeeModule,
+    EmployeeModule,
     WorkUnitModule,
     AuthModule,
     ReligionModule,

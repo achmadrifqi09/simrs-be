@@ -20,6 +20,200 @@ CREATE TABLE `db_client` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `db_pendaftaran` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nomor_registrasi` VARCHAR(50) NOT NULL,
+    `id_antrian` INTEGER NOT NULL,
+    `id_online` INTEGER NULL,
+    `kode_rm` VARCHAR(50) NULL,
+    `tgl_daftar` DATETIME(3) NOT NULL,
+    `id_asuransi` INTEGER NULL,
+    `nomor_asuransi` VARCHAR(50) NULL,
+    `no_rujukan` VARCHAR(50) NULL,
+    `status_rujukan` INTEGER NULL,
+    `nomor_rujuk_balik` VARCHAR(50) NULL,
+    `no_sep` VARCHAR(50) NULL,
+    `cob` INTEGER NULL,
+    `no_cob` VARCHAR(50) NULL,
+    `status_bpjs` INTEGER NOT NULL DEFAULT 0,
+    `status_keuangan` INTEGER NOT NULL DEFAULT 0,
+    `status_inap` INTEGER NOT NULL DEFAULT 0,
+    `status_koding` INTEGER NOT NULL DEFAULT 0,
+    `status_bayar` INTEGER NOT NULL DEFAULT 0,
+    `tgl_pulang` DATETIME(3) NULL,
+    `nama_wali` VARCHAR(50) NULL,
+    `telp_wali` VARCHAR(50) NULL,
+    `id_hub_wali` INTEGER NULL,
+    `asal_rujukan` VARCHAR(100) NULL,
+    `nama_perujuk` VARCHAR(100) NULL,
+    `tgl_rujukan` DATE NULL,
+    `ket_rujukan` TEXT NULL,
+    `kode_antrian_poli` VARCHAR(10) NULL,
+    `nomor_antrian_poli` VARCHAR(3) NULL,
+    `status_batal` INTEGER NOT NULL DEFAULT 0,
+    `keterangan_batal` TEXT NULL,
+    `task_id` INTEGER NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `created_by` INTEGER NOT NULL DEFAULT 0,
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` INTEGER NULL DEFAULT 0,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` INTEGER NULL DEFAULT 0,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` INTEGER NULL DEFAULT 0,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    INDEX `db_pendaftaran_nomor_registrasi_idx`(`nomor_registrasi`),
+    INDEX `db_pendaftaran_kode_rm_idx`(`kode_rm`),
+    INDEX `db_pendaftaran_id_antrian_idx`(`id_antrian`),
+    INDEX `db_pendaftaran_id_asuransi_idx`(`id_asuransi`),
+    INDEX `db_pendaftaran_id_hub_wali_idx`(`id_hub_wali`),
+    INDEX `db_pendaftaran_no_sep_idx`(`no_sep`),
+    INDEX `db_pendaftaran_tgl_daftar_idx`(`tgl_daftar`),
+    INDEX `db_pendaftaran_status_bpjs_status_keuangan_status_inap_statu_idx`(`status_bpjs`, `status_keuangan`, `status_inap`, `status_koding`, `status_bayar`),
+    INDEX `db_pendaftaran_is_deleted_idx`(`is_deleted`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `db_pendaftaran_online` (
+    `id_antrian` INTEGER NOT NULL AUTO_INCREMENT,
+    `jenis_pasien` INTEGER NOT NULL,
+    `jenis_penjamin` INTEGER NOT NULL,
+    `asal_pengambilan` INTEGER NOT NULL,
+    `kode_rm` VARCHAR(20) NULL,
+    `nama_pasien` VARCHAR(100) NOT NULL,
+    `identitas_pasien` INTEGER NOT NULL,
+    `no_identitas` VARCHAR(100) NOT NULL,
+    `no_bpjs` VARCHAR(50) NULL,
+    `jenis_kelamin` INTEGER NOT NULL,
+    `tempat_lahir` VARCHAR(100) NOT NULL,
+    `tgl_lahir` DATETIME(3) NOT NULL,
+    `hp` VARCHAR(20) NOT NULL,
+    `email` VARCHAR(100) NOT NULL,
+    `id_ms_status_kawin` INTEGER NOT NULL DEFAULT 0,
+    `id_ms_agama` INTEGER NOT NULL,
+    `id_ms_golongan_darah` INTEGER NOT NULL DEFAULT 0,
+    `id_ms_pendidikan` INTEGER NOT NULL,
+    `nama_pekerjaan` VARCHAR(100) NULL,
+    `suku` VARCHAR(50) NULL,
+    `id_ms_negara_asal` INTEGER NOT NULL,
+    `id_ms_propinsi_asal` VARCHAR(191) NOT NULL,
+    `id_ms_kota_asal` VARCHAR(191) NOT NULL,
+    `id_ms_kecamatan_asal` VARCHAR(191) NOT NULL,
+    `id_ms_desa_asal` VARCHAR(191) NOT NULL,
+    `rw_asal` VARCHAR(5) NOT NULL,
+    `rt_asal` VARCHAR(5) NOT NULL,
+    `alamat_asal` TEXT NOT NULL,
+    `kode_pos_asal` VARCHAR(10) NOT NULL,
+    `alamatgab_asal` TEXT NOT NULL,
+    `id_ms_negara_tinggal` INTEGER NOT NULL,
+    `id_ms_provinsi_tinggal` VARCHAR(191) NOT NULL,
+    `id_ms_kota_tinggal` VARCHAR(191) NOT NULL,
+    `id_ms_desa_tinggal` VARCHAR(191) NOT NULL,
+    `id_ms_kecamatan_tinggal` VARCHAR(191) NOT NULL,
+    `rw_tinggal` VARCHAR(5) NOT NULL,
+    `rt_tinggal` VARCHAR(5) NOT NULL,
+    `alamat_tinggal` TEXT NOT NULL,
+    `kode_pos_tinggal` VARCHAR(10) NOT NULL,
+    `alamatgab_tinggal` TEXT NOT NULL,
+    `tgl_kunjungan` DATETIME(3) NOT NULL,
+    `no_rujukan` VARCHAR(50) NOT NULL,
+    `kode_booking` VARCHAR(50) NOT NULL,
+    `id_jadwal_dokter` INTEGER NOT NULL,
+    `status` INTEGER NOT NULL DEFAULT 1,
+    `keterangan_batal` TEXT NOT NULL,
+    `tgl_cekin` DATETIME(3) NOT NULL,
+    `id_ms_loket_antrian` INTEGER NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `created_by` INTEGER NOT NULL DEFAULT 0,
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` INTEGER NULL DEFAULT 0,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` INTEGER NULL DEFAULT 0,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` INTEGER NULL DEFAULT 0,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    INDEX `db_pendaftaran_online_kode_rm_idx`(`kode_rm`),
+    INDEX `db_pendaftaran_online_no_identitas_idx`(`no_identitas`),
+    INDEX `db_pendaftaran_online_no_bpjs_idx`(`no_bpjs`),
+    INDEX `db_pendaftaran_online_kode_booking_idx`(`kode_booking`),
+    INDEX `db_pendaftaran_online_tgl_kunjungan_idx`(`tgl_kunjungan`),
+    INDEX `db_pendaftaran_online_id_jadwal_dokter_idx`(`id_jadwal_dokter`),
+    INDEX `db_pendaftaran_online_status_idx`(`status`),
+    INDEX `db_pendaftaran_online_id_ms_status_kawin_idx`(`id_ms_status_kawin`),
+    INDEX `db_pendaftaran_online_id_ms_agama_idx`(`id_ms_agama`),
+    INDEX `db_pendaftaran_online_id_ms_golongan_darah_idx`(`id_ms_golongan_darah`),
+    INDEX `db_pendaftaran_online_id_ms_pendidikan_idx`(`id_ms_pendidikan`),
+    INDEX `db_pendaftaran_online_id_ms_negara_asal_idx`(`id_ms_negara_asal`),
+    INDEX `db_pendaftaran_online_id_ms_propinsi_asal_idx`(`id_ms_propinsi_asal`),
+    INDEX `db_pendaftaran_online_id_ms_kota_asal_idx`(`id_ms_kota_asal`),
+    INDEX `db_pendaftaran_online_id_ms_kecamatan_asal_idx`(`id_ms_kecamatan_asal`),
+    INDEX `db_pendaftaran_online_id_ms_desa_asal_idx`(`id_ms_desa_asal`),
+    INDEX `db_pendaftaran_online_id_ms_negara_tinggal_idx`(`id_ms_negara_tinggal`),
+    INDEX `db_pendaftaran_online_id_ms_provinsi_tinggal_idx`(`id_ms_provinsi_tinggal`),
+    INDEX `db_pendaftaran_online_id_ms_kota_tinggal_idx`(`id_ms_kota_tinggal`),
+    INDEX `db_pendaftaran_online_id_ms_kecamatan_tinggal_idx`(`id_ms_kecamatan_tinggal`),
+    INDEX `db_pendaftaran_online_id_ms_desa_tinggal_idx`(`id_ms_desa_tinggal`),
+    INDEX `db_pendaftaran_online_id_ms_loket_antrian_idx`(`id_ms_loket_antrian`),
+    INDEX `db_pendaftaran_online_is_deleted_idx`(`is_deleted`),
+    PRIMARY KEY (`id_antrian`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `db_biaya_pendaftaran` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_pendaftaran` INTEGER NOT NULL,
+    `biaya_daftar` VARCHAR(20) NOT NULL,
+    `diskon_daftar` VARCHAR(20) NOT NULL,
+    `biaya_kartu` VARCHAR(20) NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `diskon_kartu` VARCHAR(20) NOT NULL,
+    `biaya_dokter` VARCHAR(20) NOT NULL,
+    `diskon_dokter` VARCHAR(20) NOT NULL,
+    `tgl_billing_daftar` DATETIME(3) NOT NULL,
+    `tgl_billing_daftar_selesai` DATETIME(3) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `created_by` INTEGER NOT NULL DEFAULT 0,
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` INTEGER NULL DEFAULT 0,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` INTEGER NULL DEFAULT 0,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` INTEGER NULL DEFAULT 0,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    INDEX `db_biaya_pendaftaran_id_pendaftaran_idx`(`id_pendaftaran`),
+    INDEX `db_biaya_pendaftaran_tgl_billing_daftar_idx`(`tgl_billing_daftar`),
+    INDEX `db_biaya_pendaftaran_is_deleted_idx`(`is_deleted`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `db_asuransi` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nama_asuransi` VARCHAR(100) NOT NULL,
+    `status` INTEGER NOT NULL DEFAULT 1,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `created_by` INTEGER NOT NULL DEFAULT 0,
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` INTEGER NULL DEFAULT 0,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` INTEGER NULL DEFAULT 0,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` INTEGER NULL DEFAULT 0,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    INDEX `db_asuransi_nama_asuransi_idx`(`nama_asuransi`),
+    INDEX `db_asuransi_status_is_deleted_idx`(`status`, `is_deleted`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `db_user` (
     `id_user` INTEGER NOT NULL AUTO_INCREMENT,
     `id_pegawai` INTEGER NOT NULL,
@@ -162,7 +356,7 @@ CREATE TABLE `db_pasien` (
     `id_warga_negara` INTEGER NOT NULL,
     `identitas_pasien` INTEGER NOT NULL,
     `no_identitas` VARCHAR(100) NOT NULL,
-    `no_bpjs` VARCHAR(50) NOT NULL,
+    `no_bpjs` VARCHAR(50) NULL,
     `no_hp` VARCHAR(20) NOT NULL,
     `id_ms_negara_tinggal` INTEGER NOT NULL,
     `id_ms_provinsi_tinggal` VARCHAR(191) NOT NULL,
@@ -183,7 +377,7 @@ CREATE TABLE `db_pasien` (
     `rt_asal` VARCHAR(5) NOT NULL,
     `rw_asal` VARCHAR(5) NOT NULL,
     `id_ms_negara_asal` INTEGER NOT NULL,
-    `id_ms_propinsi_asal` VARCHAR(20) NOT NULL,
+    `id_ms_provinsi_asal` VARCHAR(20) NOT NULL,
     `id_ms_kota_asal` VARCHAR(20) NOT NULL,
     `id_ms_kecamatan_asal` VARCHAR(20) NOT NULL,
     `id_ms_desa_asal` VARCHAR(20) NOT NULL,
@@ -217,7 +411,7 @@ CREATE TABLE `db_pasien` (
     INDEX `db_pasien_id_ms_kecamatan_tinggal_idx`(`id_ms_kecamatan_tinggal`),
     INDEX `db_pasien_id_ms_desa_tinggal_idx`(`id_ms_desa_tinggal`),
     INDEX `db_pasien_id_ms_negara_asal_idx`(`id_ms_negara_asal`),
-    INDEX `db_pasien_id_ms_propinsi_asal_idx`(`id_ms_propinsi_asal`),
+    INDEX `db_pasien_id_ms_provinsi_asal_idx`(`id_ms_provinsi_asal`),
     INDEX `db_pasien_id_ms_kota_asal_idx`(`id_ms_kota_asal`),
     INDEX `db_pasien_id_ms_kecamatan_asal_idx`(`id_ms_kecamatan_asal`),
     INDEX `db_pasien_id_ms_desa_asal_idx`(`id_ms_desa_asal`),
@@ -237,52 +431,52 @@ CREATE TABLE `db_pegawai` (
     `gelar_belakang` VARCHAR(100) NULL,
     `nama_pegawai` VARCHAR(100) NOT NULL,
     `id_ms_negara_asal` INTEGER NOT NULL,
-    `id_ms_provinsi_asal` VARCHAR(191) NOT NULL,
-    `id_ms_kota_asal` VARCHAR(191) NOT NULL,
-    `id_ms_kecamatan_asal` VARCHAR(191) NOT NULL,
-    `id_ms_desa_asal` VARCHAR(191) NOT NULL,
+    `id_ms_provinsi_asal` VARCHAR(191) NULL,
+    `id_ms_kota_asal` VARCHAR(191) NULL,
+    `id_ms_kecamatan_asal` VARCHAR(191) NULL,
+    `id_ms_desa_asal` VARCHAR(191) NULL,
     `alamat_asal` TEXT NULL,
     `kode_pos_asal` VARCHAR(10) NULL,
     `rt_asal` VARCHAR(5) NULL,
     `rw_asal` VARCHAR(5) NULL,
-    `id_ms_negara_tinggal` INTEGER NOT NULL,
-    `id_ms_provinsi_tinggal` VARCHAR(191) NOT NULL,
-    `id_ms_kota_tinggal` VARCHAR(191) NOT NULL,
-    `id_ms_kecamatan_tinggal` VARCHAR(191) NOT NULL,
-    `id_ms_desa_tinggal` VARCHAR(191) NOT NULL,
-    `alamat_tinggal` TEXT NOT NULL,
-    `kode_pos_tinggal` VARCHAR(10) NOT NULL,
-    `rt_tinggal` VARCHAR(3) NOT NULL,
-    `rw_tinggal` VARCHAR(3) NOT NULL,
+    `id_ms_negara_tinggal` INTEGER NULL,
+    `id_ms_provinsi_tinggal` VARCHAR(191) NULL,
+    `id_ms_kota_tinggal` VARCHAR(191) NULL,
+    `id_ms_kecamatan_tinggal` VARCHAR(191) NULL,
+    `id_ms_desa_tinggal` VARCHAR(191) NULL,
+    `alamat_tinggal` TEXT NULL,
+    `kode_pos_tinggal` VARCHAR(10) NULL,
+    `rt_tinggal` VARCHAR(3) NULL,
+    `rw_tinggal` VARCHAR(3) NULL,
     `tempat_lahir` VARCHAR(100) NOT NULL,
     `tgl_lahir` DATE NOT NULL,
     `id_jenis_kelamin` INTEGER NOT NULL,
     `id_ms_golongan_darah` INTEGER NULL,
-    `id_ms_status_kawin` INTEGER NOT NULL,
-    `id_ms_agama` INTEGER NOT NULL,
-    `id_ms_pendidikan` INTEGER NOT NULL,
-    `id_ms_jenis_pegawai` INTEGER NOT NULL,
-    `id_ms_status_pegawai` INTEGER NOT NULL,
+    `id_ms_status_kawin` INTEGER NULL,
+    `id_ms_agama` INTEGER NULL,
+    `id_ms_pendidikan` INTEGER NULL,
+    `id_ms_jenis_pegawai` INTEGER NULL,
+    `id_ms_status_pegawai` INTEGER NULL,
     `id_ms_spesialis` INTEGER NULL,
-    `id_unit_induk` INTEGER NOT NULL,
-    `id_pangkat` INTEGER NOT NULL,
-    `id_jabatan` INTEGER NOT NULL,
-    `id_unit_jabatan` INTEGER NOT NULL,
+    `id_unit_induk` INTEGER NULL,
+    `id_unit_kerja` INTEGER NULL,
+    `id_pangkat` INTEGER NULL,
+    `id_jabatan` INTEGER NULL,
+    `id_unit_jabatan` INTEGER NULL,
     `id_gaji` INTEGER NULL,
-    `pjs` INTEGER NULL,
     `hp` VARCHAR(15) NOT NULL,
     `email` VARCHAR(100) NOT NULL,
-    `no_npwp` VARCHAR(25) NOT NULL,
-    `no_ktp` VARCHAR(25) NOT NULL,
-    `no_ktam` VARCHAR(25) NOT NULL,
+    `no_npwp` VARCHAR(25) NULL,
+    `no_ktp` VARCHAR(25) NULL,
+    `no_ktam` VARCHAR(25) NULL,
     `foto` TEXT NULL,
     `kode_arsip` VARCHAR(20) NULL,
-    `id_finger` VARCHAR(10) NOT NULL,
+    `id_finger` VARCHAR(10) NULL,
     `kode_dpjp` VARCHAR(20) NULL,
-    `tgl_masuk` DATE NOT NULL,
+    `tgl_masuk` DATE NULL,
     `tgl_keluar` DATE NULL,
-    `status_pns` INTEGER NOT NULL,
-    `status_aktif` INTEGER NOT NULL,
+    `status_pns` TINYINT NULL DEFAULT 1,
+    `status_aktif` TINYINT NULL DEFAULT 1,
     `id_pelamar` INTEGER NULL,
     `file_ktp` TEXT NULL,
     `file_kk` TEXT NULL,
@@ -300,7 +494,6 @@ CREATE TABLE `db_pegawai` (
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
     INDEX `db_pegawai_id_pegawai_idx`(`id_pegawai`),
-    INDEX `id_status_kawin`(`id_ms_status_kawin`),
     INDEX `db_pegawai_nama_pegawai_idx`(`nama_pegawai`),
     INDEX `db_pegawai_nip_pegawai_idx`(`nip_pegawai`),
     INDEX `db_pegawai_nip_pns_idx`(`nip_pns`),
@@ -314,10 +507,21 @@ CREATE TABLE `db_pegawai` (
     INDEX `db_pegawai_id_ms_kecamatan_tinggal_idx`(`id_ms_kecamatan_tinggal`),
     INDEX `db_pegawai_id_ms_desa_asal_idx`(`id_ms_desa_asal`),
     INDEX `db_pegawai_id_ms_desa_tinggal_idx`(`id_ms_desa_tinggal`),
+    INDEX `db_pegawai_id_ms_golongan_darah_idx`(`id_ms_golongan_darah`),
+    INDEX `db_pegawai_id_ms_status_kawin_idx`(`id_ms_status_kawin`),
+    INDEX `db_pegawai_id_ms_agama_idx`(`id_ms_agama`),
+    INDEX `db_pegawai_id_ms_pendidikan_idx`(`id_ms_pendidikan`),
+    INDEX `db_pegawai_id_ms_jenis_pegawai_idx`(`id_ms_jenis_pegawai`),
+    INDEX `db_pegawai_id_ms_status_pegawai_idx`(`id_ms_status_pegawai`),
+    INDEX `db_pegawai_id_ms_spesialis_idx`(`id_ms_spesialis`),
+    INDEX `db_pegawai_id_unit_induk_idx`(`id_unit_induk`),
+    INDEX `db_pegawai_id_unit_kerja_idx`(`id_unit_kerja`),
+    INDEX `db_pegawai_id_pangkat_idx`(`id_pangkat`),
+    INDEX `db_pegawai_id_jabatan_idx`(`id_jabatan`),
+    INDEX `db_pegawai_id_unit_jabatan_idx`(`id_unit_jabatan`),
     INDEX `db_pegawai_no_ktp_idx`(`no_ktp`),
     INDEX `db_pegawai_email_idx`(`email`),
     INDEX `db_pegawai_hp_idx`(`hp`),
-    INDEX `db_pegawai_id_jabatan_idx`(`id_jabatan`),
     INDEX `db_pegawai_status_aktif_is_deleted_idx`(`status_aktif`, `is_deleted`),
     INDEX `db_pegawai_id_ms_jenis_pegawai_status_aktif_idx`(`id_ms_jenis_pegawai`, `status_aktif`),
     PRIMARY KEY (`id_pegawai`)
@@ -634,6 +838,7 @@ CREATE TABLE `db_antrian` (
     `tgl_lahir` DATE NULL,
     `no_hp` VARCHAR(20) NULL,
     `no_bpjs` VARCHAR(50) NULL,
+    `no_rujukan` VARCHAR(50) NULL,
     `kode_antrian` VARCHAR(1) NOT NULL,
     `no_antrian` INTEGER NOT NULL,
     `id_jadwal_dokter` INTEGER NOT NULL,
@@ -652,6 +857,11 @@ CREATE TABLE `db_antrian` (
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `is_restored` BOOLEAN NOT NULL DEFAULT false,
 
+    INDEX `db_antrian_no_rujukan_no_bpjs_kode_rm_idx`(`no_rujukan`, `no_bpjs`, `kode_rm`),
+    INDEX `db_antrian_kode_antrian_status_panggil_status_is_deleted_idx`(`kode_antrian`, `status_panggil`, `status`, `is_deleted`),
+    INDEX `db_antrian_created_at_is_deleted_idx`(`created_at`, `is_deleted`),
+    INDEX `db_antrian_jenis_pasien_no_hp_tgl_lahir_idx`(`jenis_pasien`, `no_hp`, `tgl_lahir`),
+    INDEX `db_antrian_id_ms_loket_antrian_kode_antrian_idx`(`id_ms_loket_antrian`, `kode_antrian`),
     INDEX `db_antrian_kode_rm_idx`(`kode_rm`),
     INDEX `db_antrian_nama_pasien_idx`(`nama_pasien`),
     INDEX `db_antrian_no_bpjs_idx`(`no_bpjs`),
@@ -663,90 +873,6 @@ CREATE TABLE `db_antrian` (
     INDEX `db_antrian_id_ms_loket_antrian_created_at_status_kode_antria_idx`(`id_ms_loket_antrian`, `created_at`, `status`, `kode_antrian`),
     INDEX `db_antrian_tgl_panggil_status_panggil_idx`(`tgl_panggil`, `status_panggil`),
     INDEX `db_antrian_status_is_deleted_idx`(`status`, `is_deleted`),
-    PRIMARY KEY (`id_antrian`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `db_pendaftaran_online` (
-    `id_antrian` INTEGER NOT NULL AUTO_INCREMENT,
-    `jenis_pasien` INTEGER NOT NULL,
-    `jenis_penjamin` INTEGER NOT NULL,
-    `asal_pengambilan` INTEGER NOT NULL,
-    `kode_rm` VARCHAR(20) NOT NULL,
-    `nama_pasien` VARCHAR(100) NOT NULL,
-    `identitas_pasien` INTEGER NOT NULL,
-    `no_identitas` VARCHAR(100) NOT NULL,
-    `no_bpjs` VARCHAR(50) NOT NULL,
-    `jenis_kelamin` INTEGER NOT NULL,
-    `tempat_lahir` VARCHAR(100) NOT NULL,
-    `tgl_lahir` DATETIME(3) NOT NULL,
-    `hp` VARCHAR(20) NOT NULL,
-    `email` VARCHAR(100) NOT NULL,
-    `id_ms_status_kawin` INTEGER NOT NULL DEFAULT 0,
-    `id_ms_agama` INTEGER NOT NULL,
-    `id_ms_golongan_darah` INTEGER NOT NULL DEFAULT 0,
-    `id_ms_pendidikan` INTEGER NOT NULL,
-    `id_warga_negara` INTEGER NOT NULL,
-    `nama_pekerjaan` VARCHAR(100) NOT NULL,
-    `suku` VARCHAR(50) NOT NULL,
-    `id_ms_propinsi_asal` INTEGER NOT NULL,
-    `id_ms_negara_asal` INTEGER NOT NULL,
-    `id_ms_kota_asal` INTEGER NOT NULL,
-    `id_ms_kecamatan_asal` INTEGER NOT NULL,
-    `id_ms_desa_asal` INTEGER NOT NULL,
-    `rw_asal` VARCHAR(5) NOT NULL,
-    `rt_asal` VARCHAR(5) NOT NULL,
-    `alamat_asal` TEXT NOT NULL,
-    `kode_pos_asal` VARCHAR(10) NOT NULL,
-    `alamatgab_asal` TEXT NOT NULL,
-    `id_ms_negara_tinggal` INTEGER NOT NULL,
-    `id_ms_provinsi_tinggal` INTEGER NOT NULL,
-    `id_ms_kota_tinggal` INTEGER NOT NULL,
-    `id_ms_desa_tinggal` INTEGER NOT NULL,
-    `id_ms_kecamatan_tinggal` INTEGER NOT NULL,
-    `rw_tinggal` VARCHAR(5) NOT NULL,
-    `rt_tinggal` VARCHAR(5) NOT NULL,
-    `alamat_tinggal` TEXT NOT NULL,
-    `kode_pos_tinggal` VARCHAR(10) NOT NULL,
-    `alamatgab_tinggal` TEXT NOT NULL,
-    `tgl_kunjungan` DATETIME(3) NOT NULL,
-    `no_rujukan` VARCHAR(50) NOT NULL,
-    `kode_booking` VARCHAR(50) NOT NULL,
-    `kode_antrian` VARCHAR(2) NOT NULL,
-    `no_antrian` INTEGER NOT NULL,
-    `id_jadwal_dokter` INTEGER NOT NULL,
-    `status` INTEGER NOT NULL DEFAULT 1,
-    `keterangan_batal` TEXT NOT NULL,
-    `tgl_cekin` DATETIME(3) NOT NULL,
-    `id_ms_loket_antrian` INTEGER NOT NULL,
-    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `created_by` CHAR(36) NOT NULL DEFAULT '0',
-    `modified_at` DATETIME(3) NULL,
-    `modified_by` CHAR(36) NULL,
-    `deleted_at` DATETIME(3) NULL,
-    `deleted_by` CHAR(36) NULL,
-    `restored_at` DATETIME(3) NULL,
-    `restored_by` CHAR(36) NULL,
-    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
-    `is_restored` BOOLEAN NOT NULL DEFAULT false,
-
-    INDEX `db_pendaftaran_online_jenis_pasien_idx`(`jenis_pasien`),
-    INDEX `db_pendaftaran_online_jenis_penjamin_idx`(`jenis_penjamin`),
-    INDEX `db_pendaftaran_online_asal_pengambilan_idx`(`asal_pengambilan`),
-    INDEX `db_pendaftaran_online_kode_rm_idx`(`kode_rm`),
-    INDEX `db_pendaftaran_online_no_identitas_idx`(`no_identitas`),
-    INDEX `db_pendaftaran_online_no_bpjs_idx`(`no_bpjs`),
-    INDEX `db_pendaftaran_online_tgl_lahir_idx`(`tgl_lahir`),
-    INDEX `db_pendaftaran_online_email_idx`(`email`),
-    INDEX `db_pendaftaran_online_kode_booking_idx`(`kode_booking`),
-    INDEX `db_pendaftaran_online_kode_antrian_idx`(`kode_antrian`),
-    INDEX `db_pendaftaran_online_no_antrian_idx`(`no_antrian`),
-    INDEX `db_pendaftaran_online_id_jadwal_dokter_idx`(`id_jadwal_dokter`),
-    INDEX `db_pendaftaran_online_status_idx`(`status`),
-    INDEX `db_pendaftaran_online_tgl_cekin_idx`(`tgl_cekin`),
-    INDEX `db_pendaftaran_online_created_at_idx`(`created_at`),
-    INDEX `db_pendaftaran_online_deleted_at_idx`(`deleted_at`),
-    INDEX `db_pendaftaran_online_restored_at_idx`(`restored_at`),
     PRIMARY KEY (`id_antrian`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -1078,6 +1204,66 @@ CREATE TABLE `ms_kelas_kamar` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
+ALTER TABLE `db_pendaftaran` ADD CONSTRAINT `db_pendaftaran_id_antrian_fkey` FOREIGN KEY (`id_antrian`) REFERENCES `db_antrian`(`id_antrian`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran` ADD CONSTRAINT `db_pendaftaran_id_asuransi_fkey` FOREIGN KEY (`id_asuransi`) REFERENCES `db_asuransi`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran` ADD CONSTRAINT `db_pendaftaran_id_hub_wali_fkey` FOREIGN KEY (`id_hub_wali`) REFERENCES `ms_status_keluarga`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran_online` ADD CONSTRAINT `db_pendaftaran_online_id_antrian_fkey` FOREIGN KEY (`id_antrian`) REFERENCES `db_antrian`(`id_antrian`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran_online` ADD CONSTRAINT `db_pendaftaran_online_id_ms_status_kawin_fkey` FOREIGN KEY (`id_ms_status_kawin`) REFERENCES `ms_status_kawin`(`id_ms_status_kawin`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran_online` ADD CONSTRAINT `db_pendaftaran_online_id_ms_agama_fkey` FOREIGN KEY (`id_ms_agama`) REFERENCES `ms_agama`(`id_ms_agama`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran_online` ADD CONSTRAINT `db_pendaftaran_online_id_ms_golongan_darah_fkey` FOREIGN KEY (`id_ms_golongan_darah`) REFERENCES `ms_golongan_darah`(`id_ms_golongan_darah`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran_online` ADD CONSTRAINT `db_pendaftaran_online_id_ms_pendidikan_fkey` FOREIGN KEY (`id_ms_pendidikan`) REFERENCES `ms_tingkat_pendidikan`(`id_ms_tingkat_pendidikan`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran_online` ADD CONSTRAINT `db_pendaftaran_online_id_ms_negara_asal_fkey` FOREIGN KEY (`id_ms_negara_asal`) REFERENCES `ms_negara`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran_online` ADD CONSTRAINT `db_pendaftaran_online_id_ms_propinsi_asal_fkey` FOREIGN KEY (`id_ms_propinsi_asal`) REFERENCES `ms_provinsi`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran_online` ADD CONSTRAINT `db_pendaftaran_online_id_ms_kota_asal_fkey` FOREIGN KEY (`id_ms_kota_asal`) REFERENCES `ms_kabkot`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran_online` ADD CONSTRAINT `db_pendaftaran_online_id_ms_kecamatan_asal_fkey` FOREIGN KEY (`id_ms_kecamatan_asal`) REFERENCES `ms_kecamatan`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran_online` ADD CONSTRAINT `db_pendaftaran_online_id_ms_desa_asal_fkey` FOREIGN KEY (`id_ms_desa_asal`) REFERENCES `ms_desa`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran_online` ADD CONSTRAINT `db_pendaftaran_online_id_ms_negara_tinggal_fkey` FOREIGN KEY (`id_ms_negara_tinggal`) REFERENCES `ms_negara`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran_online` ADD CONSTRAINT `db_pendaftaran_online_id_ms_provinsi_tinggal_fkey` FOREIGN KEY (`id_ms_provinsi_tinggal`) REFERENCES `ms_provinsi`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran_online` ADD CONSTRAINT `db_pendaftaran_online_id_ms_kota_tinggal_fkey` FOREIGN KEY (`id_ms_kota_tinggal`) REFERENCES `ms_kabkot`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran_online` ADD CONSTRAINT `db_pendaftaran_online_id_ms_desa_tinggal_fkey` FOREIGN KEY (`id_ms_desa_tinggal`) REFERENCES `ms_desa`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran_online` ADD CONSTRAINT `db_pendaftaran_online_id_ms_kecamatan_tinggal_fkey` FOREIGN KEY (`id_ms_kecamatan_tinggal`) REFERENCES `ms_kecamatan`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran_online` ADD CONSTRAINT `db_pendaftaran_online_id_ms_loket_antrian_fkey` FOREIGN KEY (`id_ms_loket_antrian`) REFERENCES `ms_loket_antrian`(`id_ms_loket_antrian`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_biaya_pendaftaran` ADD CONSTRAINT `db_biaya_pendaftaran_id_pendaftaran_fkey` FOREIGN KEY (`id_pendaftaran`) REFERENCES `db_pendaftaran`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `db_menu` ADD CONSTRAINT `db_menu_parent_id_fkey` FOREIGN KEY (`parent_id`) REFERENCES `db_menu`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -1120,7 +1306,7 @@ ALTER TABLE `db_pasien` ADD CONSTRAINT `db_pasien_id_ms_agama_fkey` FOREIGN KEY 
 ALTER TABLE `db_pasien` ADD CONSTRAINT `db_pasien_id_ms_negara_asal_fkey` FOREIGN KEY (`id_ms_negara_asal`) REFERENCES `ms_negara`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `db_pasien` ADD CONSTRAINT `db_pasien_id_ms_propinsi_asal_fkey` FOREIGN KEY (`id_ms_propinsi_asal`) REFERENCES `ms_provinsi`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `db_pasien` ADD CONSTRAINT `db_pasien_id_ms_provinsi_asal_fkey` FOREIGN KEY (`id_ms_provinsi_asal`) REFERENCES `ms_provinsi`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `db_pasien` ADD CONSTRAINT `db_pasien_id_ms_kota_asal_fkey` FOREIGN KEY (`id_ms_kota_asal`) REFERENCES `ms_kabkot`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -1138,31 +1324,67 @@ ALTER TABLE `db_pasien` ADD CONSTRAINT `db_pasien_id_ms_pendidikan_fkey` FOREIGN
 ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_negara_asal_fkey` FOREIGN KEY (`id_ms_negara_asal`) REFERENCES `ms_negara`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_provinsi_asal_fkey` FOREIGN KEY (`id_ms_provinsi_asal`) REFERENCES `ms_provinsi`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_provinsi_asal_fkey` FOREIGN KEY (`id_ms_provinsi_asal`) REFERENCES `ms_provinsi`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_kota_asal_fkey` FOREIGN KEY (`id_ms_kota_asal`) REFERENCES `ms_kabkot`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_kota_asal_fkey` FOREIGN KEY (`id_ms_kota_asal`) REFERENCES `ms_kabkot`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_kecamatan_asal_fkey` FOREIGN KEY (`id_ms_kecamatan_asal`) REFERENCES `ms_kecamatan`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_kecamatan_asal_fkey` FOREIGN KEY (`id_ms_kecamatan_asal`) REFERENCES `ms_kecamatan`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_desa_asal_fkey` FOREIGN KEY (`id_ms_desa_asal`) REFERENCES `ms_desa`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_desa_asal_fkey` FOREIGN KEY (`id_ms_desa_asal`) REFERENCES `ms_desa`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_negara_tinggal_fkey` FOREIGN KEY (`id_ms_negara_tinggal`) REFERENCES `ms_negara`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_negara_tinggal_fkey` FOREIGN KEY (`id_ms_negara_tinggal`) REFERENCES `ms_negara`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_provinsi_tinggal_fkey` FOREIGN KEY (`id_ms_provinsi_tinggal`) REFERENCES `ms_provinsi`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_provinsi_tinggal_fkey` FOREIGN KEY (`id_ms_provinsi_tinggal`) REFERENCES `ms_provinsi`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_kota_tinggal_fkey` FOREIGN KEY (`id_ms_kota_tinggal`) REFERENCES `ms_kabkot`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_kota_tinggal_fkey` FOREIGN KEY (`id_ms_kota_tinggal`) REFERENCES `ms_kabkot`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_kecamatan_tinggal_fkey` FOREIGN KEY (`id_ms_kecamatan_tinggal`) REFERENCES `ms_kecamatan`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_kecamatan_tinggal_fkey` FOREIGN KEY (`id_ms_kecamatan_tinggal`) REFERENCES `ms_kecamatan`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_desa_tinggal_fkey` FOREIGN KEY (`id_ms_desa_tinggal`) REFERENCES `ms_desa`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_desa_tinggal_fkey` FOREIGN KEY (`id_ms_desa_tinggal`) REFERENCES `ms_desa`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_golongan_darah_fkey` FOREIGN KEY (`id_ms_golongan_darah`) REFERENCES `ms_golongan_darah`(`id_ms_golongan_darah`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_status_kawin_fkey` FOREIGN KEY (`id_ms_status_kawin`) REFERENCES `ms_status_kawin`(`id_ms_status_kawin`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_agama_fkey` FOREIGN KEY (`id_ms_agama`) REFERENCES `ms_agama`(`id_ms_agama`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_pendidikan_fkey` FOREIGN KEY (`id_ms_pendidikan`) REFERENCES `ms_tingkat_pendidikan`(`id_ms_tingkat_pendidikan`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_jenis_pegawai_fkey` FOREIGN KEY (`id_ms_jenis_pegawai`) REFERENCES `ms_jenis_pegawai`(`id_ms_jenis_pegawai`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_status_pegawai_fkey` FOREIGN KEY (`id_ms_status_pegawai`) REFERENCES `ms_status_pegawai`(`id_ms_status_pegawai`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_ms_spesialis_fkey` FOREIGN KEY (`id_ms_spesialis`) REFERENCES `ms_spesialis`(`id_ms_spesialis`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_unit_induk_fkey` FOREIGN KEY (`id_unit_induk`) REFERENCES `db_unit_kerja`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_unit_kerja_fkey` FOREIGN KEY (`id_unit_kerja`) REFERENCES `db_unit_kerja`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_pangkat_fkey` FOREIGN KEY (`id_pangkat`) REFERENCES `ms_pangkat`(`id_ms_pangkat`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_jabatan_fkey` FOREIGN KEY (`id_jabatan`) REFERENCES `ms_jabatan`(`id_ms_jabatan`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pegawai` ADD CONSTRAINT `db_pegawai_id_unit_jabatan_fkey` FOREIGN KEY (`id_unit_jabatan`) REFERENCES `db_unit_kerja`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `db_unit_kerja` ADD CONSTRAINT `db_unit_kerja_id_unit_induk_fkey` FOREIGN KEY (`id_unit_induk`) REFERENCES `db_unit_kerja`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

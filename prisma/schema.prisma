@@ -388,7 +388,7 @@ model Patient {
   id_warga_negara         Int
   identitas_pasien        Int
   no_identitas            String         @db.VarChar(100)
-  no_bpjs                 String         @db.VarChar(50)
+  no_bpjs                 String?        @db.VarChar(50)
   no_hp                   String         @db.VarChar(20)
   id_ms_negara_tinggal    Int
   negara_tinggal          Country        @relation("negara_tinggal_pasien", fields: [id_ms_negara_tinggal], references: [id])
@@ -410,7 +410,7 @@ model Patient {
   id_ms_status_kawin      Int            @default(0)
   status_kawin            MaritalStatus  @relation(fields: [id_ms_status_kawin], references: [id_ms_status_kawin])
   id_ms_golongan_darah    Int            @default(0)
-  gologan_darah           BloodType      @relation(fields: [id_ms_golongan_darah], references: [id_ms_golongan_darah])
+  golongan_darah          BloodType      @relation(fields: [id_ms_golongan_darah], references: [id_ms_golongan_darah])
   id_ms_agama             Int
   agama                   Religion       @relation(fields: [id_ms_agama], references: [id_ms_agama])
   live                    Int            @default(1)
@@ -418,8 +418,8 @@ model Patient {
   rw_asal                 String         @db.VarChar(5)
   id_ms_negara_asal       Int
   negara_asal             Country        @relation("negara_asal_pasien", fields: [id_ms_negara_asal], references: [id])
-  id_ms_propinsi_asal     String         @db.VarChar(20)
-  provinsi_asal           Province       @relation("provinsi_asal_pasien", fields: [id_ms_propinsi_asal], references: [id])
+  id_ms_provinsi_asal     String         @db.VarChar(20)
+  provinsi_asal           Province       @relation("provinsi_asal_pasien", fields: [id_ms_provinsi_asal], references: [id])
   id_ms_kota_asal         String         @db.VarChar(20)
   kota_asal               Regency        @relation("kota_asal_pasien", fields: [id_ms_kota_asal], references: [id])
   id_ms_kecamatan_asal    String         @db.VarChar(20)
@@ -457,7 +457,7 @@ model Patient {
   @@index([id_ms_kecamatan_tinggal])
   @@index([id_ms_desa_tinggal])
   @@index([id_ms_negara_asal])
-  @@index([id_ms_propinsi_asal])
+  @@index([id_ms_provinsi_asal])
   @@index([id_ms_kota_asal])
   @@index([id_ms_kecamatan_asal])
   @@index([id_ms_desa_asal])
@@ -475,7 +475,7 @@ model Employee {
   gelar_depan             String?          @db.VarChar(100)
   gelar_belakang          String?          @db.VarChar(100)
   nama_pegawai            String           @db.VarChar(100)
-  id_ms_negara_asal       Int
+  id_ms_negara_asal       Int?
   negara_asal             Country?         @relation("CountryOfOrigin", fields: [id_ms_negara_asal], references: [id])
   id_ms_provinsi_asal     String?
   provinsi_asal           Province?        @relation("ProvinceOfOrigin", fields: [id_ms_provinsi_asal], references: [id])
@@ -520,18 +520,17 @@ model Employee {
   nama_status_pegawai     EmployeeStatus?  @relation("EmployeeStatus", fields: [id_ms_status_pegawai], references: [id_ms_status_pegawai])
   id_ms_spesialis         Int?
   nama_spesialis          Specialist?      @relation("SpecialistEmployee", fields: [id_ms_spesialis], references: [id_ms_spesialis])
-  id_unit_induk           Int?
-  nama_unit_induk         WorkUnit?        @relation("ParentUnitEmployee", fields: [id_unit_induk], references: [id])
   id_unit_kerja           Int?
-  nama_unit_kerja         WorkUnit?        @relation("WorkUnitEmployee", fields: [id_unit_kerja], references: [id])
+  id_unit_induk           Int?
+  id_unit_jabatan         Int?
+  unit_kerja              WorkUnit?        @relation("WorkUnitEmployee", fields: [id_unit_kerja], references: [id])
+  unit_induk              WorkUnit?        @relation("ParentUnitEmployee", fields: [id_unit_induk], references: [id])
+  unit_jabatan            WorkUnit?        @relation("PositionUnitEmployee", fields: [id_unit_jabatan], references: [id])
   id_pangkat              Int?
   nama_pangkat            RankOfEmployees? @relation("RankOfEmployee", fields: [id_pangkat], references: [id_ms_pangkat])
   id_jabatan              Int?
   nama_jabatan            Position?        @relation("PositionEmployee", fields: [id_jabatan], references: [id_ms_jabatan])
-  id_unit_jabatan         Int?
-  nama_unit_jabatan       WorkUnit?        @relation("PositionUnitEmployee", fields: [id_unit_jabatan], references: [id])
   id_gaji                 Int?
-  // pjs                     Int?
   hp                      String           @db.VarChar(15)
   email                   String           @db.VarChar(100)
   no_npwp                 String?          @db.VarChar(25)
@@ -543,7 +542,7 @@ model Employee {
   kode_dpjp               String?          @db.VarChar(20)
   tgl_masuk               DateTime?        @db.Date
   tgl_keluar              DateTime?        @db.Date
-  status_pns              Int?             @default(1) @db.TinyInt // 0: non pns, 1: pns 
+  status_pns              Int?             @default(1) @db.TinyInt // 0: non pns, 1: pns
   status_aktif            Int?             @default(1) @db.TinyInt // 0: nonaktif, 1: aktif
   id_pelamar              Int?
   file_ktp                String?          @db.Text // new endpoints 2 : /employee/{id}/ktp
@@ -583,11 +582,11 @@ model Employee {
   @@index([id_ms_jenis_pegawai])
   @@index([id_ms_status_pegawai])
   @@index([id_ms_spesialis])
-  @@index([id_unit_induk])
   @@index([id_unit_kerja])
+  @@index([id_unit_induk])
+  @@index([id_unit_jabatan])
   @@index([id_pangkat])
   @@index([id_jabatan])
-  @@index([id_unit_jabatan])
   @@index([no_ktp])
   @@index([email])
   @@index([hp])
@@ -603,7 +602,7 @@ model WorkUnit {
   kode_instalasi_bpjs  String?          @unique @db.VarChar(10)
   status_antrian       Int              @default(0)
   is_parent_unit       Int              @default(0)
-  id_unit_induk        Int?
+  id_unit_induk        Int? // unit induk
   unit_induk           WorkUnit?        @relation("WorkUnitToWorkUnit", fields: [id_unit_induk], references: [id])
   id_bidang            Int?
   bidang               FieldOfWorkUnit? @relation(fields: [id_bidang], references: [id])

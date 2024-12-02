@@ -1,0 +1,16 @@
+export const keysToDelete: string[] = [
+  'id_ms_negara_tinggal',
+  'id_ms_provinsi_tinggal',
+  'id_ms_kota_tinggal',
+  'id_ms_kecamatan_tinggal',
+  'id_ms_desa_tinggal',
+  'id_ms_agama',
+  'id_ms_negara_asal',
+  'id_ms_provinsi_asal',
+  'id_ms_kota_asal',
+  'id_ms_kecamatan_asal',
+  'id_ms_desa_asal',
+  'id_ms_status_kawin',
+  'id_ms_golongan_darah',
+  'id_ms_pendidikan',
+];

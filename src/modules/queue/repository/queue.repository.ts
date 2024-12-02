@@ -300,6 +300,13 @@ export class QueueRepository {
     });
   }
 
+  async updateRMCode(id: number, rmCode: string) {
+    return this.prismaService.queue.update({
+      where: { id_antrian: Number(id) },
+      data: { kode_rm: rmCode },
+    });
+  }
+
   async findSkippedQueue(queueCode: string) {
     return this.prismaService.queue.findMany({
       where: {

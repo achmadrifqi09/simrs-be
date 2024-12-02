@@ -5,14 +5,18 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { PatientRepository } from '../repository/patient.repository';
-import { PatientDTO } from '../dto/patient.dto';
+import { LatestRM, PatientDTO } from '../dto/patient.dto';
 import { generateCurrentDate } from '../../../utils/date-formatter';
 import { SoftDelete } from '../../../common/types/common.type';
+import { RegistrationService } from '../../registration/service/registration.service';
 
-@Dependencies([PatientRepository])
+@Dependencies([PatientRepository, RegistrationService])
 @Injectable()
 export class PatientService {
-  constructor(private readonly patientRepository: PatientRepository) {}
+  constructor(
+    private readonly patientRepository: PatientRepository,
+    private readonly registrationService: RegistrationService,
+  ) {}
 
   async findAllPatient(
     keyword?: string,
@@ -60,5 +64,45 @@ export class PatientService {
       is_deleted: true,
     };
     return this.patientRepository.softDeletePatient(id, payload);
+  }
+
+  async createNewPatient(patient: PatientDTO, queueId: number, req?: any) {
+    const registration =
+      await this.registrationService.findRegistrationByQueueId(queueId);
+
+    if (!registration) {
+      throw new HttpException(
+        'Pasien tidak memiliki data pendaftaran',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const rmCode = await this.generateRmCode();
+
+    patient = {
+      ...patient,
+      created_by: req?.user?.id,
+      created_at: generateCurrentDate(),
+      kode_rm: rmCode,
+    };
+
+    const result = await this.patientRepository.createNewPatient(patient);
+    if (result) {
+      await this.registrationService.updateRMCode(
+        registration.id,
+        result.kode_rm,
+      );
+    }
+    return result;
+  }
+
+  private async generateRmCode() {
+    const patientWithLatestRM: LatestRM =
+      await this.patientRepository.findLastedRMCode();
+    if (!patientWithLatestRM) {
+      return '0000001';
+    }
+    const rmCode = String(Number(patientWithLatestRM.kode_rm) + 1);
+    return rmCode.padStart(7, '0');
   }
 }

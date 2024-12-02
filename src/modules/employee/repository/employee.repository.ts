@@ -1,92 +1,192 @@
-import { Injectable } from '@nestjs/common';
+import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { Employee, Prisma } from '@prisma/client';
-// import { z } from 'zod';
-// import { CreateEmployeeDto } from '../dto/employee.dto';
+import { Prisma } from '@prisma/client';
+import {
+  UpdateFileFoto,
+  UpdateFileKk,
+  UpdateFileKtam,
+  UpdateFileKtp,
+  UpdateFileNpwp,
+} from '../dto/employee.dto';
+import { PrismaErrorHandler } from '../../../common/handler/prisma-error.handler';
+import { SoftDelete } from '../../../common/types/common.type';
 
+@Dependencies([PrismaService])
 @Injectable()
 export class EmployeeRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
-  async createEmployee() {
-    // return this.prisma.employee.create({
-    //   data,
-    // });
-  }
+  async findEmployee(keyword: string) {
+    const whereClause: Prisma.EmployeeWhereInput = {
+      OR: [{ nama_pegawai: { contains: keyword } }],
+      is_deleted: false,
+    };
 
-  async getEmployeeById(id: number) {
-    return this.prisma.employee.findUnique({
-      where: { id_pegawai: id },
+    if (Number(keyword)) whereClause.OR.push({ id_pegawai: Number(keyword) });
+
+    return this.prismaService.employee.findMany({
+      where: whereClause,
+      orderBy: {
+        id_pegawai: 'desc',
+      },
     });
   }
 
-  async getAllEmployees(filter: Prisma.EmployeeWhereInput = {}) {
-    return this.prisma.employee.findMany({
-      where: filter,
+  async findEmployeeById(id: number) {
+    const whereClause: Prisma.EmployeeWhereInput = {
+      id_pegawai: Number(id),
+      is_deleted: false,
+    };
+
+    return this.prismaService.employee.findFirst({
+      where: whereClause,
     });
   }
 
-  async updateEmployee(
-    id: number,
-    updateData: Partial<Employee>,
-  ): Promise<Employee> {
-    return this.prisma.employee.update({
-      where: { id_pegawai: id },
-      data: updateData,
-    });
+  async createEmployee(field: Prisma.EmployeeCreateInput) {
+    try {
+      return await this.prismaService.employee.create({
+        data: field,
+        // select: {
+        //   negara_asal: {
+        //     select: {
+        //       nama: true,
+        //     }
+        //   }
+        // }
+      });
+    } catch (error) {
+      console.log(error);
+      PrismaErrorHandler.handle(error);
+    }
   }
 
-  async findById(id: number): Promise<Employee | null> {
-    return this.prisma.employee.findUnique({
-      where: { id_pegawai: id },
-    });
+  async updateEmployee(id_pegawai: number, field: Prisma.EmployeeUpdateInput) {
+    try {
+      return await this.prismaService.employee.update({
+        where: {
+          id_pegawai: Number(id_pegawai),
+          is_deleted: false,
+        },
+        data: field,
+      });
+    } catch (error) {
+      console.log(error);
+      PrismaErrorHandler.handle(error);
+    }
   }
 
-  async softDeleteEmployee(id: number) {
-    return this.prisma.employee.update({
-      where: { id_pegawai: id },
-      data: { is_deleted: true, deleted_at: new Date() },
-    });
+  async updateEmployeePhoto(id_pegawai: number, field: UpdateFileFoto) {
+    try {
+      return await this.prismaService.employee.update({
+        where: {
+          id_pegawai: Number(id_pegawai),
+          // is_deleted: false,
+        },
+        data: field,
+        select: {
+          id_pegawai: true,
+          nama_pegawai: true,
+          foto: true,
+        },
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+      throw new Error('Failed to update employee photo');
+    }
   }
 
-  async restoreEmployee(id: number) {
-    return this.prisma.employee.update({
-      where: { id_pegawai: id },
-      data: { is_deleted: false, restored_at: new Date() },
-    });
+  async updateEmployeeKtp(id_pegawai: number, field: UpdateFileKtp) {
+    try {
+      return await this.prismaService.employee.update({
+        where: {
+          id_pegawai: Number(id_pegawai),
+          is_deleted: false,
+        },
+        data: field,
+        select: {
+          id_pegawai: true,
+          nama_pegawai: true,
+          file_ktp: true,
+        },
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+      throw new Error('Failed to update employee photo');
+    }
   }
 
-  async deleteEmployeePermanently(id: number) {
-    return this.prisma.employee.delete({
-      where: { id_pegawai: id },
-    });
+  async updateEmployeeKk(id_pegawai: number, field: UpdateFileKk) {
+    try {
+      return await this.prismaService.employee.update({
+        where: {
+          id_pegawai: Number(id_pegawai),
+          is_deleted: false,
+        },
+        data: field,
+        select: {
+          id_pegawai: true,
+          nama_pegawai: true,
+          file_kk: true,
+        },
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+      throw new Error('Failed to update employee photo');
+    }
   }
 
-  async saveKtpFile(id: number, filename: string) {
-    return this.prisma.employee.update({
-      where: { id_pegawai: id },
-      data: { file_ktp: filename },
-    });
+  async updateEmployeeKtam(id_pegawai: number, field: UpdateFileKtam) {
+    try {
+      return await this.prismaService.employee.update({
+        where: {
+          id_pegawai: Number(id_pegawai),
+          is_deleted: false,
+        },
+        data: field,
+        select: {
+          id_pegawai: true,
+          nama_pegawai: true,
+          file_ktam: true,
+        },
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+      throw new Error('Failed to update employee photo');
+    }
   }
 
-  async saveKkFile(id: number, filename: string) {
-    return this.prisma.employee.update({
-      where: { id_pegawai: id },
-      data: { file_kk: filename },
-    });
+  async updateEmployeeNpwp(id_pegawai: number, field: UpdateFileNpwp) {
+    try {
+      return await this.prismaService.employee.update({
+        where: {
+          id_pegawai: Number(id_pegawai),
+          is_deleted: false,
+        },
+        data: field,
+        select: {
+          id_pegawai: true,
+          nama_pegawai: true,
+          file_npwp: true,
+        },
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+      throw new Error('Failed to update employee photo');
+    }
   }
 
-  async saveKtamFile(id: number, filename: string) {
-    return this.prisma.employee.update({
-      where: { id_pegawai: id },
-      data: { file_ktam: filename },
-    });
-  }
-
-  async saveNpwpFile(id: number, filename: string) {
-    return this.prisma.employee.update({
-      where: { id_pegawai: id },
-      data: { file_npwp: filename },
-    });
+  async softDeleteEmployee(id_pegawai: number, payload: SoftDelete) {
+    try {
+      return await this.prismaService.employee.update({
+        where: {
+          id_pegawai: Number(id_pegawai),
+          is_deleted: false,
+        },
+        data: payload,
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
   }
 }

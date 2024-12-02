@@ -1,79 +1,109 @@
-import { z } from 'zod';
+export interface Employee {
+  no_reg: string;
+  nip_pegawai: string;
+  nip_pns?: string | null;
+  gelar_depan?: string | null;
+  gelar_belakang?: string | null;
+  nama_pegawai: string;
+  id_ms_negara_asal?: number | null;
+  id_ms_provinsi_asal?: string | null;
+  id_ms_kota_asal?: string | null;
+  id_ms_kecamatan_asal?: string | null;
+  id_ms_desa_asal?: string | null;
+  alamat_asal?: string | null;
+  kode_pos_asal?: string | null;
+  rt_asal?: string | null;
+  rw_asal?: string | null;
+  id_ms_negara_tinggal: number;
+  id_ms_provinsi_tinggal: string;
+  id_ms_kota_tinggal: string;
+  id_ms_kecamatan_tinggal: string;
+  id_ms_desa_tinggal: string;
+  alamat_tinggal: string;
+  kode_pos_tinggal: string;
+  rt_tinggal: string;
+  rw_tinggal: string;
+  tempat_lahir: string;
+  tgl_lahir: Date;
+  id_jenis_kelamin: number; // 1: laki-laki 2:perempuan
+  id_ms_golongan_darah: number;
+  id_ms_status_kawin: number;
+  id_ms_agama: number;
+  id_ms_pendidikan?: number | null; // optional
+  id_ms_jenis_pegawai?: number | null; // optional
+  id_ms_status_pegawai?: number | null; // optional
+  id_ms_spesialis?: number | null; // optional
+  id_unit_induk?: number | null; // optional
+  id_pangkat?: number | null; // optional
+  id_jabatan?: number | null; // optional
+  id_unit_jabatan?: number | null; // optional
+  id_gaji?: number | null; // optional
+  hp: string;
+  email: string;
+  no_npwp?: string | null;
+  no_ktp: string;
+  no_ktam?: string | null;
+  kode_arsip?: string | null;
+  id_finger?: string | null;
+  kode_dpjp?: string | null;
+  tgl_masuk?: Date | null; // optional
+  tgl_keluar?: Date | null; // optional
+  status_pns?: number; // 0: non pns, 1: pns
+  status_aktif?: number; // 0: nonaktif, 1: aktif
+  id_pelamar?: number | null;
+  foto?: string | null;
+  file_ktp?: string | null;
+  file_kk?: string | null;
+  file_ktam?: string | null;
+  file_npwp?: string | null;
+  created_by?: number;
+  created_at?: Date;
+  modified_at?: Date;
+  modified_by?: number;
+  deleted_at?: Date;
+}
 
-export const CreateEmployeeDto = z.object({
-  no_reg: z.string().max(50, 'Nomor registrasi maksimal 50 karakter'),
-  nip_pegawai: z
-    .string()
-    .max(50, 'NIP pegawai maksimal 50 karakter')
-    .optional(),
-  nip_pns: z.string().max(50, 'NIP PNS maksimal 50 karakter').optional(),
-  gelar_depan: z
-    .string()
-    .max(100, 'Gelar depan maksimal 100 karakter')
-    .optional(),
-  gelar_belakang: z
-    .string()
-    .max(100, 'Gelar belakang maksimal 100 karakter')
-    .optional(),
-  nama_pegawai: z.string().max(100, 'Nama pegawai maksimal 100 karakter'),
-  id_ms_negara_asal: z.number().optional(),
-  id_ms_provinsi_asal: z.number().optional(),
-  id_ms_kota_asal: z.number().optional(),
-  id_ms_kecamatan_asal: z.number().optional(),
-  id_ms_desa_asal: z.number().optional(),
-  alamat_asal: z.string().optional(),
-  kode_pos_asal: z
-    .string()
-    .max(10, 'Kode pos asal maksimal 10 karakter')
-    .optional(),
-  rt_asal: z.string().max(5, 'RT asal maksimal 5 karakter').optional(),
-  rw_asal: z.string().max(5, 'RW asal maksimal 5 karakter').optional(),
-  id_ms_negara_tinggal: z.number(),
-  id_ms_provinsi_tinggal: z.number(),
-  id_ms_kota_tinggal: z.number(),
-  id_ms_kecamatan_tinggal: z.number(),
-  id_ms_desa_tinggal: z.number(),
-  alamat_tinggal: z.string(),
-  kode_pos_tinggal: z.string().max(10, 'Kode pos tinggal maksimal 10 karakter'),
-  rt_tinggal: z.string().max(3, 'RT tinggal maksimal 3 karakter'),
-  rw_tinggal: z.string().max(3, 'RW tinggal maksimal 3 karakter'),
-  tempat_lahir: z.string().max(100, 'Tempat lahir maksimal 100 karakter'),
-  tgl_lahir: z.date(),
-  id_jenis_kelamin: z.number(),
-  id_ms_golongan_darah: z.number().optional(),
-  id_ms_status_kawin: z.number(),
-  id_ms_agama: z.number(),
-  id_ms_pendidikan: z.number(),
-  id_ms_jenis_pegawai: z.number(),
-  id_ms_status_pegawai: z.number(),
-  id_ms_spesialis: z.number().optional(),
-  id_unit_induk: z.number(),
-  id_pangkat: z.number(),
-  id_jabatan: z.number(),
-  id_unit_jabatan: z.number(),
-  id_gaji: z.number().optional(),
-  pjs: z.number().optional(),
-  hp: z.string().max(15, 'Nomor HP maksimal 15 karakter'),
-  email: z
-    .string()
-    .email('Format email tidak valid')
-    .max(100, 'Email maksimal 100 karakter'),
-  no_npwp: z.string().max(25, 'Nomor NPWP maksimal 25 karakter'),
-  no_ktp: z.string().max(25, 'Nomor KTP maksimal 25 karakter'),
-  no_ktam: z.string().max(25, 'Nomor KTAM maksimal 25 karakter'),
-  foto: z.string().optional(),
-  kode_arsip: z.string().max(20, 'Kode arsip maksimal 20 karakter').optional(),
-  id_finger: z.string().max(10, 'ID finger maksimal 10 karakter'),
-  kode_dpjp: z.string().max(20, 'Kode DPJP maksimal 20 karakter').optional(),
-  tgl_masuk: z.date(),
-  tgl_keluar: z.date().optional(),
-  status_pns: z.number(),
-  status_aktif: z.number(),
-  id_pelamar: z.number().optional(),
-  file_ktp: z.string().optional(),
-  file_kk: z.string().optional(),
-  file_ktam: z.string().optional(),
-  file_npwp: z.string().optional(),
-});
+export interface UpdateFileFoto {
+  foto: string;
+  created_by?: number;
+  created_at?: Date;
+  modified_at?: Date;
+  modified_by?: number;
+  deleted_at?: Date;
+}
 
-export const UpdateEmployeeDto = CreateEmployeeDto.partial();
+export interface UpdateFileKtp {
+  file_ktp: string;
+  created_by?: number;
+  created_at?: Date;
+  modified_at?: Date;
+  modified_by?: number;
+  deleted_at?: Date;
+}
+
+export interface UpdateFileKk {
+  file_kk: string;
+  created_by?: number;
+  created_at?: Date;
+  modified_at?: Date;
+  modified_by?: number;
+  deleted_at?: Date;
+}
+
+export interface UpdateFileKtam {
+  file_ktam: string;
+  created_by?: number;
+  created_at?: Date;
+  modified_at?: Date;
+  modified_by?: number;
+  deleted_at?: Date;
+}
+
+export interface UpdateFileNpwp {
+  file_npwp: string;
+  created_by?: number;
+  created_at?: Date;
+  modified_at?: Date;
+  modified_by?: number;
+  deleted_at?: Date;
+}
