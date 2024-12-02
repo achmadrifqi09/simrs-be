@@ -1,10 +1,12 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { RegistrationRepository } from '../repository/registration.repository';
 import { QueueDto } from '../../queue/dto/queue.dto';
-import { RegistrationDto } from '../dto/registration.dto';
+import {
+  CancellationStatusPayload,
+  RegistrationDto,
+} from '../dto/registration.dto';
 import { generateCurrentDate } from '../../../utils/date-formatter';
 import { generateUniqueCodeWithDate } from '../../../utils/unique-code-generator';
-import { CancellationStatusPayload } from '../dto/registration.dto';
 
 @Dependencies([RegistrationRepository])
 @Injectable()
@@ -35,6 +37,17 @@ export class RegistrationService {
 
   async findRegistrationById(id: number) {
     return this.registrationRepository.findRegistrationById(id);
+  }
+
+  async findRegistrationByQueueId(queueId: number) {
+    return this.registrationRepository.findRegistrationByQueueId(queueId);
+  }
+
+  async updateRMCode(registrationId: number, rmCode: string) {
+    return this.registrationRepository.updateRMForRegistrationAndQueue(
+      registrationId,
+      rmCode,
+    );
   }
 
   async createRegistrationFromQueue(queue: QueueDto) {

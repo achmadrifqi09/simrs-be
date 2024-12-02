@@ -388,7 +388,7 @@ model Patient {
   id_warga_negara         Int
   identitas_pasien        Int
   no_identitas            String         @db.VarChar(100)
-  no_bpjs                 String         @db.VarChar(50)
+  no_bpjs                 String?        @db.VarChar(50)
   no_hp                   String         @db.VarChar(20)
   id_ms_negara_tinggal    Int
   negara_tinggal          Country        @relation("negara_tinggal_pasien", fields: [id_ms_negara_tinggal], references: [id])
@@ -410,7 +410,7 @@ model Patient {
   id_ms_status_kawin      Int            @default(0)
   status_kawin            MaritalStatus  @relation(fields: [id_ms_status_kawin], references: [id_ms_status_kawin])
   id_ms_golongan_darah    Int            @default(0)
-  gologan_darah           BloodType      @relation(fields: [id_ms_golongan_darah], references: [id_ms_golongan_darah])
+  golongan_darah          BloodType      @relation(fields: [id_ms_golongan_darah], references: [id_ms_golongan_darah])
   id_ms_agama             Int
   agama                   Religion       @relation(fields: [id_ms_agama], references: [id_ms_agama])
   live                    Int            @default(1)
@@ -418,8 +418,8 @@ model Patient {
   rw_asal                 String         @db.VarChar(5)
   id_ms_negara_asal       Int
   negara_asal             Country        @relation("negara_asal_pasien", fields: [id_ms_negara_asal], references: [id])
-  id_ms_propinsi_asal     String         @db.VarChar(20)
-  provinsi_asal           Province       @relation("provinsi_asal_pasien", fields: [id_ms_propinsi_asal], references: [id])
+  id_ms_provinsi_asal     String         @db.VarChar(20)
+  provinsi_asal           Province       @relation("provinsi_asal_pasien", fields: [id_ms_provinsi_asal], references: [id])
   id_ms_kota_asal         String         @db.VarChar(20)
   kota_asal               Regency        @relation("kota_asal_pasien", fields: [id_ms_kota_asal], references: [id])
   id_ms_kecamatan_asal    String         @db.VarChar(20)
@@ -457,7 +457,7 @@ model Patient {
   @@index([id_ms_kecamatan_tinggal])
   @@index([id_ms_desa_tinggal])
   @@index([id_ms_negara_asal])
-  @@index([id_ms_propinsi_asal])
+  @@index([id_ms_provinsi_asal])
   @@index([id_ms_kota_asal])
   @@index([id_ms_kecamatan_asal])
   @@index([id_ms_desa_asal])

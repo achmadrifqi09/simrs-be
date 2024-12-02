@@ -36,6 +36,7 @@ export class AdmissionGateway {
     private readonly queueService: QueueService,
   ) {}
 
+  @Public()
   @SubscribeMessage('remaining-queue-code')
   async handleRemainingQueueCode(client: Socket, queueCode: string) {
     if (!queueCode) throw new WsException('Kode antrian harus disertakan');
@@ -55,7 +56,7 @@ export class AdmissionGateway {
         payload.id_ms_loket_antrian,
         payload.id_user,
       );
-      this.server.emit(`current-${payload.kode_antrian}-${client.id}`, {
+      this.server.emit(`current-queue-${client.id}`, {
         data: result,
       });
       if (result?.id_antrian) {

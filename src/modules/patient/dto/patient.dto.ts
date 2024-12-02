@@ -28,7 +28,7 @@ export interface PatientDTO {
   rt_asal: string;
   rw_asal: string;
   id_ms_negara_asal: number;
-  id_ms_propinsi_asal: string;
+  id_ms_provinsi_asal: string;
   id_ms_kota_asal: string;
   id_ms_kecamatan_asal: string;
   id_ms_desa_asal: string;
@@ -42,4 +42,9 @@ export interface PatientDTO {
   modified_at?: Date;
   modified_by?: number;
   deleted_at?: Date;
+}
+
+export interface LatestRM {
+  id_pasien: number;
+  kode_rm: string;
 }
