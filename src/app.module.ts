@@ -27,6 +27,7 @@ import { CounterGateway } from './gateways/counter/gateway/counter.gateway';
 import { AdmissionGateway } from './gateways/admission/gateway/admission.gateway';
 import { RegistrationModule } from './modules/registration/registration.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { RegistrationFeeModule } from './modules/registration-fee/registration-fee.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     PatientModule,
     BPJSModule,
     RegistrationModule,
+    RegistrationFeeModule,
   ],
   controllers: [AppController],
   providers: [
