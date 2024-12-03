@@ -195,13 +195,14 @@ model RegistrationFee {
   id_pendaftaran             Int
   pendaftaran                Registration @relation(fields: [id_pendaftaran], references: [id])
   biaya_daftar               String       @db.VarChar(20)
-  diskon_daftar              String       @db.VarChar(20)
+  diskon_daftar              String       @default("0") @db.VarChar(20)
   biaya_kartu                String       @default("0000-00-00 00:00:00") @db.VarChar(20)
-  diskon_kartu               String       @db.VarChar(20)
+  diskon_kartu               String       @default("0") @db.VarChar(20)
   biaya_dokter               String       @db.VarChar(20)
-  diskon_dokter              String       @db.VarChar(20)
+  diskon_dokter              String       @default("0") @db.VarChar(20)
+  total_biaya                String       @default("0") @db.VarChar(20)
   tgl_billing_daftar         DateTime
-  tgl_billing_daftar_selesai DateTime
+  tgl_billing_daftar_selesai DateTime?
   created_at                 DateTime     @default(now())
   created_by                 Int          @default(0)
   modified_at                DateTime?    @db.DateTime(0)
