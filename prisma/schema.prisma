@@ -404,7 +404,7 @@ model Patient {
   rt_tinggal              String         @db.VarChar(5)
   rw_tinggal              String         @db.VarChar(5)
   kode_pos_tinggal        String?        @db.VarChar(10)
-  alamatgab_tinggal       String         @db.Text
+  alamatgab_tinggal       String?        @db.Text
   suku                    String?        @db.VarChar(50)
   nama_ibu_kandung        String?        @db.VarChar(100)
   id_ms_status_kawin      Int            @default(0)
@@ -427,7 +427,7 @@ model Patient {
   id_ms_desa_asal         String         @db.VarChar(20)
   desa_asal               Village        @relation("desa_asal_pasien", fields: [id_ms_desa_asal], references: [id])
   alamat_asal             String         @db.Text
-  alamatgab_asal          String         @db.Text
+  alamatgab_asal          String?        @db.Text
   nama_pekerjaan          String?        @db.VarChar(100)
   kode_pos_asal           String?        @db.VarChar(10)
   id_ms_pendidikan        Int

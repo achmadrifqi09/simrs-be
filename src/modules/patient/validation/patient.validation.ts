@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 
 const phoneNumberRegex = /^(\+62|62|0)8[1-9][0-9]{6,11}$/;
 const dateValidation = z
-  .string()
+  .string({ message: 'Tanggal lahir harus diisi' })
   .refine(
     (val) => {
       const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/;
@@ -28,19 +28,21 @@ const patientValidation = z
       .string({ message: 'Nama pasien harus diisi' })
       .max(100, 'Nama Pasien tidak boleh melebihi 100 karakter'),
     tempat_lahir: z
-      .string()
+      .string({ message: 'Tempat lahir harus diisi' })
       .max(100, 'Tempat Lahir tidak boleh melebihi 100 karakter'),
     tgl_lahir: dateValidation,
     jenis_kelamin: z
-      .number()
+      .number({ message: 'Jenis kelamin harus diisi' })
       .int()
       .min(1)
       .max(2, 'Jenis Kelamin harus 1 (Laki-laki) atau 2 (Perempuan)'),
     id_warga_negara: z
-      .number()
+      .number({ message: 'Warga negara harus diisi' })
       .int()
       .refine((value) => value > 0, { message: 'ID Warga Negara harus valid' }),
-    identitas_pasien: z.number().int(),
+    identitas_pasien: z
+      .number({ message: 'Identitas pasien harus diisi' })
+      .int(),
     no_identitas: z
       .string()
       .max(100, 'No Identitas tidak boleh melebihi 100 karakter'),
@@ -49,11 +51,11 @@ const patientValidation = z
       .max(50, 'No BPJS tidak boleh melebihi 50 karakter')
       .nullish(),
     no_hp: z
-      .string()
+      .string({ message: 'Nomor hp harus diisi' })
       .regex(phoneNumberRegex, 'No HP harus berupa nomor telepon yang valid')
       .max(20),
     id_ms_negara_tinggal: z
-      .number()
+      .number({ message: 'Negara tinggal harus diisi' })
       .int()
       .refine((value) => value > 0, {
         message: 'ID Negara Tinggal harus valid',
@@ -75,6 +77,7 @@ const patientValidation = z
       .max(5, 'RW Tinggal tidak boleh melebihi 5 karakter'),
     kode_pos_tinggal: z.string().max(10).nullish(),
     alamatgab_tinggal: z.string().nullish(),
+    nama_pekerjaan: z.string().nullish(),
     id_ms_negara_asal: z
       .number()
       .int()
@@ -94,16 +97,18 @@ const patientValidation = z
     alamatgab_asal: z.string().nullish(),
     suku: z.string().max(50).nullish(),
     nama_ibu_kandung: z.string().max(100).nullish(),
-    id_ms_status_kawin: z.number().int().default(0),
-    id_ms_golongan_darah: z.number().int().default(0),
+    id_ms_status_kawin: z.number({ message: 'Status kawin harus diisi' }).int(),
+    id_ms_golongan_darah: z
+      .number({ message: 'Golongan darah harus diisi' })
+      .int(),
     id_ms_agama: z
-      .number()
+      .number({ message: 'Agama harus diisi' })
       .int()
-      .refine((value) => value > 0, { message: 'ID Agama harus valid' }),
+      .refine((value) => value > 0, { message: 'Agama tidak valid' }),
     id_ms_pendidikan: z
       .number()
       .int()
-      .refine((value) => value > 0, { message: 'ID Pendidikan harus valid' }),
+      .refine((value) => value > 0, { message: 'Pendidikan tidak valid' }),
     live: z.number().int().default(1),
   })
   .refine(
