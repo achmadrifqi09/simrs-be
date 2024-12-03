@@ -79,7 +79,6 @@ export class PatientRepository {
         data: payload,
       });
     } catch (error) {
-      console.log(error);
       PrismaErrorHandler.handle(error);
     }
   }
