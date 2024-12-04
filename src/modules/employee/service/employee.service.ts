@@ -2,7 +2,7 @@ import {
   Dependencies,
   HttpException,
   HttpStatus,
-  Injectable
+  Injectable,
 } from '@nestjs/common';
 import { EmployeeRepository } from '../repository/employee.repository';
 import { generateCurrentDate } from '../../../utils/date-formatter';
@@ -14,15 +14,8 @@ import { SoftDelete } from '../../../common/types/common.type';
 export class EmployeeService {
   constructor(private readonly employeeRepository: EmployeeRepository) {}
 
-  async findEmployee(keyword?: string, status?: number) {
-    if (!Number(status) && !(status in [0, 1]) && status !== undefined) {
-      throw new HttpException(
-        'Status bidang unit kerja tidak valid',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    return this.employeeRepository.findEmployee(keyword || '');
+  async findEmployee(keyword?: string, cursor: number = 0, take: number = 10) {
+    return this.employeeRepository.findEmployee(keyword || '', cursor, take);
   }
 
   async createEmployee(
