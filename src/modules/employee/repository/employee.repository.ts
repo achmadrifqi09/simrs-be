@@ -16,20 +16,37 @@ import { SoftDelete } from '../../../common/types/common.type';
 export class EmployeeRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findEmployee(keyword: string) {
+  async findEmployee(keyword: string, cursor: number, take: number) {
     const whereClause: Prisma.EmployeeWhereInput = {
       OR: [{ nama_pegawai: { contains: keyword } }],
       is_deleted: false,
     };
 
-    if (Number(keyword)) whereClause.OR.push({ id_pegawai: Number(keyword) });
-
-    return this.prismaService.employee.findMany({
+    const result = await this.prismaService.employee.findMany({
+      take: Number(take) || 10,
+      skip: Number(cursor) || 0,
       where: whereClause,
       orderBy: {
         id_pegawai: 'desc',
       },
     });
+
+    return {
+      results: result,
+      pagination: {
+        current_cursor: Number(cursor),
+        take: Number(take) || 10,
+      },
+    };
+
+    // if (Number(keyword)) whereClause.OR.push({ id_pegawai: Number(keyword) });
+
+    // return this.prismaService.employee.findMany({
+    //   where: whereClause,
+    //   orderBy: {
+    //     id_pegawai: 'desc',
+    //   },
+    // });
   }
 
   async findEmployeeById(id: number) {

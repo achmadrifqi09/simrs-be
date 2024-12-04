@@ -43,10 +43,10 @@ export class EmployeeController {
   @Get()
   @Header('Content-Type', 'application/json')
   async findEmployee(
-    @Query('keyword') keyword: string,
-    @Query('status') status: number,
+    @Query('keyword') keyword: string
+    // @Query('status') status: number,
   ) {
-    return this.employeeService.findEmployee(keyword, status);
+    return this.employeeService.findEmployee(keyword);
   }
 
   @Post()

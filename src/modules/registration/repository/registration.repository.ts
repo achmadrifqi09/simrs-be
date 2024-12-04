@@ -90,7 +90,7 @@ export class RegistrationRepository {
     if (result) {
       await this.prismaService.queue.update({
         where: { id_antrian: Number(result.id_antrian), is_deleted: false },
-        data: { kode_rm: rmCode, jenis_pasien: 1 },
+        data: { kode_rm: rmCode },
       });
     }
     return result;
