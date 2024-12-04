@@ -79,7 +79,14 @@ export class RegistrationRepository {
 
   async findRegisrationWithDoctorScheduleId(id: number) {
     return this.prismaService.registration.findFirst({
-      where: { id: Number(id), is_deleted: false },
+      where: {
+        id: Number(id),
+        is_deleted: false,
+        created_at: {
+          gte: generateCurrentDateWithCustomHour('00:00:00'),
+          lte: generateCurrentDateWithCustomHour('23:59:59'),
+        },
+      },
       select: {
         id: true,
         antrian: {

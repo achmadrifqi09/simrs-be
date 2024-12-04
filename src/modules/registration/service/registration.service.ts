@@ -11,14 +11,19 @@ import {
   RegistrationDto,
   RegistrationUpdateDto,
 } from '../dto/registration.dto';
-import { generateCurrentDate } from '../../../utils/date-formatter';
+import {
+  generateCurrentDate,
+  generateCurrentDateWithCustomHour,
+} from '../../../utils/date-formatter';
 import { generateUniqueCodeWithDate } from '../../../utils/unique-code-generator';
+import { PrismaService } from 'src/prisma/prisma.service';
 
-@Dependencies([RegistrationRepository])
+@Dependencies([RegistrationRepository, PrismaService])
 @Injectable()
 export class RegistrationService {
   constructor(
     private readonly registrationRepository: RegistrationRepository,
+    private readonly prismaService: PrismaService,
   ) {}
 
   async findAllTodayRegistration(
@@ -112,36 +117,46 @@ export class RegistrationService {
         HttpStatus.BAD_REQUEST,
       );
     }
+    return this.prismaService.$transaction(async (prisma) => {
+      const registration =
+        await this.registrationRepository.findRegisrationWithDoctorScheduleId(
+          Number(id),
+        );
 
-    const registration =
-      await this.registrationRepository.findRegisrationWithDoctorScheduleId(
-        Number(id),
+      if (!registration) {
+        throw new HttpException(
+          'Data pendaftaran tidak ditemukan, pastikan pasien mendaftar antrean dihari ini',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      const totalPolyQueue = await prisma.queue.count({
+        where: {
+          created_at: {
+            gte: generateCurrentDateWithCustomHour('00:00:00'),
+            lte: generateCurrentDateWithCustomHour('23:59:59'),
+          },
+          status: { not: 2 },
+          is_deleted: false,
+          jadwal_dokter: {
+            id_jadwal_dokter: Number(registration.antrian.id_jadwal_dokter),
+          },
+          id_antrian: { not: registration.antrian.id_antrian },
+        },
+      });
+
+      payload.modified_at = generateCurrentDate();
+      payload.modified_by = req?.user?.id || 0;
+      payload.kode_antrian_poli = registration.antrian.kode_antrian;
+      payload.nomor_antrian_poli = totalPolyQueue + 1;
+
+      const result = await this.registrationRepository.updateRegistration(
+        id,
+        payload,
       );
-
-    if (!registration) {
-      throw new HttpException(
-        'Data pendaftaran tidak ditemukan',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    const queueTotal =
-      await this.registrationRepository.queueTotalBasedOnIdDoctorSchedule(
-        registration.antrian.id_jadwal_dokter,
-        registration.antrian.id_antrian,
-      );
-
-    payload.modified_at = generateCurrentDate();
-    payload.modified_by = req?.user?.id || 0;
-    payload.kode_antrian_poli = registration.antrian.kode_antrian;
-    payload.nomor_antrian_poli = queueTotal + 1;
-
-    const result = await this.registrationRepository.updateRegistration(
-      id,
-      payload,
-    );
-    return {
-      ...result,
-      antrian: { ...registration.antrian },
-    };
+      return {
+        ...result,
+        antrian: { ...registration.antrian },
+      };
+    });
   }
 }
