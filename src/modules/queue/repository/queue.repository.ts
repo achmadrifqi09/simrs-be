@@ -32,6 +32,7 @@ export class QueueRepository {
         status: { not: 2 },
         status_panggil: 0,
         id_ms_loket_antrian: null,
+        is_deleted: false,
       },
     });
   }
@@ -58,6 +59,7 @@ export class QueueRepository {
         },
         status: { not: 2 },
         OR: [{ status_panggil: 0 }, { status_panggil: null }],
+        is_deleted: false,
       },
       select: counterQueue,
     });
@@ -65,7 +67,7 @@ export class QueueRepository {
 
   async updateCounterId(id: number, payload: CounterIdUpdatePayload) {
     return this.prismaService.queue.update({
-      where: { id_antrian: Number(id) },
+      where: { id_antrian: Number(id), is_deleted: false },
       data: payload,
       select: counterQueue,
     });
@@ -82,6 +84,7 @@ export class QueueRepository {
         status: { not: 2 },
         status_panggil: 0,
         id_ms_loket_antrian: null,
+        is_deleted: false,
       },
       select: {
         id_antrian: true,
@@ -93,6 +96,7 @@ export class QueueRepository {
     return this.prismaService.queue.update({
       where: {
         id_antrian: Number(queueId),
+        is_deleted: false,
       },
       data: payload,
       select: counterQueue,
@@ -192,6 +196,7 @@ export class QueueRepository {
       status: { not: 2 },
       tgl_panggil: null,
       status_panggil: { not: 1 },
+      is_deleted: false,
     };
 
     if (!identifierType || identifierType == 1)
@@ -283,6 +288,7 @@ export class QueueRepository {
     return this.prismaService.queue.update({
       where: {
         id_antrian: Number(queueId),
+        is_deleted: false,
       },
       data: payload,
       select: {
@@ -302,7 +308,7 @@ export class QueueRepository {
 
   async updateRMCode(id: number, rmCode: string) {
     return this.prismaService.queue.update({
-      where: { id_antrian: Number(id) },
+      where: { id_antrian: Number(id), is_deleted: false },
       data: { kode_rm: rmCode },
     });
   }
@@ -327,6 +333,7 @@ export class QueueRepository {
     return this.prismaService.queue.update({
       where: {
         id_antrian: Number(queueId),
+        is_deleted: false,
       },
       select: queueAttendance,
       data: payload,
@@ -337,6 +344,7 @@ export class QueueRepository {
     return this.prismaService.queue.update({
       where: {
         id_antrian: Number(queueId),
+        is_deleted: false,
       },
       data: payload,
     });
@@ -392,6 +400,7 @@ export class QueueRepository {
         kode_antrian: queueCode,
         status_panggil: { not: 1 },
         no_antrian: { lt: Number(queueNumber) },
+        is_deleted: false,
       },
     });
   }

@@ -1,6 +1,9 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { RegistrationDto } from '../dto/registration.dto';
+import {
+  RegistrationDto,
+  RegistrationUpdateDto,
+} from '../dto/registration.dto';
 import { PrismaErrorHandler } from '../../../common/handler/prisma-error.handler';
 import { Prisma } from '@prisma/client';
 import { generateCurrentDateWithCustomHour } from '../../../utils/date-formatter';
@@ -74,6 +77,33 @@ export class RegistrationRepository {
     });
   }
 
+  async findRegisrationWithDoctorScheduleId(id: number) {
+    return this.prismaService.registration.findFirst({
+      where: {
+        id: Number(id),
+        is_deleted: false,
+        created_at: {
+          gte: generateCurrentDateWithCustomHour('00:00:00'),
+          lte: generateCurrentDateWithCustomHour('23:59:59'),
+        },
+      },
+      select: {
+        id: true,
+        antrian: {
+          select: {
+            id_jadwal_dokter: true,
+            id_antrian: true,
+            kode_antrian: true,
+            no_antrian: true,
+            jadwal_dokter: {
+              select: { jam_buka_praktek: true, jam_tutup_praktek: true },
+            },
+          },
+        },
+      },
+    });
+  }
+
   async findRegistrationByQueueId(queueId: number) {
     return this.prismaService.registration.findFirst({
       where: { id_antrian: Number(queueId), is_deleted: false },
@@ -129,12 +159,55 @@ export class RegistrationRepository {
     id: number,
     payload: CancellationStatusPayload,
   ) {
-    return this.prismaService.registration.update({
+    try {
+      return await this.prismaService.registration.update({
+        where: {
+          id: Number(id),
+          is_deleted: false,
+        },
+        data: payload,
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
+  }
+
+  async updateRegistration(id: number, payload: RegistrationUpdateDto) {
+    try {
+      let registration: Prisma.RegistrationUpdateInput = {};
+      if (Number(payload.id_asuransi)) {
+        registration.asuransi.connect = { id: Number(payload.id_asuransi) };
+        delete payload.id_asuransi;
+      }
+      if (Number(payload.id_hub_wali)) {
+        registration.hub_wali.connect = { id: Number(payload.id_hub_wali) };
+        delete payload.id_hub_wali;
+      }
+      registration = { ...registration, ...payload };
+      return await this.prismaService.registration.update({
+        where: { id: Number(id) },
+        data: registration,
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
+  }
+
+  async queueTotalBasedOnIdDoctorSchedule(
+    doctorScheduleId: number,
+    queueId: number,
+  ) {
+    return this.prismaService.queue.count({
       where: {
-        id: Number(id),
+        created_at: {
+          gte: generateCurrentDateWithCustomHour('00:00:00'),
+          lte: generateCurrentDateWithCustomHour('23:59:59'),
+        },
+        status: { not: 2 },
         is_deleted: false,
+        jadwal_dokter: { id_jadwal_dokter: Number(doctorScheduleId) },
+        id_antrian: { not: queueId },
       },
-      data: payload,
     });
   }
 }

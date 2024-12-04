@@ -3,6 +3,8 @@ import {
   Controller,
   Get,
   Header,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Query,
@@ -14,8 +16,14 @@ import { AccessMenuGuard } from '../../../guards/access-menu/access-menu.guard';
 import { Permission } from '../../../decorators/permission/permission.decorator';
 import { Action } from '../../../common/enums/action.enum';
 import { ZodPipe } from '../../../pipes/zod-pipe/zod-pipe.pipe';
-import { cancellationValidation } from '../validation/registration.validation';
-import { CancellationStatusPayload } from '../dto/registration.dto';
+import {
+  cancellationValidation,
+  registrationValidation,
+} from '../validation/registration.validation';
+import {
+  CancellationStatusPayload,
+  RegistrationUpdateDto,
+} from '../dto/registration.dto';
 
 @Controller({
   path: 'registration',
@@ -52,6 +60,7 @@ export class RegistrationController {
 
   @Patch('/:id/cancellation')
   @Header('Content-Type', 'application/json')
+  @HttpCode(HttpStatus.OK)
   @UseGuards(AccessMenuGuard)
   @Permission('pendaftaran-onsite', Action.CAN_UPDATE)
   async updateCancellationStatus(
@@ -61,5 +70,19 @@ export class RegistrationController {
     payload: CancellationStatusPayload,
   ) {
     return this.registrationService.updateCancellationStatus(id, payload, req);
+  }
+
+  @Patch('/:id')
+  @Header('Content-Type', 'application/json')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('pendaftaran-onsite', Action.CAN_UPDATE)
+  async updateRegistration(
+    @Param('id') id: number,
+    @Req() req: any,
+    @Body(new ZodPipe(registrationValidation))
+    payload: RegistrationUpdateDto,
+  ) {
+    return this.registrationService.updateRegisration(id, payload, req);
   }
 }
