@@ -60,7 +60,7 @@ model Registration {
   tgl_rujukan        DateTime?         @db.Date
   ket_rujukan        String?           @db.Text
   kode_antrian_poli  String?           @db.VarChar(10)
-  nomor_antrian_poli String?           @db.VarChar(3)
+  nomor_antrian_poli Int?
   status_batal       Int               @default(0)
   keterangan_batal   String?           @db.Text
   task_id            Int?
