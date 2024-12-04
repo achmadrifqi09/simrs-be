@@ -7,8 +7,7 @@ import { PrismaModule } from '../../prisma/prisma.module';
 import { QueueServiceHelper } from './helper/queue-service.helper';
 import { BPJSModule } from '../bpjs/bpjs.module';
 import { PatientModule } from '../patient/patient.module';
-import { EventEmitterModule } from '@nestjs/event-emitter';
-import { QueueListener } from './listener/queue.listener';
+import { QueueListener } from '../../events/listener/queue.listener';
 import { RegistrationModule } from '../registration/registration.module';
 
 @Module({
@@ -18,7 +17,6 @@ import { RegistrationModule } from '../registration/registration.module';
     BPJSModule,
     PatientModule,
     RegistrationModule,
-    EventEmitterModule.forRoot(),
   ],
   controllers: [QueueController],
   providers: [QueueService, QueueRepository, QueueServiceHelper, QueueListener],

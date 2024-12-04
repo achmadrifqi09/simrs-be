@@ -8,6 +8,7 @@ import {
   HttpStatus,
   Param,
   Patch,
+  Post,
   Query,
   Req,
   UseGuards,
@@ -49,6 +50,20 @@ export class PatientController {
       identifier_number,
       identifier_type,
     );
+  }
+
+  @Post('/QUID/:queue_id')
+  @Header('Content-Type', 'application/json')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AccessMenuGuard)
+  @Permission('data-pasien', Action.CAN_CREATE)
+  async createNewPatient(
+    @Req() req: any,
+    @Param('queue_id') queueId: number,
+    @Body(new ZodPipe(patientValidation))
+    patient: PatientDTO,
+  ) {
+    return this.patientService.createNewPatient(patient, queueId, req);
   }
 
   @Patch('/:id')

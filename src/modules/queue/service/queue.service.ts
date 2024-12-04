@@ -33,7 +33,7 @@ import { PatientReference } from '../../bpjs/dto/v-claim/participant-reference';
 import { PatientService } from '../../patient/service/patient.service';
 import { PatientDTO } from '../../patient/dto/patient.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { QueueEvent } from '../event/queue.event';
+import { RegisterWhenPatientPresentEvent } from '../../../events/event/register-when-patient-present.event';
 
 Dependencies([
   QueueRepository,
@@ -229,7 +229,10 @@ export class QueueService {
       finalPayload,
     );
     if (result) {
-      this.eventEmitter.emit('queue.attendance', new QueueEvent(result));
+      this.eventEmitter.emit(
+        'queue.attendance',
+        new RegisterWhenPatientPresentEvent(result),
+      );
     }
     return result;
   }
@@ -267,6 +270,10 @@ export class QueueService {
         },
       ],
     };
+  }
+
+  async updateRMCode(queueId: number, rmCode: string) {
+    return this.queueRepository.updateRMCode(queueId, rmCode);
   }
 
   async createOldPatientOnsiteQueue(queue: RegisterQueuePayload) {
@@ -326,6 +333,7 @@ export class QueueService {
         );
       }
     }
+
     await this.updatePatientIfItChange(patient, queue);
     return this.prismaService.$transaction(async (prisma) => {
       const totalDoctorQueue = await prisma.queue.count({
@@ -338,7 +346,6 @@ export class QueueService {
           status: { not: 2 },
         },
       });
-
       await this.queueServiceHelper.checkScheduleQuota(
         totalDoctorQueue,
         queue.id_jadwal_dokter,

@@ -195,13 +195,14 @@ model RegistrationFee {
   id_pendaftaran             Int
   pendaftaran                Registration @relation(fields: [id_pendaftaran], references: [id])
   biaya_daftar               String       @db.VarChar(20)
-  diskon_daftar              String       @db.VarChar(20)
+  diskon_daftar              String       @default("0") @db.VarChar(20)
   biaya_kartu                String       @default("0000-00-00 00:00:00") @db.VarChar(20)
-  diskon_kartu               String       @db.VarChar(20)
+  diskon_kartu               String       @default("0") @db.VarChar(20)
   biaya_dokter               String       @db.VarChar(20)
-  diskon_dokter              String       @db.VarChar(20)
+  diskon_dokter              String       @default("0") @db.VarChar(20)
+  total_biaya                String       @default("0") @db.VarChar(20)
   tgl_billing_daftar         DateTime
-  tgl_billing_daftar_selesai DateTime
+  tgl_billing_daftar_selesai DateTime?
   created_at                 DateTime     @default(now())
   created_by                 Int          @default(0)
   modified_at                DateTime?    @db.DateTime(0)
@@ -388,7 +389,7 @@ model Patient {
   id_warga_negara         Int
   identitas_pasien        Int
   no_identitas            String         @db.VarChar(100)
-  no_bpjs                 String         @db.VarChar(50)
+  no_bpjs                 String?        @db.VarChar(50)
   no_hp                   String         @db.VarChar(20)
   id_ms_negara_tinggal    Int
   negara_tinggal          Country        @relation("negara_tinggal_pasien", fields: [id_ms_negara_tinggal], references: [id])
@@ -404,13 +405,13 @@ model Patient {
   rt_tinggal              String         @db.VarChar(5)
   rw_tinggal              String         @db.VarChar(5)
   kode_pos_tinggal        String?        @db.VarChar(10)
-  alamatgab_tinggal       String         @db.Text
+  alamatgab_tinggal       String?        @db.Text
   suku                    String?        @db.VarChar(50)
   nama_ibu_kandung        String?        @db.VarChar(100)
   id_ms_status_kawin      Int            @default(0)
   status_kawin            MaritalStatus  @relation(fields: [id_ms_status_kawin], references: [id_ms_status_kawin])
   id_ms_golongan_darah    Int            @default(0)
-  gologan_darah           BloodType      @relation(fields: [id_ms_golongan_darah], references: [id_ms_golongan_darah])
+  golongan_darah          BloodType      @relation(fields: [id_ms_golongan_darah], references: [id_ms_golongan_darah])
   id_ms_agama             Int
   agama                   Religion       @relation(fields: [id_ms_agama], references: [id_ms_agama])
   live                    Int            @default(1)
@@ -418,8 +419,8 @@ model Patient {
   rw_asal                 String         @db.VarChar(5)
   id_ms_negara_asal       Int
   negara_asal             Country        @relation("negara_asal_pasien", fields: [id_ms_negara_asal], references: [id])
-  id_ms_propinsi_asal     String         @db.VarChar(20)
-  provinsi_asal           Province       @relation("provinsi_asal_pasien", fields: [id_ms_propinsi_asal], references: [id])
+  id_ms_provinsi_asal     String         @db.VarChar(20)
+  provinsi_asal           Province       @relation("provinsi_asal_pasien", fields: [id_ms_provinsi_asal], references: [id])
   id_ms_kota_asal         String         @db.VarChar(20)
   kota_asal               Regency        @relation("kota_asal_pasien", fields: [id_ms_kota_asal], references: [id])
   id_ms_kecamatan_asal    String         @db.VarChar(20)
@@ -427,7 +428,7 @@ model Patient {
   id_ms_desa_asal         String         @db.VarChar(20)
   desa_asal               Village        @relation("desa_asal_pasien", fields: [id_ms_desa_asal], references: [id])
   alamat_asal             String         @db.Text
-  alamatgab_asal          String         @db.Text
+  alamatgab_asal          String?        @db.Text
   nama_pekerjaan          String?        @db.VarChar(100)
   kode_pos_asal           String?        @db.VarChar(10)
   id_ms_pendidikan        Int
@@ -457,7 +458,7 @@ model Patient {
   @@index([id_ms_kecamatan_tinggal])
   @@index([id_ms_desa_tinggal])
   @@index([id_ms_negara_asal])
-  @@index([id_ms_propinsi_asal])
+  @@index([id_ms_provinsi_asal])
   @@index([id_ms_kota_asal])
   @@index([id_ms_kecamatan_asal])
   @@index([id_ms_desa_asal])

@@ -1,9 +1,10 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
-import { PatientDTO } from '../dto/patient.dto';
+import { LatestRM, PatientDTO } from '../dto/patient.dto';
 import { PrismaErrorHandler } from '../../../common/handler/prisma-error.handler';
 import { SoftDelete } from '../../../common/types/common.type';
+import { keysToDelete } from '../const/patient.const';
 
 @Dependencies([PrismaService])
 @Injectable()
@@ -52,6 +53,80 @@ export class PatientRepository {
     return this.prismaService.patient.findFirst({
       where: whereClause,
     });
+  }
+
+  async findLastedRMCode(): Promise<LatestRM | null> {
+    const result = await this.prismaService.patient.findMany({
+      where: {
+        is_deleted: false,
+      },
+      select: {
+        id_pasien: true,
+        kode_rm: true,
+      },
+      orderBy: {
+        kode_rm: 'desc',
+      },
+      take: 1,
+    });
+    return result.length > 0 ? result[0] : null;
+  }
+
+  async createNewPatient(patient: PatientDTO) {
+    try {
+      const payload = this.buildCreatePayload(patient);
+      return this.prismaService.patient.create({
+        data: payload,
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
+  }
+
+  private buildCreatePayload(patient: PatientDTO) {
+    const payload = {
+      desa_asal: { connect: { id: String(patient.id_ms_desa_asal) } },
+      desa_tinggal: { connect: { id: String(patient.id_ms_desa_tinggal) } },
+      id_warga_negara: Number(patient.id_ms_negara_asal),
+      kecamatan_tinggal: {
+        connect: { id: String(patient.id_ms_kecamatan_tinggal) },
+      },
+      kota_asal: { connect: { id: String(patient.id_ms_kota_asal) } },
+      kota_tinggal: { connect: { id: String(patient.id_ms_kota_tinggal) } },
+      negara_asal: { connect: { id: Number(patient.id_ms_negara_asal) } },
+      negara_tinggal: {
+        connect: { id: Number(patient.id_ms_negara_tinggal) },
+      },
+      pendidikan: {
+        connect: {
+          id_ms_tingkat_pendidikan: Number(patient.id_ms_pendidikan),
+        },
+      },
+      provinsi_asal: { connect: { id: String(patient.id_ms_provinsi_asal) } },
+      provinsi_tinggal: {
+        connect: { id: String(patient.id_ms_provinsi_tinggal) },
+      },
+      agama: { connect: { id_ms_agama: patient.id_ms_agama } },
+      kecamatan_asal: {
+        connect: { id: String(patient.id_ms_kecamatan_asal) },
+      },
+      golongan_darah: {
+        connect: {
+          id_ms_golongan_darah: Number(patient.id_ms_golongan_darah),
+        },
+      },
+      status_kawin: {
+        connect: { id_ms_status_kawin: Number(patient.id_ms_status_kawin) },
+      },
+    };
+    keysToDelete.forEach((key: string) => {
+      delete patient[key];
+    });
+    const finalPayload: Prisma.PatientCreateInput = {
+      ...payload,
+      ...patient,
+    };
+    return finalPayload;
   }
 
   async updatePatient(id: number, patient: PatientDTO) {

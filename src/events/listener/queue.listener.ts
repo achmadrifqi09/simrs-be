@@ -1,7 +1,7 @@
 import { Dependencies, Injectable } from '@nestjs/common';
-import { RegistrationService } from '../../registration/service/registration.service';
+import { RegistrationService } from '../../modules/registration/service/registration.service';
 import { OnEvent } from '@nestjs/event-emitter';
-import { QueueEvent } from '../event/queue.event';
+import { RegisterWhenPatientPresentEvent } from '../event/register-when-patient-present.event';
 
 @Dependencies([RegistrationService])
 @Injectable()
@@ -9,7 +9,9 @@ export class QueueListener {
   constructor(private readonly registrationService: RegistrationService) {}
 
   @OnEvent('queue.attendance')
-  async createRegistrationWhenQueueIsPresent(payload: QueueEvent) {
+  async createRegistrationWhenQueueIsPresent(
+    payload: RegisterWhenPatientPresentEvent,
+  ) {
     await this.registrationService.createRegistrationFromQueue(payload.queue);
   }
 }

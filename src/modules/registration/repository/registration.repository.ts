@@ -74,6 +74,28 @@ export class RegistrationRepository {
     });
   }
 
+  async findRegistrationByQueueId(queueId: number) {
+    return this.prismaService.registration.findFirst({
+      where: { id_antrian: Number(queueId), is_deleted: false },
+    });
+  }
+
+  async updateRMForRegistrationAndQueue(id: number, rmCode: string) {
+    const result = await this.prismaService.registration.update({
+      where: {
+        id: Number(id),
+      },
+      data: { kode_rm: rmCode },
+    });
+    if (result) {
+      await this.prismaService.queue.update({
+        where: { id_antrian: Number(result.id_antrian), is_deleted: false },
+        data: { kode_rm: rmCode, jenis_pasien: 1 },
+      });
+    }
+    return result;
+  }
+
   async createRegistration(
     queueId: number,
     insuranceId: number | null,
