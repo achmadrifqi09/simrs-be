@@ -2,6 +2,7 @@ import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import {
+  UpdateCodeDpjp,
   UpdateFileFoto,
   UpdateFileKk,
   UpdateFileKtam,
@@ -86,6 +87,26 @@ export class EmployeeRepository {
           is_deleted: false,
         },
         data: field,
+      });
+    } catch (error) {
+      console.log(error);
+      PrismaErrorHandler.handle(error);
+    }
+  }
+
+  async updateCodeDpjp(id_pegawai: number, employee: UpdateCodeDpjp) {
+    try {
+      return await this.prismaService.employee.update({
+        where: {
+          id_pegawai: Number(id_pegawai),
+          is_deleted: false,
+        },
+        data: employee,
+        select: {
+          id_pegawai: true,
+          nama_pegawai: true,
+          kode_dpjp: true,
+        },
       });
     } catch (error) {
       console.log(error);

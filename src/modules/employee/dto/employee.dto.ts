@@ -63,47 +63,56 @@ export interface Employee {
   deleted_at?: Date;
 }
 
-export interface UpdateFileFoto {
-  foto: string;
-  created_by?: number;
-  created_at?: Date;
+export interface UpdateCodeDpjp {
+  kode_dpjp: string;
+  // created_by?: number;
+  // created_at?: Date;
   modified_at?: Date;
   modified_by?: number;
-  deleted_at?: Date;
+  // deleted_at?: Date;
+}
+
+export interface UpdateFileFoto {
+  foto: string;
+  // created_by?: number;
+  // created_at?: Date;
+  modified_at?: Date;
+  modified_by?: number;
+  // deleted_at?: Date;
 }
 
 export interface UpdateFileKtp {
   file_ktp: string;
-  created_by?: number;
-  created_at?: Date;
+  // created_by?: number;
+  // created_at?: Date;
   modified_at?: Date;
   modified_by?: number;
-  deleted_at?: Date;
+  // deleted_at?: Date;
 }
 
 export interface UpdateFileKk {
   file_kk: string;
-  created_by?: number;
-  created_at?: Date;
+  // created_by?: number;
+  // created_at?: Date;
   modified_at?: Date;
   modified_by?: number;
-  deleted_at?: Date;
+  // deleted_at?: Date;
 }
 
 export interface UpdateFileKtam {
   file_ktam: string;
-  created_by?: number;
-  created_at?: Date;
+  // created_by?: number;
+  // created_at?: Date;
   modified_at?: Date;
   modified_by?: number;
-  deleted_at?: Date;
+  // deleted_at?: Date;
 }
 
 export interface UpdateFileNpwp {
   file_npwp: string;
-  created_by?: number;
-  created_at?: Date;
+  // created_by?: number;
+  // created_at?: Date;
   modified_at?: Date;
   modified_by?: number;
-  deleted_at?: Date;
+  // deleted_at?: Date;
 }

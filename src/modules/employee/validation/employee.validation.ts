@@ -264,9 +264,10 @@ const employeeValidation = z.object({
 
   kode_dpjp: z
     .string()
-    .regex(/^[a-zA-Z0-9]+$/, {
-      message: 'Kode DPJP hanya boleh berisi huruf dan angka',
+    .regex(/^[0-9]+$/, {
+      message: 'Kode DPJP hanya boleh berisi angka',
     })
+    .max(10, { message: 'Kode DPJP tidak boleh lebih dari 10 karakter' })
     .optional()
     .nullable(),
 
@@ -285,4 +286,13 @@ const employeeValidation = z.object({
   id_pelamar: ifStringOrNumber.optional().nullable(),
 });
 
-export { employeeValidation };
+const codeDpjpValidation = z.object({
+  kode_dpjp: z
+    .string()
+    .regex(/^[0-9]+$/, {
+      message: 'Kode DPJP hanya boleh berisi angka',
+    })
+    .max(10, { message: 'Kode DPJP tidak boleh lebih dari 10 karakter' }),
+});
+
+export { employeeValidation, codeDpjpValidation };
