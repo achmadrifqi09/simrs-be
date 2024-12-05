@@ -50,6 +50,12 @@ export class EmployeeController {
     return this.employeeService.findEmployee(keyword);
   }
 
+  @Get('/:id')
+  @Header('Content-Type', 'application/json')
+  async findEmployeeById(@Param('id') id: number) {
+    return this.employeeService.findEmployeeById(id);
+  }
+
   @Post()
   @HttpCode(HttpStatus.CREATED)
   // @Header('Content-Type', 'multipart/form-data')

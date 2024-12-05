@@ -18,6 +18,19 @@ export class EmployeeService {
     return this.employeeRepository.findEmployee(keyword || '', cursor, take);
   }
 
+  async findEmployeeById(id: number) {
+    const employee = await this.employeeRepository.findEmployeeById(id);
+    if (!employee) {
+      throw new HttpException(
+        'ID Employee tidak ditemukan.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return employee;
+    // return this.employeeRepository.findEmployeeById(id);
+  }
+
   async createEmployee(
     employee: Employee,
     files: {
@@ -49,7 +62,7 @@ export class EmployeeService {
     };
     return this.employeeRepository.updateEmployee(id, employee);
   }
-  
+
   async updateCodeDpjp(id: number, employee: UpdateCodeDpjp, req: any) {
     employee = {
       ...employee,
