@@ -540,7 +540,7 @@ model Employee {
   foto                    String?          @db.Text // new endpoints 1 : /employee/{id}/foto
   kode_arsip              String?          @db.VarChar(20)
   id_finger               String?          @db.VarChar(10)
-  kode_dpjp               String?          @db.VarChar(20)
+  kode_dpjp               String?          @db.VarChar(10)
   tgl_masuk               DateTime?        @db.Date
   tgl_keluar              DateTime?        @db.Date
   status_pns              Int?             @default(1) @db.TinyInt // 0: non pns, 1: pns

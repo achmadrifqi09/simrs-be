@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { EmployeeRepository } from '../repository/employee.repository';
 import { generateCurrentDate } from '../../../utils/date-formatter';
-import { Employee } from '../dto/employee.dto';
+import { Employee, UpdateCodeDpjp } from '../dto/employee.dto';
 import { SoftDelete } from '../../../common/types/common.type';
 
 @Dependencies([EmployeeRepository])
@@ -16,6 +16,19 @@ export class EmployeeService {
 
   async findEmployee(keyword?: string, cursor: number = 0, take: number = 10) {
     return this.employeeRepository.findEmployee(keyword || '', cursor, take);
+  }
+
+  async findEmployeeById(id: number) {
+    const employee = await this.employeeRepository.findEmployeeById(id);
+    if (!employee) {
+      throw new HttpException(
+        'ID Employee tidak ditemukan.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return employee;
+    // return this.employeeRepository.findEmployeeById(id);
   }
 
   async createEmployee(
@@ -48,6 +61,15 @@ export class EmployeeService {
       modified_at: generateCurrentDate(),
     };
     return this.employeeRepository.updateEmployee(id, employee);
+  }
+
+  async updateCodeDpjp(id: number, employee: UpdateCodeDpjp, req: any) {
+    employee = {
+      ...employee,
+      modified_by: req.user?.id,
+      modified_at: generateCurrentDate(),
+    };
+    return this.employeeRepository.updateCodeDpjp(id, employee);
   }
 
   async updateEmployeePhoto(id: number, file: string | null, req: any) {

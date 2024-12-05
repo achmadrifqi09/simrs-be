@@ -23,7 +23,8 @@ import { AccessMenuGuard } from '../../../guards/access-menu/access-menu.guard';
 import { Permission } from '../../../decorators/permission/permission.decorator';
 import { Action } from '../../../common/enums/action.enum';
 import { ZodPipe } from '../../../pipes/zod-pipe/zod-pipe.pipe';
-import { employeeValidation } from '../validation/employee.validation';
+import { employeeValidation, codeDpjpValidation } from '../validation/employee.validation';
+import { UpdateCodeDpjp } from '../dto/employee.dto';
 import { Employee } from '@prisma/client';
 import {
   FileFieldsInterceptor,
@@ -47,6 +48,12 @@ export class EmployeeController {
     // @Query('status') status: number,
   ) {
     return this.employeeService.findEmployee(keyword);
+  }
+
+  @Get('/:id')
+  @Header('Content-Type', 'application/json')
+  async findEmployeeById(@Param('id') id: number) {
+    return this.employeeService.findEmployeeById(id);
   }
 
   @Post()
@@ -200,6 +207,20 @@ export class EmployeeController {
     employee: Employee,
   ) {
     return this.employeeService.updateEmployee(id, employee, req);
+  }
+
+  @Patch('/:id/kode-dpjp')
+  @HttpCode(HttpStatus.OK)
+  @Header('Content-Type', 'multipart/form-data')
+  @UseGuards(AccessMenuGuard)
+  @Permission('data-pegawai', Action.CAN_UPDATE)
+  async updateCodeDpjp(
+    @Param('id') id: number,
+    @Req() req: any,
+    @Body(new ZodPipe(codeDpjpValidation))
+    employee: UpdateCodeDpjp,
+  ) {
+    return this.employeeService.updateCodeDpjp(id, employee, req);
   }
 
   @Patch(':id/foto')
