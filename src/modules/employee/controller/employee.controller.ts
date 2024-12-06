@@ -50,6 +50,15 @@ export class EmployeeController {
     return this.employeeService.findEmployee(keyword);
   }
 
+  @Get('/doctor')
+  @Header('Content-Type', 'application/json')
+  async findDoctor(
+    @Query('keyword') keyword: string
+    // @Query('status') status: number,
+  ) {
+    return this.employeeService.findDoctor(keyword);
+  }
+
   @Get('/:id')
   @Header('Content-Type', 'application/json')
   async findEmployeeById(@Param('id') id: number) {
