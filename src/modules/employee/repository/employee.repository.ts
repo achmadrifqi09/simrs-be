@@ -39,15 +39,38 @@ export class EmployeeRepository {
         take: Number(take) || 10,
       },
     };
+  }
 
-    // if (Number(keyword)) whereClause.OR.push({ id_pegawai: Number(keyword) });
+  async findDoctor(keyword: string, cursor: number, take: number) {
+    const whereClause: Prisma.EmployeeWhereInput = {
+      OR: [{ nama_pegawai: { contains: keyword } }],
+      is_deleted: false,
+      id_ms_jenis_pegawai: 1,
+    };
 
-    // return this.prismaService.employee.findMany({
-    //   where: whereClause,
-    //   orderBy: {
-    //     id_pegawai: 'desc',
-    //   },
-    // });
+    const result = await this.prismaService.employee.findMany({
+      take: Number(take) || 10,
+      skip: Number(cursor) || 0,
+      where: whereClause,
+      orderBy: {
+        id_pegawai: 'desc',
+      },
+      include: {
+        nama_jenis_pegawai: {
+          include: {
+            jenis_pegawai_status: true,
+          },
+        },
+      },
+    });
+
+    return {
+      results: result,
+      pagination: {
+        current_cursor: Number(cursor),
+        take: Number(take) || 10,
+      },
+    };
   }
 
   async findEmployeeById(id: number) {

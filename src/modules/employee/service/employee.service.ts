@@ -17,6 +17,10 @@ export class EmployeeService {
   async findEmployee(keyword?: string, cursor: number = 0, take: number = 10) {
     return this.employeeRepository.findEmployee(keyword || '', cursor, take);
   }
+  
+  async findDoctor(keyword?: string, cursor: number = 0, take: number = 10) {
+    return this.employeeRepository.findDoctor(keyword || '', cursor, take);
+  }
 
   async findEmployeeById(id: number) {
     const employee = await this.employeeRepository.findEmployeeById(id);
