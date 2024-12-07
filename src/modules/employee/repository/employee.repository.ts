@@ -10,7 +10,10 @@ import {
   UpdateFileNpwp,
 } from '../dto/employee.dto';
 import { PrismaErrorHandler } from '../../../common/handler/prisma-error.handler';
-import { SoftDelete } from '../../../common/types/common.type';
+import {
+  SoftDelete,
+  UpdateStatusEmployee,
+} from '../../../common/types/common.type';
 
 @Dependencies([PrismaService])
 @Injectable()
@@ -88,13 +91,17 @@ export class EmployeeRepository {
     try {
       return await this.prismaService.employee.create({
         data: field,
-        // select: {
-        //   negara_asal: {
-        //     select: {
-        //       nama: true,
-        //     }
-        //   }
-        // }
+        select: {
+          id_pegawai: true,
+          nama_pegawai: true,
+          hp: true,
+          email: true,
+          // negara_asal: {
+          //   select: {
+          //     nama: true,
+          //   }
+          // }
+        },
       });
     } catch (error) {
       console.log(error);
@@ -129,6 +136,29 @@ export class EmployeeRepository {
           id_pegawai: true,
           nama_pegawai: true,
           kode_dpjp: true,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      PrismaErrorHandler.handle(error);
+    }
+  }
+
+  async updateVisibilityEmployee(
+    id_pegawai: number,
+    employee: UpdateStatusEmployee,
+  ) {
+    try {
+      return await this.prismaService.employee.update({
+        where: {
+          id_pegawai: Number(id_pegawai),
+          is_deleted: false,
+        },
+        data: employee,
+        select: {
+          id_pegawai: true,
+          nama_pegawai: true,
+          status_aktif: true,
         },
       });
     } catch (error) {

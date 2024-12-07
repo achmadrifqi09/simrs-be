@@ -23,7 +23,7 @@ import { AccessMenuGuard } from '../../../guards/access-menu/access-menu.guard';
 import { Permission } from '../../../decorators/permission/permission.decorator';
 import { Action } from '../../../common/enums/action.enum';
 import { ZodPipe } from '../../../pipes/zod-pipe/zod-pipe.pipe';
-import { employeeValidation, codeDpjpValidation } from '../validation/employee.validation';
+import { employeeValidation, codeDpjpValidation, visibilityEmployeeValidation } from '../validation/employee.validation';
 import { UpdateCodeDpjp } from '../dto/employee.dto';
 import { Employee } from '@prisma/client';
 import {
@@ -33,6 +33,7 @@ import {
 import { diskStorage } from 'multer';
 import fs from 'fs';
 import path from 'path';
+import { UpdateStatusEmployee } from 'src/common/types/common.type';
 
 @Controller({
   path: 'employee',
@@ -216,6 +217,20 @@ export class EmployeeController {
     employee: Employee,
   ) {
     return this.employeeService.updateEmployee(id, employee, req);
+  }
+
+  @Patch('/:id/status')
+  @HttpCode(HttpStatus.OK)
+  @Header('Content-Type', 'multipart/form-data')
+  @UseGuards(AccessMenuGuard)
+  @Permission('data-pegawai', Action.CAN_UPDATE)
+  async updateVisibilityEmployee(
+    @Param('id') id: number,
+    @Req() req: any,
+    @Body(new ZodPipe(visibilityEmployeeValidation))
+    employee: UpdateStatusEmployee,
+  ) {
+    return this.employeeService.updateVisibilityEmployee(id, employee, req);
   }
 
   @Patch('/:id/kode-dpjp')

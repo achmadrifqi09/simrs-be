@@ -7,7 +7,7 @@ import {
 import { EmployeeRepository } from '../repository/employee.repository';
 import { generateCurrentDate } from '../../../utils/date-formatter';
 import { Employee, UpdateCodeDpjp } from '../dto/employee.dto';
-import { SoftDelete } from '../../../common/types/common.type';
+import { SoftDelete, UpdateStatusEmployee } from '../../../common/types/common.type';
 
 @Dependencies([EmployeeRepository])
 @Injectable()
@@ -74,6 +74,15 @@ export class EmployeeService {
       modified_at: generateCurrentDate(),
     };
     return this.employeeRepository.updateCodeDpjp(id, employee);
+  }
+
+  async updateVisibilityEmployee(id: number, employee: UpdateStatusEmployee, req: any) {
+    const payload: UpdateStatusEmployee = {
+      status_aktif: Number(employee.status_aktif),
+      modified_by: req.user?.id,
+      modified_at: generateCurrentDate(),
+    }
+    return this.employeeRepository.updateVisibilityEmployee(id, payload);
   }
 
   async updateEmployeePhoto(id: number, file: string | null, req: any) {

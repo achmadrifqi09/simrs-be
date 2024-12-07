@@ -223,8 +223,8 @@ const employeeValidation = z.object({
 
   email: z
     .string({ message: 'Email harus diisi' })
-    .email({ message: 'Format email tidak valid' })
-    .transform((val) => val.split('@')[1]),
+    .email({ message: 'Format email tidak valid' }),
+    // .transform((val) => val.split('@')[1]),
 
   no_npwp: z
     .string()
@@ -295,4 +295,10 @@ const codeDpjpValidation = z.object({
     .max(10, { message: 'Kode DPJP tidak boleh lebih dari 10 karakter' }),
 });
 
-export { employeeValidation, codeDpjpValidation };
+const visibilityEmployeeValidation = z.object({
+  status_aktif: ifStringOrNumber.refine((val) => val === 0 || val === 1, {
+    message: 'Status aktif hanya boleh bernilai 0 (tidak aktif) atau 1 (aktif)',
+  }),
+});
+
+export { employeeValidation, codeDpjpValidation, visibilityEmployeeValidation };
