@@ -1,6 +1,6 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, Employee } from '@prisma/client';
 import {
   UpdateCodeDpjp,
   UpdateFileFoto,
@@ -84,6 +84,79 @@ export class EmployeeRepository {
 
     return this.prismaService.employee.findFirst({
       where: whereClause,
+    });
+  }
+
+  async findByNip(nipPegawai: string, nipPns: string): Promise<Employee | null> {
+    const whereClause: Prisma.EmployeeWhereInput = {
+      OR: [
+        { nip_pegawai: nipPegawai },
+        { nip_pns: nipPns },
+      ],
+    };
+  
+    return this.prismaService.employee.findFirst({
+      where: whereClause,
+    });
+  }
+
+  async findPhotoById(id: number) {
+    const whereClause: Prisma.EmployeeWhereInput = {
+      id_pegawai: Number(id),
+      is_deleted: false,
+    };
+
+    return this.prismaService.employee.findFirst({
+      where: whereClause,
+      select: { id_pegawai: true, foto: true },
+    });
+  }
+
+  async findKtpById(id: number) {
+    const whereClause: Prisma.EmployeeWhereInput = {
+      id_pegawai: Number(id),
+      is_deleted: false,
+    };
+
+    return this.prismaService.employee.findFirst({
+      where: whereClause,
+      select: { id_pegawai: true, file_ktp: true },
+    });
+  }
+
+  async findKkById(id: number) {
+    const whereClause: Prisma.EmployeeWhereInput = {
+      id_pegawai: Number(id),
+      is_deleted: false,
+    };
+
+    return this.prismaService.employee.findFirst({
+      where: whereClause,
+      select: { id_pegawai: true, file_kk: true },
+    });
+  }
+
+  async findKtamById(id: number) {
+    const whereClause: Prisma.EmployeeWhereInput = {
+      id_pegawai: Number(id),
+      is_deleted: false,
+    };
+
+    return this.prismaService.employee.findFirst({
+      where: whereClause,
+      select: { id_pegawai: true, file_ktam: true },
+    });
+  }
+
+  async findNpwpById(id: number) {
+    const whereClause: Prisma.EmployeeWhereInput = {
+      id_pegawai: Number(id),
+      is_deleted: false,
+    };
+
+    return this.prismaService.employee.findFirst({
+      where: whereClause,
+      select: { id_pegawai: true, file_npwp: true },
     });
   }
 

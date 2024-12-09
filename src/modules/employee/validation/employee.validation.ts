@@ -29,14 +29,18 @@ const ifStringOrNumber = z.union([z.string(), z.number()]).transform((val) => {
 const employeeValidation = z.object({
   nip_pegawai: z
     .string({ message: 'NIP Pegawai harus diisi' })
-    .min(18, { message: 'NIP Pegawai harus memiliki minimal 18 karakter' })
-    .max(18, { message: 'NIP Pegawai tidak boleh lebih dari 18 karakter' })
-    .regex(/^\d+$/, { message: 'NIP Pegawai hanya boleh terdiri dari angka' }),
+    // .min(18, { message: 'NIP Pegawai harus memiliki minimal 18 karakter' })
+    // .max(18, { message: 'NIP Pegawai tidak boleh lebih dari 18 karakter' })
+    .regex(/^\d+$/, { message: 'NIP Pegawai hanya boleh terdiri dari angka' })
+    .regex(/^(?:\d{4}\.\d{8}\.\d{2}\.\d{4}|\d{4}\.\d{2}\.\d{5})$/, {
+      message:
+        'Format NIP Pegawai tidak valid, harus mengikuti format yyyy.ddmmyyyy.xx.xxxx atau yyyy.mm.00000',
+    }),
 
   nip_pns: z
     .string({ message: 'NIP PNS harus diisi' })
-    .min(18, { message: 'NIP PNS harus memiliki minimal 18 karakter' })
-    .max(18, { message: 'NIP PNS tidak boleh lebih dari 18 karakter' })
+    // .min(18, { message: 'NIP PNS harus memiliki minimal 18 karakter' })
+    // .max(18, { message: 'NIP PNS tidak boleh lebih dari 18 karakter' })
     .regex(/^\d+$/, { message: 'NIP PNS hanya boleh terdiri dari angka' })
     .optional()
     .nullable(),
@@ -106,7 +110,6 @@ const employeeValidation = z.object({
 
   alamat_asal: z
     .string({ message: 'Alamat asal harus diisi' })
-    .min(5, { message: 'Alamat asal minimal 5 karakter' })
     .optional()
     .nullable(),
 
@@ -224,7 +227,7 @@ const employeeValidation = z.object({
   email: z
     .string({ message: 'Email harus diisi' })
     .email({ message: 'Format email tidak valid' }),
-    // .transform((val) => val.split('@')[1]),
+  // .transform((val) => val.split('@')[1]),
 
   no_npwp: z
     .string()
