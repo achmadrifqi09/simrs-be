@@ -13,6 +13,7 @@ import {
   Post,
   Query,
   Req,
+  Res,
   UploadedFile,
   UploadedFiles,
   UseGuards,
@@ -23,7 +24,11 @@ import { AccessMenuGuard } from '../../../guards/access-menu/access-menu.guard';
 import { Permission } from '../../../decorators/permission/permission.decorator';
 import { Action } from '../../../common/enums/action.enum';
 import { ZodPipe } from '../../../pipes/zod-pipe/zod-pipe.pipe';
-import { employeeValidation, codeDpjpValidation, visibilityEmployeeValidation } from '../validation/employee.validation';
+import {
+  employeeValidation,
+  codeDpjpValidation,
+  visibilityEmployeeValidation,
+} from '../validation/employee.validation';
 import { UpdateCodeDpjp } from '../dto/employee.dto';
 import { Employee } from '@prisma/client';
 import {
@@ -33,6 +38,8 @@ import {
 import { diskStorage } from 'multer';
 import fs from 'fs';
 import path from 'path';
+import { join } from 'path';
+import { Response } from 'express';
 import { UpdateStatusEmployee } from 'src/common/types/common.type';
 
 @Controller({
@@ -45,7 +52,7 @@ export class EmployeeController {
   @Get()
   @Header('Content-Type', 'application/json')
   async findEmployee(
-    @Query('keyword') keyword: string
+    @Query('keyword') keyword: string,
     // @Query('status') status: number,
   ) {
     return this.employeeService.findEmployee(keyword);
@@ -54,7 +61,7 @@ export class EmployeeController {
   @Get('/doctor')
   @Header('Content-Type', 'application/json')
   async findDoctor(
-    @Query('keyword') keyword: string
+    @Query('keyword') keyword: string,
     // @Query('status') status: number,
   ) {
     return this.employeeService.findDoctor(keyword);
@@ -64,6 +71,121 @@ export class EmployeeController {
   @Header('Content-Type', 'application/json')
   async findEmployeeById(@Param('id') id: number) {
     return this.employeeService.findEmployeeById(id);
+  }
+
+  @Get('/:id/foto')
+  // @Header('Content-Type', 'application/json')
+  async findPhotoById(@Param('id') id: number, @Res() res: Response) {
+    const employee = await this.employeeService.findPhotoById(id);
+
+    if (!employee || !employee.foto) {
+      throw new HttpException('Data photo not found', HttpStatus.NOT_FOUND);
+    }
+
+    const fotoPath = './storage/foto/';
+    const fileFoto = join(fotoPath, employee.foto);
+
+    if (!fs.existsSync(fileFoto)) {
+      throw new HttpException(
+        'Photo file not found on server',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    res.sendFile(fileFoto, { root: '.' });
+    // res.sendFile(fileFoto);
+  }
+
+  @Get('/:id/ktp')
+  // @Header('Content-Type', 'application/json')
+  async findKtpById(@Param('id') id: number, @Res() res: Response) {
+    const employee = await this.employeeService.findKtpById(id);
+
+    if (!employee || !employee.file_ktp) {
+      throw new HttpException('Data KTP not found', HttpStatus.NOT_FOUND);
+    }
+
+    const ktpPath = './storage/file_ktp/';
+    const fileKtp = join(ktpPath, employee.file_ktp);
+
+    if (!fs.existsSync(fileKtp)) {
+      throw new HttpException(
+        'KTP file not found on server',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    res.sendFile(fileKtp, { root: '.' });
+    // res.sendFile(fileKtp);
+  }
+
+  @Get('/:id/kk')
+  // @Header('Content-Type', 'application/json')
+  async findKkById(@Param('id') id: number, @Res() res: Response) {
+    const employee = await this.employeeService.findKkById(id);
+
+    if (!employee || !employee.file_kk) {
+      throw new HttpException('Data KK not found', HttpStatus.NOT_FOUND);
+    }
+
+    const kkPath = './storage/file_kk/';
+    const fileKk = join(kkPath, employee.file_kk);
+
+    if (!fs.existsSync(fileKk)) {
+      throw new HttpException(
+        'KK file not found on server',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    res.sendFile(fileKk, { root: '.' });
+    // res.sendFile(fileKk);
+  }
+
+  @Get('/:id/ktam')
+  // @Header('Content-Type', 'application/json')
+  async findKtamById(@Param('id') id: number, @Res() res: Response) {
+    const employee = await this.employeeService.findKtamById(id);
+
+    if (!employee || !employee.file_ktam) {
+      throw new HttpException('Data KTAM not found', HttpStatus.NOT_FOUND);
+    }
+
+    const ktamPath = './storage/file_ktam/';
+    const fileKtam = join(ktamPath, employee.file_ktam);
+
+    if (!fs.existsSync(fileKtam)) {
+      throw new HttpException(
+        'KTAM file not found on server',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    res.sendFile(fileKtam, { root: '.' });
+    // res.sendFile(fileKtam);
+  }
+
+  @Get('/:id/npwp')
+  // @Header('Content-Type', 'application/json')
+  async findNpwpById(@Param('id') id: number, @Res() res: Response) {
+    const employee = await this.employeeService.findNpwpById(id);
+
+    if (!employee || !employee.file_npwp) {
+      throw new HttpException('Data NPWP not found', HttpStatus.NOT_FOUND);
+    }
+
+    const npwpPath = './storage/file_npwp/';
+    const fileNpwp = join(npwpPath, employee.file_npwp);
+
+    if (!fs.existsSync(fileNpwp)) {
+      throw new HttpException(
+        'NPWP file not found on server',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    res.sendFile(fileNpwp, { root: '.' });
+    // res.sendFile(fileNpwp);
   }
 
   @Post()
