@@ -33,6 +33,11 @@ export class EmployeeRepository {
       orderBy: {
         id_pegawai: 'desc',
       },
+      include: {
+        nama_jenis_pegawai: true,
+        unit_induk: true,
+        unit_kerja: true,
+      },
     });
 
     return {
@@ -87,14 +92,14 @@ export class EmployeeRepository {
     });
   }
 
-  async findByNip(nipPegawai: string, nipPns: string): Promise<Employee | null> {
+  async findByNip(
+    nipPegawai: string,
+    nipPns: string,
+  ): Promise<Employee | null> {
     const whereClause: Prisma.EmployeeWhereInput = {
-      OR: [
-        { nip_pegawai: nipPegawai },
-        { nip_pns: nipPns },
-      ],
+      OR: [{ nip_pegawai: nipPegawai }, { nip_pns: nipPns }],
     };
-  
+
     return this.prismaService.employee.findFirst({
       where: whereClause,
     });
