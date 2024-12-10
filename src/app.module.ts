@@ -35,7 +35,7 @@ import { RegistrationFeeModule } from './modules/registration-fee/registration-f
     ThrottlerModule.forRoot([
       {
         ttl: Number(process.env.THROTTLER_TTL || 60000),
-        limit: Number(process.env.THROTTLER_LIMIT || 100),
+        limit: Number(process.env.THROTTLER_LIMIT || 200),
       },
     ]),
     EventEmitterModule.forRoot(),
@@ -80,7 +80,6 @@ import { RegistrationFeeModule } from './modules/registration-fee/registration-f
     },
     AppService,
     CounterGateway,
-    // AdmissionQueueGateway,
     AdmissionGateway,
   ],
 })

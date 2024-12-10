@@ -46,6 +46,7 @@ export interface RegistrationUpdateDto {
   nama_perujuk?: string | null;
   status_bpjs: number;
   status_inap: number;
+  no_rujukan?: string;
   ket_rujukan?: string | null;
   status_rujukan?: number | null;
   nomor_rujuk_balik?: string | null;
@@ -61,6 +62,7 @@ export interface RegistrationUpdateDto {
 export interface CancellationStatusPayload {
   status_batal: number;
   keterangan_batal: string;
+  task_id_terakhir?: number;
   modified_at?: Date;
   modified_by?: number;
 }

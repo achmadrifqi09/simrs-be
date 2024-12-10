@@ -170,6 +170,12 @@ export class QueueRepository {
         nama_pasien: true,
         kode_antrian: true,
         no_antrian: true,
+        pendaftaran: {
+          select: {
+            kode_booking: true,
+            status_batal: true,
+          },
+        },
       },
       orderBy: {
         created_at: 'desc',

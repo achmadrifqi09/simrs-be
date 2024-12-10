@@ -13,12 +13,13 @@ import * as process from 'node:process';
 @Injectable()
 export class VClaimService {
   constructor(private readonly bpjsHttpHelper: BPJSHttpHelper) {}
+  private BASE_URL = `${process.env.BASE_URL}/${process.env.V_CLAIM_SERVICE_NAME}`;
 
   async findPatientReference(BPJSNumber: string) {
     const headers: AxiosHeaders = this.bpjsHttpHelper.generateHeader(
       BPJSResource.V_CLAIM,
     );
-    const url = `${process.env.BASE_URL}/${process.env.V_CLAIM_SERVICE_NAME}/Rujukan/Peserta/${BPJSNumber}`;
+    const url = `${this.BASE_URL}/Rujukan/Peserta/${BPJSNumber}`;
     try {
       const response = await axios.get(url, {
         headers: headers,
@@ -37,7 +38,26 @@ export class VClaimService {
     const headers: AxiosHeaders = this.bpjsHttpHelper.generateHeader(
       BPJSResource.V_CLAIM,
     );
-    const url = `${process.env.BASE_URL}/${process.env.V_CLAIM_SERVICE_NAME}/Rujukan/List/Peserta/${BPJSNumber}`;
+    const url = `${this.BASE_URL}/Rujukan/List/Peserta/${BPJSNumber}`;
+    try {
+      const response = await axios.get(url, {
+        headers: headers,
+      });
+      const result = this.bpjsHttpHelper.responseChecker(
+        response.data,
+        headers.get('X-timestamp').toString(),
+      );
+      return JSON.parse(result);
+    } catch (error: any) {
+      throw new HttpException(error?.message || error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async findPatientReferenceByReferenceNumber(referenceNumber: string) {
+    const headers: AxiosHeaders = this.bpjsHttpHelper.generateHeader(
+      BPJSResource.V_CLAIM,
+    );
+    const url = `${this.BASE_URL}/Rujukan/${referenceNumber}`;
     try {
       const response = await axios.get(url, {
         headers: headers,
@@ -62,7 +82,32 @@ export class VClaimService {
     const headers: AxiosHeaders = this.bpjsHttpHelper.generateHeader(
       BPJSResource.V_CLAIM,
     );
-    const url = `${process.env.BASE_URL}/${process.env.V_CLAIM_SERVICE_NAME}/referensi/poli/${keyword}`;
+    const url = `${this.BASE_URL}/referensi/poli/${keyword}`;
+    try {
+      const response = await axios.get(url, {
+        headers: headers,
+      });
+      const result = this.bpjsHttpHelper.responseChecker(
+        response.data,
+        headers.get('X-timestamp').toString(),
+      );
+      return JSON.parse(result);
+    } catch (error: any) {
+      throw new HttpException(error?.message || error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async findControllLatter(controllNumber: string) {
+    if (!controllNumber) {
+      throw new HttpException(
+        'Nomor surat kontrol harus disertakan',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const headers: AxiosHeaders = this.bpjsHttpHelper.generateHeader(
+      BPJSResource.V_CLAIM,
+    );
+    const url = `${this.BASE_URL}/RencanaKontrol/noSuratKontrol/${controllNumber}`;
     try {
       const response = await axios.get(url, {
         headers: headers,

@@ -1,6 +1,7 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import {
+  CancellationStatusPayload,
   RegistrationDto,
   RegistrationUpdateDto,
 } from '../dto/registration.dto';
@@ -11,7 +12,6 @@ import {
   registrationSelect,
   registrationSelectForSingleResponse,
 } from '../const/registration.const';
-import { CancellationStatusPayload } from '../dto/registration.dto';
 
 @Dependencies([PrismaService])
 @Injectable()
@@ -77,7 +77,7 @@ export class RegistrationRepository {
     });
   }
 
-  async findRegisrationWithDoctorScheduleId(id: number) {
+  async findRegistrationWithDoctorScheduleId(id: number) {
     return this.prismaService.registration.findFirst({
       where: {
         id: Number(id),
@@ -107,6 +107,9 @@ export class RegistrationRepository {
   async findRegistrationByQueueId(queueId: number) {
     return this.prismaService.registration.findFirst({
       where: { id_antrian: Number(queueId), is_deleted: false },
+      include: {
+        antrian: true,
+      },
     });
   }
 
@@ -126,13 +129,16 @@ export class RegistrationRepository {
     return result;
   }
 
-  async createRegistration(
-    queueId: number,
-    insuranceId: number | null,
-    registrationData: RegistrationDto,
-  ) {
+  async createRegistration(queueId: number, registrationData: RegistrationDto) {
+    const insuranceId = registrationData?.id_asuransi || null;
+    const cob = registrationData?.cob || null;
+    const familyStatusId = registrationData.id_hub_wali;
+
+    delete registrationData.id_asuransi;
+    delete registrationData.id_hub_wali;
+
     try {
-      const registration: Prisma.RegistrationCreateInput = {
+      let registration: Prisma.RegistrationCreateInput = {
         ...registrationData,
         antrian: {
           connect: {
@@ -140,6 +146,7 @@ export class RegistrationRepository {
           },
         },
       };
+
       if (insuranceId && Number(insuranceId)) {
         registration.asuransi = {
           connect: {
@@ -147,6 +154,23 @@ export class RegistrationRepository {
           },
         };
       }
+      if (familyStatusId && Number(familyStatusId)) {
+        registration.hub_wali = {
+          connect: {
+            id: Number(familyStatusId),
+          },
+        };
+      }
+
+      if (cob && Number(cob)) {
+        registration.cob_asuransi = {
+          connect: {
+            id: Number(cob),
+          },
+        };
+      }
+
+      registration = { ...registration, ...registrationData };
       return await this.prismaService.registration.create({
         data: registration,
       });
@@ -174,21 +198,15 @@ export class RegistrationRepository {
 
   async updateRegistration(id: number, payload: RegistrationUpdateDto) {
     try {
-      let registration: Prisma.RegistrationUpdateInput = {};
-      if (Number(payload.id_asuransi)) {
-        registration.asuransi.connect = { id: Number(payload.id_asuransi) };
-        delete payload.id_asuransi;
-      }
-      if (Number(payload.id_hub_wali)) {
-        registration.hub_wali.connect = { id: Number(payload.id_hub_wali) };
-        delete payload.id_hub_wali;
-      }
-      registration = { ...registration, ...payload };
+      const registration: Prisma.RegistrationUpdateInput = {
+        ...payload,
+      };
       return await this.prismaService.registration.update({
         where: { id: Number(id) },
         data: registration,
       });
     } catch (error) {
+      console.log(error);
       PrismaErrorHandler.handle(error);
     }
   }

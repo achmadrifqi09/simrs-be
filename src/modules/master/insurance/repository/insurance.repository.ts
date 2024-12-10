@@ -10,7 +10,7 @@ import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 export class InsuranceRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findAllInsurance(keyword?: string, status?: number) {
+  async findAllInsurance(keyword?: string, status?: number, isBPJS?: number) {
     const whereClause: Prisma.InsuranceWhereInput = {
       OR: [{ nama_asuransi: { contains: keyword } }],
       is_deleted: false,
@@ -21,7 +21,7 @@ export class InsuranceRepository {
         status: Number(status),
       };
     }
-
+    if (Number(isBPJS) == 0) whereClause.id = { not: 1 };
     return this.prismaService.insurance.findMany({
       where: whereClause,
       orderBy: {

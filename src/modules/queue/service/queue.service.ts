@@ -34,6 +34,7 @@ import { PatientService } from '../../patient/service/patient.service';
 import { PatientDTO } from '../../patient/dto/patient.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { RegisterWhenPatientPresentEvent } from '../../../events/event/register-when-patient-present.event';
+import { RegistrationService } from 'src/modules/registration/service/registration.service';
 
 Dependencies([
   QueueRepository,
@@ -53,6 +54,7 @@ export class QueueService {
     private readonly vClaimService: VClaimService,
     private readonly patientService: PatientService,
     private readonly eventEmitter: EventEmitter2,
+    private readonly registrationService: RegistrationService,
   ) {}
 
   async findQueueById(id: number) {
@@ -215,7 +217,7 @@ export class QueueService {
     );
   }
 
-  async queueAttendance(payload: QueueAttendancePayload) {
+  private async updateQueueToAttend(payload: QueueAttendancePayload) {
     const finalPayload: QueueAttendancePayloadInput = {
       status: 1,
       status_panggil: 1,
@@ -224,10 +226,14 @@ export class QueueService {
       modified_by: payload.id_user,
       modified_at: generateCurrentDate(),
     };
-    const result = await this.queueRepository.queueAttendance(
+    return await this.queueRepository.queueAttendance(
       payload.id_antrian,
       finalPayload,
     );
+  }
+
+  async queueAttendance(payload: QueueAttendancePayload) {
+    const result = await this.updateQueueToAttend(payload);
     if (result) {
       this.eventEmitter.emit(
         'queue.attendance',
@@ -235,6 +241,20 @@ export class QueueService {
       );
     }
     return result;
+  }
+
+  async queueAttendanceWithRegistration(payload: QueueAttendancePayload) {
+    const result = await this.updateQueueToAttend(payload);
+    if (result) {
+      const registration =
+        await this.registrationService.createRegistrationFromQueue(result);
+      return {
+        kode_rm: result?.kode_rm,
+        id_antrian: result?.id_antrian,
+        jenis_pasien: result?.jenis_pasien,
+        id_pendaftaran: registration.id,
+      };
+    }
   }
 
   async callStatusUpdate(payload: CallStatusUpdatePayload) {

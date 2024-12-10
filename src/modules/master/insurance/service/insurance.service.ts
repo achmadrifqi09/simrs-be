@@ -14,15 +14,24 @@ import { SoftDelete, UpdateStatus } from '../../../../common/types/common.type';
 export class InsuranceService {
   constructor(private readonly insuranceRepository: InsuranceRepository) {}
 
-  async findAllInsurance(keyword?: string, status?: number) {
+  async findAllInsurance(keyword?: string, status?: number, isBPJS?: number) {
     if (typeof status !== 'undefined' && !/^[01]$/.test(status.toString())) {
       throw new HttpException(
         'Format status tidak sesuai',
         HttpStatus.BAD_REQUEST,
       );
     }
-
-    return this.insuranceRepository.findAllInsurance(keyword ?? '', status);
+    if (isBPJS && ![0, 1].includes(Number(isBPJS))) {
+      throw new HttpException(
+        'Format status BPJS tidak sesuai',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return this.insuranceRepository.findAllInsurance(
+      keyword ?? '',
+      status,
+      isBPJS,
+    );
   }
 
   async createInsurance(insurance: InsuranceDto, req: any) {

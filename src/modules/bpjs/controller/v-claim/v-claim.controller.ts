@@ -13,6 +13,15 @@ export class VClaimController {
     return this.vClaimService.findAllPatientReference(BPJSNumber);
   }
 
+  @Get('/participant/reference/:reference_number')
+  async findPatientReferenceByReferenceNumber(
+    @Param('reference_number') referenceNumber: string,
+  ) {
+    return this.vClaimService.findPatientReferenceByReferenceNumber(
+      referenceNumber,
+    );
+  }
+
   @Get('/reference/polyclinic/:keyword')
   async findPolyclinic(@Param('keyword') keyword: string) {
     return this.vClaimService.findPolyclinicReference(keyword);

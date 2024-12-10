@@ -37,8 +37,9 @@ export class InsuranceController {
   async findAllInsurance(
     @Query('keyword') keyword: string,
     @Query('status') status: number,
+    @Query('is_bpjs') isBPJS: number,
   ) {
-    return this.insuranceService.findAllInsurance(keyword, status);
+    return this.insuranceService.findAllInsurance(keyword, status, isBPJS);
   }
 
   @Post()
