@@ -8,6 +8,7 @@ export const registrationSelect: Prisma.RegistrationSelect = {
   tgl_daftar: true,
   status_batal: true,
   keterangan_batal: true,
+  status_kirim_bpjs: true,
   antrian: {
     select: {
       id_antrian: true,
@@ -52,16 +53,26 @@ export const registrationSelectForSingleResponse: Prisma.RegistrationSelect = {
   status_rujukan: true,
   nomor_asuransi: true,
   nomor_rujuk_balik: true,
+  id_asuransi: true,
   no_sep: true,
   cob: true,
   no_cob: true,
   nama_wali: true,
   hub_wali: true,
   telp_wali: true,
+  nomor_antrian_poli: true,
+  kode_antrian_poli: true,
+  status_kirim_bpjs: true,
+  kode_booking: true,
+  task_id_terakhir: true,
   antrian: {
     select: {
+      id_antrian: true,
       nama_pasien: true,
       jenis_pasien: true,
+      jenis_penjamin: true,
+      no_antrian: true,
+      kode_antrian: true,
       jadwal_dokter: {
         select: {
           id_jadwal_dokter: true,
@@ -70,6 +81,7 @@ export const registrationSelectForSingleResponse: Prisma.RegistrationSelect = {
           unit: {
             select: {
               nama_unit_kerja: true,
+              kode_instalasi_bpjs: true,
             },
           },
           pegawai: {
@@ -84,4 +96,27 @@ export const registrationSelectForSingleResponse: Prisma.RegistrationSelect = {
       },
     },
   },
+  biaya_pendaftaran: {
+    select: {
+      id: true,
+      id_pendaftaran: true,
+      biaya_daftar: true,
+      diskon_daftar: true,
+      biaya_kartu: true,
+      diskon_kartu: true,
+      biaya_dokter: true,
+      diskon_dokter: true,
+      total_biaya: true,
+      tgl_billing_daftar: true,
+      tgl_billing_daftar_selesai: true,
+      created_at: true,
+    },
+  },
+  asuransi: {
+    select: {
+      id: true,
+      nama_asuransi: true,
+    },
+  },
+  modified_at: true,
 };

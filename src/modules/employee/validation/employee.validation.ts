@@ -210,6 +210,8 @@ const employeeValidation = z.object({
 
   id_ms_spesialis: ifStringOrNumber.optional(),
 
+  id_unit_kerja: ifStringOrNumber.optional(),
+
   id_unit_induk: ifStringOrNumber.optional(),
 
   id_pangkat: ifStringOrNumber.optional(),

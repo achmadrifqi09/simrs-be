@@ -24,6 +24,33 @@ export interface QueueAttendancePayloadInput {
   modified_by?: number;
 }
 
+export interface QueueAttendanceResponse {
+  id_antrian: number;
+  jenis_pasien: number;
+  jenis_penjamin: number;
+  kode_rm?: string;
+  nama_pasien: string;
+  tgl_lahir: Date;
+  no_hp: string;
+  no_bpjs?: string;
+  no_rujukan?: string;
+  kode_antrian?: string;
+  no_antrian: number;
+  jadwal_dokter: {
+    select: {
+      kode_instalasi_bpjs: string;
+    };
+  };
+  id_jadwal_dokter: number;
+  id_ms_loket_antrian: number;
+  status_panggil: number;
+  tgl_panggil: Date;
+  status: number;
+  registration?: {
+    id: number;
+  };
+}
+
 export interface StatusPayload {
   id_antrian: number;
   status_panggil: number;

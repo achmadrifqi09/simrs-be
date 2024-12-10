@@ -11,9 +11,12 @@ export interface Signature {
 }
 
 export interface BPJSResponse {
-  metaData: {
-    code: string;
-    message: string;
-  };
+  metadata: Metadata;
+  metaData?: Metadata;
   response: string;
+}
+
+interface Metadata {
+  code: string;
+  message: string;
 }

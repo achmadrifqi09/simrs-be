@@ -16,6 +16,7 @@ import { SkippedAdmissionDto } from '../dto/skipped-admission.dto';
 import { UpdateAdmissionDto } from '../dto/update-admission.dto';
 import { Public } from '../../../decorators/public/public.decorator';
 import { CallingAdmissionDto } from '../dto/calling-admission.dto';
+import { RegistrationService } from 'src/modules/registration/service/registration.service';
 
 @UseGuards(WsGuard)
 @UseFilters(WsExceptionFilter)
@@ -34,6 +35,7 @@ export class AdmissionGateway {
     private readonly counterGateway: CounterGateway,
     private readonly counterService: CounterService,
     private readonly queueService: QueueService,
+    private readonly registrationService: RegistrationService,
   ) {}
 
   @Public()
@@ -131,7 +133,6 @@ export class AdmissionGateway {
       });
       await this.handleRemainingQueueCode(client, payload.kode_antrian);
     } catch (err) {
-      console.log(err);
       if (err instanceof WsException || err instanceof HttpException) {
         throw new WsException(err.message);
       }
@@ -221,7 +222,15 @@ export class AdmissionGateway {
       if (!this.counterGateway.findCounter(payload.id_ms_loket_antrian)) {
         throw new WsException('Anda belum terhubung ke loket manapun');
       }
-
+      const registraion =
+        await this.registrationService.findRegistrationByQueueId(
+          Number(payload.id_antrian),
+        );
+      if (registraion) {
+        throw new WsException(
+          'Data antrean tersebut sudah memiliki data pendaftaran (sudah dilayani)',
+        );
+      }
       await this.queueService.queueAttendance(payload);
       await this.handleSkipInit(client, {
         id_ms_loket_antrian: payload.id_ms_loket_antrian,
@@ -232,6 +241,45 @@ export class AdmissionGateway {
         id_ms_loket_antrian: payload.id_ms_loket_antrian,
         kode_antrian: payload.kode_antrian,
       });
+    } catch (error) {
+      if (error instanceof WsException || error instanceof HttpException) {
+        throw new WsException(error.message);
+      }
+      throw new WsException('Terjadi kesalahan saat memproses antrian');
+    }
+  }
+
+  @SubscribeMessage('admission-attend-and-continue-registration')
+  async handleQueueAttendanceAndContinueRegisration(
+    client: Socket,
+    payload: UpdateAdmissionDto,
+  ) {
+    try {
+      if (!this.counterGateway.findCounter(payload.id_ms_loket_antrian)) {
+        throw new WsException('Anda belum terhubung ke loket manapun');
+      }
+      const existringRegistration =
+        await this.registrationService.findRegistrationByQueueId(
+          Number(payload.id_antrian),
+        );
+      if (existringRegistration) {
+        throw new WsException(
+          'Data antrean tersebut sudah memiliki data pendaftaran (sudah dilayani)',
+        );
+      }
+      const result =
+        await this.queueService.queueAttendanceWithRegistration(payload);
+      await this.handleSkipInit(client, {
+        id_ms_loket_antrian: payload.id_ms_loket_antrian,
+        kode_antrian: payload.kode_antrian,
+      });
+      if (result) {
+        this.server.emit(`queue-registration-result-${client.id}`, {
+          data: result,
+        });
+      } else {
+        throw new WsException('Terjadi kesalahan saat memproses antrian');
+      }
     } catch (error) {
       if (error instanceof WsException || error instanceof HttpException) {
         throw new WsException(error.message);

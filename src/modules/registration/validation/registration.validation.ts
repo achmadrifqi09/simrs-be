@@ -13,7 +13,7 @@ export const cancellationValidation = z.object({
 });
 
 const dateValidation = z
-  .string({ message: 'Tanggal lahir harus diisi' })
+  .string({ message: 'Tanggal harus diisi' })
   .refine(
     (val) => {
       const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/;
@@ -53,25 +53,11 @@ export const registrationValidation = z
       .nullish(),
     asal_rujukan: z
       .string()
-      .max(100, { message: 'Asal rujukan tidak boleh lebih dari 50 karakter' })
-      .nullish(),
+      .max(100, { message: 'Asal rujukan tidak boleh lebih dari 50 karakter' }),
     nama_perujuk: z
       .string()
       .max(100, { message: 'Nama perujuk tidak boleh lebih dari 50 karakter' })
       .nullish(),
-    status_bpjs: z
-      .number({ message: 'Status BPJS harus berupa angka' })
-      .min(1, { message: 'Status BPJS harus 1 digit' })
-      .max(3, {
-        message: 'Status BPJS harus 1 untuk pasien Umum, 2 untuk pasien BPJS',
-      }),
-    status_inap: z
-      .number({ message: 'Status inap harus berupa angka' })
-      .min(1, { message: 'Status inap harus 1 digit' })
-      .max(3, {
-        message:
-          'Status inap harus 1 untuk Poli (Rajal) 2 untuk Ranap 3 untuk Operasi ',
-      }),
     ket_rujukan: z
       .string()
       .max(100, { message: 'Nama perujuk tidak boleh lebih dari 50 karakter' })
@@ -85,7 +71,13 @@ export const registrationValidation = z
         message: 'Nomor rujukan balik/kontrol tidak boleh dari 50 karakter',
       })
       .nullish(),
-    tgl_rujukan: dateValidation,
+    no_rujukan: z
+      .string()
+      .max(50, {
+        message: 'Nomor rujukan balik/kontrol tidak boleh dari 50 karakter',
+      })
+      .nullish(),
+    tgl_rujukan: dateValidation.optional(),
     id_asuransi: z
       .number({ message: 'Id asuransi harus berupa nomor' })
       .nullish(),
@@ -97,8 +89,36 @@ export const registrationValidation = z
   .refine(
     (value) => {
       if (!value?.id_asuransi && !value?.nomor_asuransi) return true;
-      if (value?.id_asuransi && value?.nomor_asuransi) return true;
-      return false;
+      return !!(value?.id_asuransi && value?.nomor_asuransi);
     },
     { message: 'Nomor asuransi harus di isi dan minimal 4 karakter' },
+  )
+  .refine(
+    (value) => {
+      if (
+        Number(value.status_rujukan) === 3 &&
+        !value.nomor_rujuk_balik &&
+        value.nomor_rujuk_balik.length < 16
+      )
+        return false;
+      return true;
+    },
+    {
+      message:
+        'Harus menyertakan nomor kontrol yang valid untuk jenis rujukan kontrol',
+    },
+  )
+  .refine(
+    (value) => {
+      if (
+        value.id_asuransi === 1 &&
+        (!value.no_rujukan || value.no_rujukan === '')
+      )
+        return false;
+      return true;
+    },
+    {
+      message: 'Pasien BPJS wajib menyertakan nomor rujukan',
+      path: ['no_rujukan'],
+    },
   );

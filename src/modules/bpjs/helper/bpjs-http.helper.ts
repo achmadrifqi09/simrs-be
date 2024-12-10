@@ -21,13 +21,20 @@ export class BPJSHttpHelper {
   }
 
   responseChecker(result: BPJSResponse, timestamp: string | number) {
-    if (result.metaData && Number(result?.metaData?.code) === 200) {
+    if (
+      (result?.metadata || result?.metaData) &&
+      (Number(result?.metadata?.code) === 200 ||
+        Number(result?.metaData?.code) === 200)
+    ) {
       if (result?.response !== null) {
         const decryptionKey = `${process.env.CONSUMER_ID}${process.env.SECRET_KEY}${timestamp}`;
         return Cipher.decryptAndCompress(decryptionKey, result.response);
       }
     } else {
-      throw new HttpException(result.metaData.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        result?.metadata?.message || result?.metaData?.message,
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 }

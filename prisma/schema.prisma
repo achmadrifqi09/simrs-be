@@ -31,19 +31,20 @@ model AppClient {
 model Registration {
   id                 Int               @id @default(autoincrement())
   nomor_registrasi   String            @db.VarChar(50)
-  id_antrian         Int
+  id_antrian         Int               @unique
   antrian            Queue             @relation(fields: [id_antrian], references: [id_antrian])
   id_online          Int?
   kode_rm            String?           @db.VarChar(50)
   tgl_daftar         DateTime
   id_asuransi        Int?
   nomor_asuransi     String?           @db.VarChar(50)
-  asuransi           Insurance?        @relation(fields: [id_asuransi], references: [id])
+  asuransi           Insurance?        @relation("asuransi", fields: [id_asuransi], references: [id])
   no_rujukan         String?           @db.VarChar(50)
   status_rujukan     Int?
   nomor_rujuk_balik  String?           @db.VarChar(50)
   no_sep             String?           @db.VarChar(50)
   cob                Int?
+  cob_asuransi       Insurance?        @relation("cob", fields: [cob], references: [id])
   no_cob             String?           @db.VarChar(50)
   status_bpjs        Int               @default(0)
   status_keuangan    Int               @default(0)
@@ -63,7 +64,9 @@ model Registration {
   nomor_antrian_poli Int?
   status_batal       Int               @default(0)
   keterangan_batal   String?           @db.Text
-  task_id            Int?
+  status_kirim_bpjs  Int               @default(0)
+  kode_booking       String?
+  task_id_terakhir   Int               @default(0)
   created_at         DateTime          @default(now())
   created_by         Int               @default(0)
   modified_at        DateTime?         @db.DateTime(0)
@@ -74,7 +77,8 @@ model Registration {
   restored_by        Int?              @default(0)
   is_deleted         Boolean           @default(false)
   is_restored        Boolean           @default(false)
-  biaya_pendaftaran  RegistrationFee[]
+  biaya_pendaftaran  RegistrationFee?
+  task_ids           RegistrationTaskId[]
 
   @@index([nomor_registrasi])
   @@index([kode_rm])
@@ -192,8 +196,8 @@ model OnlineRegistration {
 
 model RegistrationFee {
   id                         Int          @id @default(autoincrement())
-  id_pendaftaran             Int
-  pendaftaran                Registration @relation(fields: [id_pendaftaran], references: [id])
+  id_pendaftaran             Int?         @unique
+  pendaftaran                Registration? @relation(fields: [id_pendaftaran], references: [id])
   biaya_daftar               String       @db.VarChar(20)
   diskon_daftar              String       @default("0") @db.VarChar(20)
   biaya_kartu                String       @default("0000-00-00 00:00:00") @db.VarChar(20)
@@ -220,21 +224,48 @@ model RegistrationFee {
   @@map("db_biaya_pendaftaran")
 }
 
+model RegistrationTaskId {
+  id                Int            @id @default(autoincrement()) 
+  id_pendaftaran    Int
+  pendaftaran       Registration   @relation(fields: [id_pendaftaran], references: [id])
+  kode_task_id      Int
+  kode_booking      String
+  tanggal_kirim     DateTime       @default(now())
+  kode_response     Int
+  request_body      String?
+  pesan_response    String
+  response          String         @db.LongText
+  created_at        DateTime       @default(now())
+  created_by        Int            @default(0)
+  modified_at       DateTime?      @db.DateTime(0)
+  modified_by       Int?           @default(0)
+  deleted_at        DateTime?      @db.DateTime(0)
+  deleted_by        Int?           @default(0)
+  restored_at       DateTime?      @db.DateTime(0)
+  restored_by       Int?           @default(0)
+  is_deleted        Boolean        @default(false)
+  is_restored       Boolean        @default(false)
+
+  @@index([id_pendaftaran, is_deleted])
+  @@map("db_pendaftaran_taskid")
+}
+
 model Insurance {
-  id            Int            @id @default(autoincrement())
-  nama_asuransi String         @db.VarChar(100)
-  status        Int            @default(1)
-  created_at    DateTime       @default(now())
-  created_by    Int            @default(0)
-  modified_at   DateTime?      @db.DateTime(0)
-  modified_by   Int?           @default(0)
-  deleted_at    DateTime?      @db.DateTime(0)
-  deleted_by    Int?           @default(0)
-  restored_at   DateTime?      @db.DateTime(0)
-  restored_by   Int?           @default(0)
-  is_deleted    Boolean        @default(false)
-  is_restored   Boolean        @default(false)
-  pendaftaran   Registration[]
+  id              Int            @id @default(autoincrement())
+  nama_asuransi   String         @db.VarChar(100)
+  status          Int            @default(1)
+  created_at      DateTime       @default(now())
+  created_by      Int            @default(0)
+  modified_at     DateTime?      @db.DateTime(0)
+  modified_by     Int?           @default(0)
+  deleted_at      DateTime?      @db.DateTime(0)
+  deleted_by      Int?           @default(0)
+  restored_at     DateTime?      @db.DateTime(0)
+  restored_by     Int?           @default(0)
+  is_deleted      Boolean        @default(false)
+  is_restored     Boolean        @default(false)
+  pendaftaran     Registration[] @relation("asuransi")
+  cob_pendaftaran Registration[] @relation("cob")
 
   @@index([nama_asuransi])
   @@index([status, is_deleted])
@@ -943,8 +974,8 @@ model Queue {
   restored_by         Int?                 @default(0)
   is_deleted          Boolean              @default(false)
   is_restored         Boolean              @default(false)
-  pendaftaran         Registration[]
-  pendaftaran_online  OnlineRegistration[]
+  pendaftaran         Registration?
+  pendaftaran_online  OnlineRegistration?
 
   @@index([no_rujukan, no_bpjs, kode_rm])
   @@index([kode_antrian, status_panggil, status, is_deleted])
