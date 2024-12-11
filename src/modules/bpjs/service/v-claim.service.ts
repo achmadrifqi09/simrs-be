@@ -97,30 +97,11 @@ export class VClaimService {
     }
   }
 
-  async findDoctorDPJP(
-    serviceType: number,
-    serviceDate: string,
-    specialist: string,
-  ) {
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(serviceDate)) {
-      throw new HttpException(
-        'Format tanggal layanan harus yyyy-mm-dd',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    if (![1, 2].includes(Number(serviceType))) {
-      throw new HttpException(
-        'Jenis layanan harus 1 untuk rawat inap dan 2 untuk rawat jalan',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
+  async findDoctorDPJP() {
     const headers: AxiosHeaders = this.bpjsHttpHelper.generateHeader(
-      BPJSResource.V_CLAIM,
+      BPJSResource.QUEUE,
     );
-    const url = `${this.BASE_URL}/referensi/dokter/pelayanan/${serviceType}/tglPelayanan/${serviceDate}/Spesialis/${specialist}`;
-
+    const url = `${process.env.BASE_URL}/${process.env.QUEUE_SERVICE_NAME}/ref/dokter`;
     try {
       const response = await axios.get(url, {
         headers: headers,
@@ -129,6 +110,7 @@ export class VClaimService {
         response.data,
         headers.get('X-timestamp').toString(),
       );
+
       return JSON.parse(result);
     } catch (error: any) {
       throw new HttpException(error?.message || error, HttpStatus.BAD_REQUEST);

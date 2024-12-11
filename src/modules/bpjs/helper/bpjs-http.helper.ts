@@ -22,9 +22,10 @@ export class BPJSHttpHelper {
 
   responseChecker(result: BPJSResponse, timestamp: string | number) {
     if (
-      (result?.metadata || result?.metaData) &&
-      (Number(result?.metadata?.code) === 200 ||
-        Number(result?.metaData?.code) === 200)
+      ((result?.metadata || result?.metaData) &&
+        (Number(result?.metadata?.code) === 200 ||
+          Number(result?.metaData?.code) === 200)) ||
+      Number(result?.metadata?.code) === 1
     ) {
       if (result?.response !== null) {
         const decryptionKey = `${process.env.CONSUMER_ID}${process.env.SECRET_KEY}${timestamp}`;
