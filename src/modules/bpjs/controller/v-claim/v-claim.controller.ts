@@ -26,4 +26,17 @@ export class VClaimController {
   async findPolyclinic(@Param('keyword') keyword: string) {
     return this.vClaimService.findPolyclinicReference(keyword);
   }
+
+  @Get('/reference/:service_type/doctor/:service_date/specialist/:specialist')
+  async findDoctorDPJP(
+    @Param('service_type') serviceType: number,
+    @Param('service_date') serviceDate: string,
+    @Param('specialist') specialist: string,
+  ) {
+    return this.vClaimService.findDoctorDPJP(
+      serviceType,
+      serviceDate,
+      specialist,
+    );
+  }
 }
