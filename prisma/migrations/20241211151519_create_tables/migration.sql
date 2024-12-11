@@ -52,7 +52,9 @@ CREATE TABLE `db_pendaftaran` (
     `nomor_antrian_poli` INTEGER NULL,
     `status_batal` INTEGER NOT NULL DEFAULT 0,
     `keterangan_batal` TEXT NULL,
-    `task_id` INTEGER NULL,
+    `status_kirim_bpjs` INTEGER NOT NULL DEFAULT 0,
+    `kode_booking` VARCHAR(191) NULL,
+    `task_id_terakhir` INTEGER NOT NULL DEFAULT 0,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `created_by` INTEGER NOT NULL DEFAULT 0,
     `modified_at` DATETIME(0) NULL,
@@ -192,6 +194,32 @@ CREATE TABLE `db_biaya_pendaftaran` (
     INDEX `db_biaya_pendaftaran_id_pendaftaran_idx`(`id_pendaftaran`),
     INDEX `db_biaya_pendaftaran_tgl_billing_daftar_idx`(`tgl_billing_daftar`),
     INDEX `db_biaya_pendaftaran_is_deleted_idx`(`is_deleted`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `db_pendaftaran_taskid` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_pendaftaran` INTEGER NOT NULL,
+    `kode_task_id` INTEGER NOT NULL,
+    `kode_booking` VARCHAR(191) NOT NULL,
+    `tanggal_kirim` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `kode_response` INTEGER NOT NULL,
+    `request_body` VARCHAR(191) NULL,
+    `pesan_response` VARCHAR(191) NOT NULL,
+    `response` LONGTEXT NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `created_by` INTEGER NOT NULL DEFAULT 0,
+    `modified_at` DATETIME(0) NULL,
+    `modified_by` INTEGER NULL DEFAULT 0,
+    `deleted_at` DATETIME(0) NULL,
+    `deleted_by` INTEGER NULL DEFAULT 0,
+    `restored_at` DATETIME(0) NULL,
+    `restored_by` INTEGER NULL DEFAULT 0,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `is_restored` BOOLEAN NOT NULL DEFAULT false,
+
+    INDEX `db_pendaftaran_taskid_id_pendaftaran_is_deleted_idx`(`id_pendaftaran`, `is_deleted`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -475,7 +503,7 @@ CREATE TABLE `db_pegawai` (
     `foto` TEXT NULL,
     `kode_arsip` VARCHAR(20) NULL,
     `id_finger` VARCHAR(10) NULL,
-    `kode_dpjp` VARCHAR(20) NULL,
+    `kode_dpjp` VARCHAR(10) NULL,
     `tgl_masuk` DATE NULL,
     `tgl_keluar` DATE NULL,
     `status_pns` TINYINT NULL DEFAULT 1,
@@ -1268,6 +1296,9 @@ ALTER TABLE `db_pendaftaran_online` ADD CONSTRAINT `db_pendaftaran_online_id_ms_
 
 -- AddForeignKey
 ALTER TABLE `db_biaya_pendaftaran` ADD CONSTRAINT `db_biaya_pendaftaran_id_pendaftaran_fkey` FOREIGN KEY (`id_pendaftaran`) REFERENCES `db_pendaftaran`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `db_pendaftaran_taskid` ADD CONSTRAINT `db_pendaftaran_taskid_id_pendaftaran_fkey` FOREIGN KEY (`id_pendaftaran`) REFERENCES `db_pendaftaran`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `db_menu` ADD CONSTRAINT `db_menu_parent_id_fkey` FOREIGN KEY (`parent_id`) REFERENCES `db_menu`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
