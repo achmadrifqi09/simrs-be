@@ -97,6 +97,44 @@ export class VClaimService {
     }
   }
 
+  async findDoctorDPJP(
+    serviceType: number,
+    serviceDate: string,
+    specialist: string,
+  ) {
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(serviceDate)) {
+      throw new HttpException(
+        'Format tanggal layanan harus yyyy-mm-dd',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (![1, 2].includes(Number(serviceType))) {
+      throw new HttpException(
+        'Jenis layanan harus 1 untuk rawat inap dan 2 untuk rawat jalan',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const headers: AxiosHeaders = this.bpjsHttpHelper.generateHeader(
+      BPJSResource.V_CLAIM,
+    );
+    const url = `${this.BASE_URL}/referensi/dokter/pelayanan/${serviceType}/tglPelayanan/${serviceDate}/Spesialis/${specialist}`;
+
+    try {
+      const response = await axios.get(url, {
+        headers: headers,
+      });
+      const result = this.bpjsHttpHelper.responseChecker(
+        response.data,
+        headers.get('X-timestamp').toString(),
+      );
+      return JSON.parse(result);
+    } catch (error: any) {
+      throw new HttpException(error?.message || error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
   async findControllLatter(controllNumber: string) {
     if (!controllNumber) {
       throw new HttpException(
