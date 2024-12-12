@@ -427,6 +427,13 @@ export class QueueService {
         },
       });
 
+      if (queue?.no_bpjs) {
+        const existingPatient =
+          await this.patientService.findPatientByBPJSNumber(queue.kode_rm);
+        queue.jenis_pasien = existingPatient ? 1 : 2;
+        queue.kode_rm = existingPatient?.kode_rm || undefined;
+      }
+
       await this.queueServiceHelper.checkScheduleQuota(
         totalDoctorQueue,
         queue.id_jadwal_dokter,
@@ -446,6 +453,8 @@ export class QueueService {
         id_jadwal_dokter: Number(queue.id_jadwal_dokter),
         kode_antrian: queueNumber.kode_antrian,
         no_antrian: queueNumber.no_antrian,
+        no_rujukan: queue.no_rujukan || undefined,
+        no_bpjs: queue?.no_bpjs || undefined,
         status: 0,
         status_panggil: 0,
         created_at: generateCurrentDate(),

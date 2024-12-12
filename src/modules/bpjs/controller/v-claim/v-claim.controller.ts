@@ -1,5 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { VClaimService } from '../../service/v-claim.service';
+import { Public } from 'src/decorators/public/public.decorator';
 
 @Controller({
   path: '/bpjs/v-claim',
@@ -8,6 +9,7 @@ import { VClaimService } from '../../service/v-claim.service';
 export class VClaimController {
   constructor(private readonly vClaimService: VClaimService) {}
 
+  @Public()
   @Get('/participant/:bpjs_number')
   async findPatientReference(@Param('bpjs_number') BPJSNumber: string) {
     return this.vClaimService.findAllPatientReference(BPJSNumber);

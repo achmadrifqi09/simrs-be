@@ -113,17 +113,21 @@ export class RegistrationRepository {
     });
   }
 
-  async updateRMForRegistrationAndQueue(id: number, rmCode: string) {
+  async updateRMForRegistrationAndQueue(
+    id: number,
+    rmCode: string,
+    bpjsNumber?: string | null,
+  ) {
     const result = await this.prismaService.registration.update({
       where: {
         id: Number(id),
       },
-      data: { kode_rm: rmCode },
+      data: { kode_rm: rmCode, nomor_asuransi: bpjsNumber || undefined },
     });
     if (result) {
       await this.prismaService.queue.update({
         where: { id_antrian: Number(result.id_antrian), is_deleted: false },
-        data: { kode_rm: rmCode },
+        data: { kode_rm: rmCode, no_bpjs: bpjsNumber || undefined },
       });
     }
     return result;

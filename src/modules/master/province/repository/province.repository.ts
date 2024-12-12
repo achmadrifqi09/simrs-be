@@ -22,7 +22,7 @@ export class ProvinceRepository {
     };
 
     if (countryId) {
-      whereClause.id_negara = countryId;
+      whereClause.id_negara = Number(countryId);
     }
 
     const result = await this.prismaService.province.findMany({

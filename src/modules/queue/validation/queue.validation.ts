@@ -31,6 +31,9 @@ const newPatientQueueValidation = z.object({
     .number({ message: 'Id jadwal dokter harus di isi' })
     .min(1, { message: 'Id jadwal dokter harus di isi' }),
   tgl_lahir: dateValidation,
+  no_bpjs: z.string().nullish(),
+  kode_rm: z.string().nullish(),
+  no_rujukan: z.string().nullish(),
   no_hp: z.string().min(10, { message: 'Nomor HP harus diisi' }),
 });
 

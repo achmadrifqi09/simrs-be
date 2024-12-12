@@ -377,10 +377,14 @@ export class QueueRepository {
     };
 
     if (Number(queue.jenis_pasien) === 2) {
-      whereClause.AND = [
-        { no_hp: queue.no_hp },
-        { tgl_lahir: queue.tgl_lahir },
-      ];
+      if (queue?.no_bpjs) {
+        whereClause.no_bpjs = queue.no_bpjs;
+      } else {
+        whereClause.AND = [
+          { no_hp: queue.no_hp },
+          { tgl_lahir: queue.tgl_lahir },
+        ];
+      }
     }
 
     if (Number(queue.jenis_pasien) === 1) {

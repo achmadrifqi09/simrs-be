@@ -32,7 +32,7 @@ export class DistrictController {
   @Header('Content-Type', 'application/json')
   async findAllRegency(
     @Query('keyword') keyword: string,
-    @Query('regencyId') regencyId: string,
+    @Query('regency_id') regencyId: string,
     @Query('cursor') skip: number,
     @Query('take') take: number,
   ) {
