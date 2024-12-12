@@ -32,7 +32,7 @@ export class VillageController {
   @Header('Content-Type', 'application/json')
   async findAllVillage(
     @Query('keyword') keyword: string,
-    @Query('districtId') districtId: string,
+    @Query('district_id') districtId: string,
     @Query('cursor') skip: number,
     @Query('take') take: number,
   ) {

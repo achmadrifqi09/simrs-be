@@ -57,10 +57,15 @@ export class RegistrationService {
     return this.registrationRepository.findRegistrationByQueueId(queueId);
   }
 
-  async updateRMCode(registrationId: number, rmCode: string) {
+  async updateRMCode(
+    registrationId: number,
+    rmCode: string,
+    bpjsNumber: string | null,
+  ) {
     return this.registrationRepository.updateRMForRegistrationAndQueue(
       registrationId,
       rmCode,
+      bpjsNumber,
     );
   }
 

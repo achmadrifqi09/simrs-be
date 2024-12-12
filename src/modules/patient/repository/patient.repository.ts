@@ -37,6 +37,15 @@ export class PatientRepository {
     };
   }
 
+  async findPatientByBPJSNumber(bpjsNumber: string) {
+    return this.prismaService.patient.findFirst({
+      where: {
+        no_bpjs: bpjsNumber,
+        is_deleted: false,
+      },
+    });
+  }
+
   async findFirstPatient(
     identifierNumber: number | string,
     identifierType?: number,

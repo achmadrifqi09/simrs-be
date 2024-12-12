@@ -34,7 +34,7 @@ export class ProvinceController {
   @Header('Content-Type', 'application/json')
   async findAllProvince(
     @Query('keyword') keyword: string,
-    @Query('countryId') countryId: number,
+    @Query('country_id') countryId: number,
     @Query('cursor') skip: number,
     @Query('take') take: number,
   ) {

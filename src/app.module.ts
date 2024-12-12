@@ -28,6 +28,7 @@ import { AdmissionGateway } from './gateways/admission/gateway/admission.gateway
 import { RegistrationModule } from './modules/registration/registration.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { RegistrationFeeModule } from './modules/registration-fee/registration-fee.module';
+import { SatuSehatModule } from './modules/satu-sehat/satu-sehat.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { RegistrationFeeModule } from './modules/registration-fee/registration-f
     BPJSModule,
     RegistrationModule,
     RegistrationFeeModule,
+    SatuSehatModule,
   ],
   controllers: [AppController],
   providers: [

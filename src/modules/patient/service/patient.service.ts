@@ -45,6 +45,10 @@ export class PatientService {
     );
   }
 
+  async findPatientByBPJSNumber(bpjsNumber: string) {
+    return this.patientRepository.findPatientByBPJSNumber(bpjsNumber);
+  }
+
   async updatePatient(id: number, patient: PatientDTO, req?: any) {
     if (isNaN(Number(id))) {
       throw new HttpException('Id pasien tidak valid', HttpStatus.BAD_REQUEST);
@@ -91,6 +95,7 @@ export class PatientService {
       await this.registrationService.updateRMCode(
         registration.id,
         result.kode_rm,
+        patient?.no_bpjs,
       );
     }
     return result;

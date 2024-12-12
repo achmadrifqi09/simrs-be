@@ -7,6 +7,7 @@ export interface RegisterQueuePayload {
   id_jadwal_dokter: number;
   tgl_lahir: Date;
   kode_rm?: string;
+  no_rujukan?: string;
 }
 
 export interface QueueAttendancePayload {

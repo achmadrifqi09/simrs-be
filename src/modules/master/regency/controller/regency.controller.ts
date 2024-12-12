@@ -31,7 +31,7 @@ export class RegencyController {
   @Header('Content-Type', 'application/json')
   async findAllRegency(
     @Query('keyword') keyword: string,
-    @Query('provinceId') provinceId: string,
+    @Query('province_id') provinceId: string,
     @Query('cursor') skip: number,
     @Query('take') take: number,
   ) {
