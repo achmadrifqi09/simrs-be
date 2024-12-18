@@ -46,13 +46,19 @@ export class TaskIdService {
         HttpStatus.BAD_REQUEST,
       );
     }
+
     if (Number(resultStatus) !== 200) {
       throw new HttpException(
-        `Gagal memeperbarui task id dengan kode booking ${taskIdPayload.kodebooking}`,
+        `Gagal memeperbarui task id dengan kode booking ${taskIdPayload.kodebooking}, pastikan task id sebelumnya tidak terlewat`,
         HttpStatus.BAD_REQUEST,
       );
     }
-
+    if (Number(resultStatus) === 200) {
+      await this.bpjsTaskIdRepository.updateTaskIdOnRegistration(
+        registrationId,
+        Number(taskIdPayload.taskid),
+      );
+    }
     return taskIdPayload;
   }
 
