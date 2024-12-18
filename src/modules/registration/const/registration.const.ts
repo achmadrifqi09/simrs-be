@@ -3,6 +3,7 @@ import { Prisma } from '@prisma/client';
 export const registrationSelect: Prisma.RegistrationSelect = {
   id: true,
   kode_rm: true,
+  kode_booking: true,
   nomor_registrasi: true,
   status_bpjs: true,
   tgl_daftar: true,
