@@ -19,6 +19,7 @@ import moment from 'moment-timezone';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { UpdateTaskIdEvent } from 'src/events/event/update-task-id.event';
 import { generateCurrentDate } from 'src/utils/date-formatter';
+import { TaskIdDto } from '../dto/queue/task-id.dto';
 
 @Dependencies([BPJSHttpHelper, BPJSQueueRepository, EventEmitter2])
 @Injectable()
@@ -52,6 +53,13 @@ export class BPJSQueueService {
       if (!registration) {
         throw new HttpException(
           'Pasien tersebut tidak memiliki data pendaftaran',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      if (registration?.task_id_terakhir) {
+        throw new HttpException(
+          'Pasien tersebut telah mengirimkan antrean ke BPJS',
           HttpStatus.BAD_REQUEST,
         );
       }

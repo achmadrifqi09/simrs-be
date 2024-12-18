@@ -10,6 +10,7 @@ import {
   QueueAttendancePayloadInput,
   RegisterQueuePayload,
   StatusPayloadInput,
+  UpdateQueueDoctorSchedule,
 } from '../dto/queue.dto';
 import { PrismaErrorHandler } from '../../../common/handler/prisma-error.handler';
 import { bigIntReplacer } from '../../../utils/helper';
@@ -308,6 +309,17 @@ export class QueueRepository {
             nama_loket: true,
           },
         },
+      },
+    });
+  }
+
+  async updateDoctorSchedule(id: number, payload: UpdateQueueDoctorSchedule) {
+    return this.prismaService.queue.update({
+      where: {
+        id_antrian: Number(id),
+      },
+      data: {
+        id_jadwal_dokter: payload.id_jadwal_dokter,
       },
     });
   }

@@ -9,6 +9,7 @@ import { BPJSModule } from '../bpjs/bpjs.module';
 import { PatientModule } from '../patient/patient.module';
 import { QueueListener } from '../../events/listener/queue.listener';
 import { RegistrationModule } from '../registration/registration.module';
+import { UserAccessModule } from '../user-access/user-access.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { RegistrationModule } from '../registration/registration.module';
     BPJSModule,
     PatientModule,
     RegistrationModule,
+    UserAccessModule,
   ],
   controllers: [QueueController],
   providers: [QueueService, QueueRepository, QueueServiceHelper, QueueListener],

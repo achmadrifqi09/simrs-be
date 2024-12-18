@@ -10,6 +10,12 @@ export interface RegisterQueuePayload {
   no_rujukan?: string;
 }
 
+export interface UpdateQueueDoctorSchedule {
+  id_jadwal_dokter: number;
+  modified_at: Date;
+  modified_by: number;
+}
+
 export interface QueueAttendancePayload {
   id_antrian: number;
   id_user: number;

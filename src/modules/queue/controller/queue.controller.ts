@@ -7,8 +7,11 @@ import {
   HttpException,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Query,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { QueueService } from '../service/queue.service';
 import { ZodPipe } from '../../../pipes/zod-pipe/zod-pipe.pipe';
@@ -16,8 +19,12 @@ import { Public } from '../../../decorators/public/public.decorator';
 import {
   newPatientQueueValidation,
   oldPatientQueueValidation,
+  updateQueueDoctorSchedule,
 } from '../validation/queue.validation';
-import { PatientQueue } from '../dto/queue.dto';
+import { PatientQueue, UpdateQueueDoctorSchedule } from '../dto/queue.dto';
+import { AccessMenuGuard } from 'src/guards/access-menu/access-menu.guard';
+import { Permission } from 'src/decorators/permission/permission.decorator';
+import { Action } from 'src/common/enums/action.enum';
 
 @Controller({
   path: 'queue',
@@ -82,6 +89,20 @@ export class QueueController {
     queue: PatientQueue,
   ) {
     return this.queueService.createNewPatientOnsiteQueue(queue);
+  }
+
+  @Patch('/:id/doctor-schedule')
+  @HttpCode(HttpStatus.OK)
+  @Header('Content-Type', 'application/json')
+  @UseGuards(AccessMenuGuard)
+  @Permission('panggil-antrean', Action.CAN_UPDATE)
+  async updateDoctorSchedule(
+    @Param('id') id: number,
+    @Body(new ZodPipe(updateQueueDoctorSchedule))
+    payload: UpdateQueueDoctorSchedule,
+    @Req() req: any,
+  ) {
+    return this.queueService.updateQueueDoctorSchedule(id, payload, req);
   }
 
   @Post('/old-patient')

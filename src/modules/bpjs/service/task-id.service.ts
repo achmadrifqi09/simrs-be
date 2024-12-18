@@ -11,15 +11,50 @@ import axios, { AxiosError, AxiosHeaders } from 'axios';
 import { BPJSResource } from 'src/common/enums/bpjs-resource-type';
 import { BPJSTaskIdRepository } from '../repository/bpjs-task-id.repository';
 import { generateCurrentDate } from 'src/utils/date-formatter';
+import { BPJSQueueRepository } from '../repository/bpjs-queue.repository';
 
-@Dependencies([BPJSHttpHelper, BPJSTaskIdRepository])
+@Dependencies([BPJSHttpHelper, BPJSTaskIdRepository, BPJSQueueRepository])
 @Injectable()
 export class TaskIdService {
   constructor(
     private readonly bpjsHttpHelper: BPJSHttpHelper,
     private readonly bpjsTaskIdRepository: BPJSTaskIdRepository,
+    private readonly bpjsQueueRepository: BPJSQueueRepository,
   ) {}
   private BASE_URL = `${process.env.BASE_URL}/${process.env.QUEUE_SERVICE_NAME}/antrean`;
+
+  async updateTaskIdFromClient(
+    taskIdPayload: TaskIdDto,
+    registrationId: number,
+  ) {
+    const registration =
+      await this.bpjsQueueRepository.findRegistrationById(registrationId);
+    if (!registration) {
+      throw new HttpException(
+        `Pendaftaran dengan kode booking ${taskIdPayload.kodebooking} tidak ditemukan`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const resultStatus: number = await this.updateTaskId(
+      taskIdPayload,
+      Number(registrationId),
+    );
+    if (Number(resultStatus) === 208) {
+      throw new HttpException(
+        `Kode booking ${taskIdPayload.kodebooking} dengan task id ${taskIdPayload.taskid} sudah ada`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (Number(resultStatus) !== 200) {
+      throw new HttpException(
+        `Gagal memeperbarui task id dengan kode booking ${taskIdPayload.kodebooking}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return taskIdPayload;
+  }
+
   async updateTaskId(
     taskIdPayload: TaskIdDto,
     registrationId: number,
@@ -31,25 +66,25 @@ export class TaskIdService {
     const response = await axios.post(url, taskIdPayload, {
       headers: headers,
     });
-    if (response.data?.metadata?.code === 200) {
-      const result = response?.data?.response
-        ? this.bpjsHttpHelper.responseChecker(
-            response.data,
-            headers.get('X-timestamp').toString(),
-          )
-        : {};
 
-      await this.bpjsTaskIdRepository.createRegistrationTaskId({
-        id_pendaftaran: registrationId,
-        kode_task_id: taskIdPayload.taskid,
-        kode_booking: taskIdPayload.kodebooking,
-        tanggal_kirim: generateCurrentDate(),
-        kode_response: response?.data?.metadata?.code || 0,
-        pesan_response: response?.data?.metadata?.message || 0,
-        request_body: JSON.stringify(taskIdPayload),
-        response: JSON.stringify(result),
-      });
-    }
+    const result = response?.data?.response
+      ? this.bpjsHttpHelper.responseChecker(
+          response.data,
+          headers.get('X-timestamp').toString(),
+        )
+      : null;
+
+    await this.bpjsTaskIdRepository.createRegistrationTaskId({
+      id_pendaftaran: registrationId,
+      kode_task_id: taskIdPayload.taskid,
+      kode_booking: taskIdPayload.kodebooking,
+      tanggal_kirim: generateCurrentDate(),
+      kode_response: response?.data?.metadata?.code || 0,
+      pesan_response: response?.data?.metadata?.message || 0,
+      request_body: JSON.stringify(taskIdPayload),
+      response: JSON.stringify(result ?? response?.data),
+    });
+
     return Number(response.data?.metadata?.code);
   }
 

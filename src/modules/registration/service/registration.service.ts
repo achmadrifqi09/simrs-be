@@ -19,14 +19,21 @@ import { generateUniqueCodeWithDate } from '../../../utils/unique-code-generator
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BPJSQueueService } from 'src/modules/bpjs/service/queue.service';
 import { AxiosError } from 'axios';
+import { DoctorScheduleService } from 'src/modules/doctor-schedule/service/doctor-schedule.service';
 
-@Dependencies([RegistrationRepository, PrismaService, BPJSQueueService])
+@Dependencies([
+  RegistrationRepository,
+  PrismaService,
+  BPJSQueueService,
+  DoctorScheduleService,
+])
 @Injectable()
 export class RegistrationService {
   constructor(
     private readonly registrationRepository: RegistrationRepository,
     private readonly prismaService: PrismaService,
     private readonly bpjsQueueService: BPJSQueueService,
+    private readonly doctorSchedulService: DoctorScheduleService,
   ) {}
 
   async findAllTodayRegistration(
@@ -107,7 +114,12 @@ export class RegistrationService {
           HttpStatus.BAD_REQUEST,
         );
       }
-      console.log(registration.kode_booking);
+      if (registration.status_batal === Number(payload.status_batal)) {
+        throw new HttpException(
+          `Data pendaftaran sudah bersetatus ${registration?.status_batal === 1 ? 'batal' : 'aktif (tidak batal)'}`,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
       const bpjsResponse = await this.bpjsQueueService.queueCancelation({
         kodebooking: registration.kode_booking,
         keterangan: payload.keterangan_batal,
@@ -161,7 +173,8 @@ export class RegistrationService {
           HttpStatus.BAD_REQUEST,
         );
       }
-      const totalPolyQueue = await prisma.registration.count({
+
+      const totalPolyQueuePerCode = await prisma.registration.count({
         where: {
           created_at: {
             gte: generateCurrentDateWithCustomHour('00:00:00'),
@@ -180,10 +193,36 @@ export class RegistrationService {
         },
       });
 
+      const totalOnsiteQueuePoly = await prisma.registration.count({
+        where: {
+          created_at: {
+            gte: generateCurrentDateWithCustomHour('00:00:00'),
+            lte: generateCurrentDateWithCustomHour('23:59:59'),
+          },
+          status_batal: { not: 1 },
+          is_deleted: false,
+          kode_antrian_poli: { in: ['A', 'B', 'C', 'D'] },
+          id: { not: Number(id) },
+          antrian: {
+            jadwal_dokter: {
+              id_jadwal_dokter: registration.antrian.id_jadwal_dokter,
+            },
+          },
+        },
+      });
+
+      const doctorScheduleQuota =
+        await this.doctorSchedulService.findScheduleQuota(
+          registration.antrian.id_jadwal_dokter,
+        );
+      if (totalOnsiteQueuePoly >= Number(doctorScheduleQuota.kuota_onsite)) {
+        throw new HttpException('Kuota dokter penuh', HttpStatus.BAD_REQUEST);
+      }
+
       payload.modified_at = generateCurrentDate();
       payload.modified_by = req?.user?.id || 0;
       payload.kode_antrian_poli = registration.antrian.kode_antrian;
-      payload.nomor_antrian_poli = totalPolyQueue + 1;
+      payload.nomor_antrian_poli = totalPolyQueuePerCode + 1;
       payload.status_bpjs = Number(payload.id_asuransi) === 1 ? 2 : 1;
       payload.status_inap = 1;
       payload = this.sanitizePayload(payload);

@@ -67,8 +67,15 @@ const updateQueueCounterIdValidation = z.object({
     .min(1, { message: 'Id loket antrian harus di isi' }),
 });
 
+const updateQueueDoctorSchedule = z.object({
+  id_jadwal_dokter: z
+    .number({ message: 'Id jadwal dokter harus berupa angka' })
+    .min(1, { message: 'Id jadwal dokter harus diisi' }),
+});
+
 export {
   newPatientQueueValidation,
   oldPatientQueueValidation,
   updateQueueCounterIdValidation,
+  updateQueueDoctorSchedule,
 };
