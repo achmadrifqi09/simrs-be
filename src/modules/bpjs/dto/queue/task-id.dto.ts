@@ -16,6 +16,7 @@ export interface RegistrationTaskIdDto {
   request_body: string;
   created_at?: Date;
   created_by?: number;
+  modified_at?: Date;
 }
 
 export interface FirstUpdateTaskIdDto {

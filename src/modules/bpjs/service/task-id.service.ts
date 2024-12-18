@@ -1,3 +1,4 @@
+import { RegistrationTaskIdDto } from './../dto/queue/task-id.dto';
 import {
   Injectable,
   Dependencies,
@@ -74,16 +75,36 @@ export class TaskIdService {
         )
       : null;
 
-    await this.bpjsTaskIdRepository.createRegistrationTaskId({
+    const registrationTaskId =
+      await this.bpjsTaskIdRepository.findRegistrationTaskId(
+        taskIdPayload.kodebooking,
+        taskIdPayload.taskid,
+      );
+
+    const registrationTaskPayload: RegistrationTaskIdDto = {
       id_pendaftaran: registrationId,
-      kode_task_id: taskIdPayload.taskid,
+      kode_task_id: Number(taskIdPayload.taskid),
       kode_booking: taskIdPayload.kodebooking,
       tanggal_kirim: generateCurrentDate(),
       kode_response: response?.data?.metadata?.code || 0,
       pesan_response: response?.data?.metadata?.message || 0,
       request_body: JSON.stringify(taskIdPayload),
       response: JSON.stringify(result ?? response?.data),
-    });
+    };
+
+    if (registrationTaskId) {
+      if (registrationTaskId.kode_response !== 200) {
+        await this.bpjsTaskIdRepository.updateRegistrationTaskId(
+          registrationTaskId.id,
+          { ...registrationTaskPayload, modified_at: generateCurrentDate() },
+        );
+      }
+    } else if (!registrationTaskId) {
+      await this.bpjsTaskIdRepository.createRegistrationTaskId({
+        ...registrationTaskPayload,
+        created_at: generateCurrentDate(),
+      });
+    }
 
     return Number(response.data?.metadata?.code);
   }
