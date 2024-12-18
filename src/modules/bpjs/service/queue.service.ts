@@ -19,7 +19,6 @@ import moment from 'moment-timezone';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { UpdateTaskIdEvent } from 'src/events/event/update-task-id.event';
 import { generateCurrentDate } from 'src/utils/date-formatter';
-import { TaskIdDto } from '../dto/queue/task-id.dto';
 
 @Dependencies([BPJSHttpHelper, BPJSQueueRepository, EventEmitter2])
 @Injectable()

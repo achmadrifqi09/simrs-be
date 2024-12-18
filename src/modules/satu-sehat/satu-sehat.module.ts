@@ -5,6 +5,6 @@ import { MasterController } from './controller/master/master.controller';
 
 @Module({
   providers: [MasterService, AuthService],
-  controllers: [MasterController]
+  controllers: [MasterController],
 })
 export class SatuSehatModule {}

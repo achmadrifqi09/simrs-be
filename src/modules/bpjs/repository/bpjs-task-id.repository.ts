@@ -20,6 +20,29 @@ export class BPJSTaskIdRepository {
     }
   }
 
+  async updateRegistrationTaskId(id: number, payload: RegistrationTaskIdDto) {
+    try {
+      return this.prismaService.registrationTaskId.update({
+        where: { id: Number(id) },
+        data: {
+          ...payload,
+          id_pendaftaran: Number(payload.id_pendaftaran),
+        },
+      });
+    } catch (error) {
+      PrismaErrorHandler.handle(error);
+    }
+  }
+
+  async findRegistrationTaskId(bookingCode: string, taskId: number) {
+    return this.prismaService.registrationTaskId.findFirst({
+      where: {
+        kode_booking: bookingCode,
+        kode_task_id: taskId,
+      },
+    });
+  }
+
   async updateTaskIdOnRegistration(registrationId: number, taskId: number) {
     try {
       return this.prismaService.registration.update({
