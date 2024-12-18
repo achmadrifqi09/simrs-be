@@ -7,11 +7,13 @@ import { accessSeeder } from './module-seeder/access.seeder';
 import { userAccessSeeder } from './module-seeder/user-access';
 import { insuranceSeeder } from './module-seeder/insurance.seeder';
 import { employeeTypeStatusSeeder } from './module-seeder/employee-type-status.seeder';
+import { familyStatusSeeder } from './module-seeder/family-status';
 
 async function main() {
   await userSeeder();
   await menuSeeder();
   await insuranceSeeder();
+  await familyStatusSeeder();
   await employeeTypeStatusSeeder();
   await accessSeeder();
   await userAccessSeeder();

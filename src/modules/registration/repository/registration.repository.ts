@@ -95,8 +95,15 @@ export class RegistrationRepository {
             id_antrian: true,
             kode_antrian: true,
             no_antrian: true,
+            jenis_penjamin: true,
             jadwal_dokter: {
-              select: { jam_buka_praktek: true, jam_tutup_praktek: true },
+              select: {
+                jam_buka_praktek: true,
+                jam_tutup_praktek: true,
+                kuota_mjkn: true,
+                kuota_online_umum: true,
+                kuota_onsite: true,
+              },
             },
           },
         },

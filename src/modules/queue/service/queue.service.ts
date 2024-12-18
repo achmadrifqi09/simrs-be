@@ -18,6 +18,7 @@ import {
   RegisterQueuePayload,
   StatusPayload,
   StatusPayloadInput,
+  UpdateQueueDoctorSchedule,
 } from '../dto/queue.dto';
 import { DoctorScheduleService } from '../../doctor-schedule/service/doctor-schedule.service';
 import { QueueRepository } from '../repository/queue.repository';
@@ -202,6 +203,19 @@ export class QueueService {
 
   async findSkippedQueue(queueCode: string) {
     return this.queueRepository.findSkippedQueue(queueCode);
+  }
+
+  async updateQueueDoctorSchedule(
+    id: number,
+    payload: UpdateQueueDoctorSchedule,
+    req: any,
+  ) {
+    if (!Number(id)) {
+      throw new HttpException('Antrean tidak valid', HttpStatus.BAD_REQUEST);
+    }
+    payload.modified_at = generateCurrentDate();
+    payload.modified_by = req?.user?.id || 0;
+    return await this.queueRepository.updateDoctorSchedule(id, payload);
   }
 
   async statusUpdate(payload: StatusPayload) {
@@ -429,7 +443,8 @@ export class QueueService {
 
       if (queue?.no_bpjs) {
         const existingPatient =
-          await this.patientService.findPatientByBPJSNumber(queue.kode_rm);
+          await this.patientService.findPatientByBPJSNumber(queue.no_bpjs);
+
         queue.jenis_pasien = existingPatient ? 1 : 2;
         queue.kode_rm = existingPatient?.kode_rm || undefined;
       }

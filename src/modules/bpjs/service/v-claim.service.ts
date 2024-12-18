@@ -141,4 +141,117 @@ export class VClaimService {
       throw new HttpException(error?.message || error, HttpStatus.BAD_REQUEST);
     }
   }
+
+  async findHealthFacility(facilityName: string, facilityType: number) {
+    if (![1, 2].includes(Number(facilityType))) {
+      throw new HttpException(
+        'Jenis faskes tidak valid, 1 untuk Faskes 1 dan 2 untuk Faskes 2/RS',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const headers: AxiosHeaders = this.bpjsHttpHelper.generateHeader(
+      BPJSResource.V_CLAIM,
+    );
+    const url = `${this.BASE_URL}/referensi/faskes/${facilityName}/${facilityType}`;
+
+    try {
+      const response = await axios.get(url, {
+        headers: headers,
+      });
+      const result = this.bpjsHttpHelper.responseChecker(
+        response.data,
+        headers.get('X-timestamp').toString(),
+      );
+
+      return JSON.parse(result);
+    } catch (error: any) {
+      throw new HttpException(error?.message || error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async findProvince() {
+    const headers: AxiosHeaders = this.bpjsHttpHelper.generateHeader(
+      BPJSResource.V_CLAIM,
+    );
+    const url = `${this.BASE_URL}/referensi/propinsi`;
+
+    try {
+      const response = await axios.get(url, {
+        headers: headers,
+      });
+      const result = this.bpjsHttpHelper.responseChecker(
+        response.data,
+        headers.get('X-timestamp').toString(),
+      );
+
+      const resJson = JSON.parse(result);
+      return resJson?.list || resJson;
+    } catch (error: any) {
+      throw new HttpException(error?.message || error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async findRegency(provinceCode: string) {
+    const headers: AxiosHeaders = this.bpjsHttpHelper.generateHeader(
+      BPJSResource.V_CLAIM,
+    );
+    const url = `${this.BASE_URL}/referensi/kabupaten/propinsi/${provinceCode}`;
+
+    try {
+      const response = await axios.get(url, {
+        headers: headers,
+      });
+      const result = this.bpjsHttpHelper.responseChecker(
+        response.data,
+        headers.get('X-timestamp').toString(),
+      );
+
+      const resJson = JSON.parse(result);
+      return resJson?.list || resJson;
+    } catch (error: any) {
+      throw new HttpException(error?.message || error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async findSubdistrict(regencyCode: string) {
+    const headers: AxiosHeaders = this.bpjsHttpHelper.generateHeader(
+      BPJSResource.V_CLAIM,
+    );
+    const url = `${this.BASE_URL}/referensi/kecamatan/kabupaten/${regencyCode}`;
+
+    try {
+      const response = await axios.get(url, {
+        headers: headers,
+      });
+      const result = this.bpjsHttpHelper.responseChecker(
+        response.data,
+        headers.get('X-timestamp').toString(),
+      );
+      const resJson = JSON.parse(result);
+      return resJson?.list || resJson;
+    } catch (error: any) {
+      throw new HttpException(error?.message || error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async findDiagnosis(diagnosisKeyword: string) {
+    const headers: AxiosHeaders = this.bpjsHttpHelper.generateHeader(
+      BPJSResource.V_CLAIM,
+    );
+    const url = `${this.BASE_URL}/referensi/diagnosa/${diagnosisKeyword}`;
+
+    try {
+      const response = await axios.get(url, {
+        headers: headers,
+      });
+      const result = this.bpjsHttpHelper.responseChecker(
+        response.data,
+        headers.get('X-timestamp').toString(),
+      );
+      const resJson = JSON.parse(result);
+      return resJson?.diagnosa || resJson;
+    } catch (error: any) {
+      throw new HttpException(error?.message || error, HttpStatus.BAD_REQUEST);
+    }
+  }
 }

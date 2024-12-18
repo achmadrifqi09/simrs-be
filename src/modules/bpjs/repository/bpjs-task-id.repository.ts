@@ -10,7 +10,10 @@ export class BPJSTaskIdRepository {
   async createRegistrationTaskId(payload: RegistrationTaskIdDto) {
     try {
       return this.prismaService.registrationTaskId.create({
-        data: payload,
+        data: {
+          ...payload,
+          id_pendaftaran: Number(payload.id_pendaftaran),
+        },
       });
     } catch (error) {
       PrismaErrorHandler.handle(error);
