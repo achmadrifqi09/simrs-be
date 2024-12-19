@@ -239,4 +239,48 @@ export class RegistrationRepository {
       },
     });
   }
+
+  async findRegistrationReportTaskId(
+    fromDate: string,
+    toDate: string,
+    guarantorType: number,
+  ) {
+    const result = await this.prismaService.$queryRaw(
+      Prisma.sql`
+      SELECT
+        queue.nama_pasien,
+        queue.jenis_pasien,
+        queue.jenis_penjamin,
+        register.kode_booking,
+        register.kode_rm,
+        register.nomor_asuransi,
+        register.no_rujukan,
+        register.nomor_rujuk_balik,
+        register.nomor_registrasi,
+        register.created_at,
+        JSON_ARRAYAGG(
+                JSON_OBJECT(
+                        'task_id', task_ids.kode_task_id,
+                        'response', task_ids.response,
+                        'kode_response', task_ids.kode_response,
+                        'tanggal_kirim', task_ids.tanggal_kirim
+                )
+        ) AS task_ids
+      FROM db_pendaftaran AS register
+              LEFT JOIN db_pendaftaran_taskid AS task_ids
+                  ON register.kode_booking = task_ids.kode_booking
+              LEFT JOIN db_antrian AS queue
+                ON queue.id_antrian = register.id_antrian
+      WHERE 
+        register.tgl_daftar >= CONCAT(${Prisma.sql`${fromDate}`}, ' 00:00:01:000')
+        AND register.tgl_daftar <= CONCAT(${Prisma.sql`${toDate}`}, ' 23:59:59:000')
+        AND queue.jenis_penjamin = ${Number(guarantorType)}
+      GROUP BY queue.nama_pasien, queue.jenis_pasien, queue.jenis_penjamin, 
+        register.kode_booking, register.kode_rm, register.nomor_asuransi,
+        register.no_rujukan, register.nomor_rujuk_balik,
+        register.nomor_registrasi, register.created_at;
+      `,
+    );
+    return result;
+  }
 }

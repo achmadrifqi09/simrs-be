@@ -20,7 +20,7 @@ export const updateTaskIdValidation = z.object({
           return true;
         return false;
       },
-      { message: 'Tanggal tidak valid, contoh 2024-12-18T13:45:000Z' },
+      { message: 'Tanggal tidak valid, contoh 2024-12-18T13:59:00.000Z' },
     )
     .transform((value) => {
       value = value.toString().replace('.00Z', '');
