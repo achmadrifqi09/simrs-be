@@ -248,4 +248,55 @@ export class RegistrationService {
     });
     return payload;
   }
+
+  async findRegistrationReportTaskId(
+    fromDate: string,
+    toDate: string,
+    guarantorType: number,
+  ) {
+    this.checkTaskIdReportParamerets(fromDate, toDate, guarantorType);
+    return this.registrationRepository.findRegistrationReportTaskId(
+      fromDate,
+      toDate,
+      guarantorType,
+    );
+  }
+
+  private checkTaskIdReportParamerets(
+    fromDate: string,
+    toDate: string,
+    guarantorType: number,
+  ) {
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!fromDate) {
+      throw new HttpException(
+        'Parameter from_date diperlukan, contoh 2024-12-20',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (!toDate) {
+      throw new HttpException(
+        'Parameter to_date diperlukan, contoh 2024-12-20',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (!guarantorType) {
+      throw new HttpException(
+        'Parameter guarantor_type diperlukan',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (!dateRegex.test(fromDate) || !dateRegex.test(toDate)) {
+      throw new HttpException(
+        'Format tanggal tidak sesuai',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (![1, 2].includes(Number(guarantorType))) {
+      throw new HttpException(
+        'Jenis penjamin harus 1 untuk umum dan 2 untuk BPJS',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
 }

@@ -58,6 +58,19 @@ export class RegistrationController {
     return this.registrationService.findRegistrationById(id);
   }
 
+  @Get('/report/task-id')
+  async findRegistrationReportTaskId(
+    @Query('from_date') fromDate: string,
+    @Query('to_date') toDate: string,
+    @Query('guarantor_type') guarantorType: number,
+  ) {
+    return this.registrationService.findRegistrationReportTaskId(
+      fromDate,
+      toDate,
+      guarantorType,
+    );
+  }
+
   @Patch('/:id/cancellation')
   @Header('Content-Type', 'application/json')
   @HttpCode(HttpStatus.OK)
